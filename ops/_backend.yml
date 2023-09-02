@@ -1,0 +1,7 @@
+version: 3
+
+tasks:
+  dev:
+    aliases: [d]
+    cmds:
+      - yarn workspace @zitadel/server dev

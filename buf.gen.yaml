@@ -1,0 +1,14 @@
+version: v1
+managed:
+  enabled: true
+plugins:
+  - name: ts
+    strategy: all
+    path: ./node_modules/ts-proto/protoc-gen-ts_proto
+    out: proto
+    opt:
+      - esModuleInterop=true
+      - env=node
+      - outputServices=nice-grpc
+      - outputServices=generic-definitions
+      - useExactTypes=false

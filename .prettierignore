@@ -2,9 +2,9 @@
 
 # dependencies
 /node_modules
-**/node_modules
 /.pnp
 .pnp.js
+yarn-lock.json
 
 # testing
 /coverage
@@ -33,8 +33,3 @@ yarn-error.log*
 
 # vercel
 .vercel
-
-**/.next/
-
-example.http
-**/sa/*

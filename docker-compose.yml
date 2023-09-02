@@ -1,0 +1,29 @@
+# docker run -d -p 8888:80 coudot/lemonldap-ng
+version: "3.3"
+
+services:
+  lemonldap:
+    image: coudot/lemonldap-ng
+    container_name: "lemonldap"
+    ports:
+      - 8888:80
+    volumes:
+      - ./lemonldap-ng.ini:/etc/lemonldap-ng/lemonldap-ng.ini
+
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: 'nginx'
+  #   extra_hosts:
+  #     - 'host.docker.internal:host-gateway'
+  #   ports:
+  #     - '80:80'
+  #     - '443:443'
+  #   volumes:
+  #     - type: bind
+  #       source: ./proxy
+  #       target: /conf
+  #       read_only: true
+  #   command: 'nginx -c /conf/nginx.local.cfg'
+
+# ldapsearch -H ldap://ldap.forumsys.com:389 -x -D "cn=read-only-admin,dc=example,dc=com" -w password -b "dc=example,dc=com" -s sub "(objectClass=*)"
+

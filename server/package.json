@@ -1,0 +1,17 @@
+{
+  "name": "@zitadel/server",
+  "version": "0.1.0",
+  "packageManager": "yarn@3.5.1",
+  "dependencies": {
+    "@submodule/core": "^4.3.0",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.17.0",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "tsx": "^3.12.7",
+    "zod": "^3.21.4"
+  },
+  "scripts": {
+    "dev": " tsx watch --clear-screen=false main"
+  }
+}

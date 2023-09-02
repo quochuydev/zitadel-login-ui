@@ -1,0 +1,13 @@
+version: '3'
+
+output: prefixed
+
+includes:
+  dev: ./ops/dev.yml
+  build: ./ops/build.yml
+  backend:
+    taskfile: ./ops/_backend.yml
+    aliases: [be]
+  frontend:
+    taskfile: ./ops/_frontend.yml
+    aliases: [fe]

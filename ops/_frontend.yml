@@ -1,0 +1,16 @@
+version: 3
+
+tasks:
+  dev:
+    aliases: [d]
+    deps:
+      - task: dev:portal
+      - task: dev:app
+
+  dev:portal:
+    cmds:
+      - yarn workspace @zitadel/portal dev
+
+  dev:app:
+    cmds:
+      - yarn workspace @zitadel/app dev

@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "nodenext",
+    "strictNullChecks": true, // to support zod
+  }
+}

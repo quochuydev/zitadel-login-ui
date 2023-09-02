@@ -1,0 +1,13 @@
+openssl req \
+    -newkey rsa:2048 \
+    -x509 \
+    -nodes \
+    -keyout localhost.key \
+    -new \
+    -out localhost.crt \
+    -subj /CN=Company \
+    -config ./openssl.cnf \
+    -reqexts SAN \
+    -extensions SAN \
+    -sha256 \
+    -days 3650
