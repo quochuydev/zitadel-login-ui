@@ -1,7 +1,7 @@
 'use client';
 
 import { IdentityProvider, IdentityProviderType } from '@/zitadel-server';
-import { finalizeAuthRequest, login, startIdpIntents } from '@/services';
+import { finalizeAuthRequest, getIntent, login, startIdpIntents } from '@/services';
 import { useState } from 'react';
 import { appUrl } from '@/config';
 
@@ -49,14 +49,8 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
             defaultUsername: 'riemann',
             defaultPassword: 'password',
             handle: async ({ username, password }) => {
-              const provider = PROVIDER_MAP[identityProvider.type];
-
               const result = await startIdpIntents(orgId, {
                 idpId: identityProvider.id,
-                // urls: {
-                //   successUrl: `${appUrl}/idp/${provider}/return?authRequest=${authRequestId}`,
-                //   failureUrl: `${appUrl}/idp/${provider}/return`,
-                // },
                 ldap: {
                   username,
                   password,
@@ -66,6 +60,13 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
               if (!result.idpIntent) {
                 return;
               }
+
+              const intent = await getIntent(orgId, {
+                idpIntentId: result.idpIntent?.idpIntentId,
+                idpIntentToken: result.idpIntent?.idpIntentToken,
+              });
+
+              console.log('intent', intent);
 
               const session = await login(orgId, {
                 checks: {

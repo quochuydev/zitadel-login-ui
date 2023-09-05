@@ -14,6 +14,23 @@ export async function startIdpIntents(orgId: string, data: object) {
   return result;
 }
 
+export async function getIntent(orgId: string, data: any): Promise<any> {
+  const result = await fetch(`${appUrl}/api/idp/get-intent`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      orgId,
+      ...data,
+    }),
+  }).then((response) => response.json());
+
+  console.log('intent', result);
+
+  return result;
+}
+
 export async function login(orgId: string, data: any): Promise<any> {
   const session = await fetch(`${appUrl}/api/login`, {
     method: 'POST',
