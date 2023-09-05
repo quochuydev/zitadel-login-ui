@@ -17,11 +17,7 @@ export async function POST(request: NextRequest) {
     console.log('orgId', orgId);
     console.log('request', data);
 
-    const validated = schema.parse({
-      orgId,
-    });
-
-    console.log('validated', validated);
+    schema.parse({ orgId });
 
     const interceptors: ClientMiddleware[] = [serviceAccount];
 

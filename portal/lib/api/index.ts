@@ -1,7 +1,7 @@
 import { appUrl } from '@/config';
 
-export async function startIdpIntents(orgId: string, data: object) {
-  const result = await fetch(`/api/idp/start`, {
+export async function startIdpIntent(orgId: string, data: object) {
+  const result = await fetch(`/api/intents/start`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -10,13 +10,11 @@ export async function startIdpIntents(orgId: string, data: object) {
     body: JSON.stringify({ ...data }),
   }).then((res) => res.json());
 
-  console.log('result', result);
-
   return result;
 }
 
-export async function getIntent(orgId: string, data: any): Promise<any> {
-  const result = await fetch(`${appUrl}/api/idp/get-intent`, {
+export async function retrieveIntent(orgId: string, data: any): Promise<any> {
+  const result = await fetch(`${appUrl}/api/intents/retrieve`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -24,8 +22,6 @@ export async function getIntent(orgId: string, data: any): Promise<any> {
     },
     body: JSON.stringify(data),
   }).then((response) => response.json());
-
-  console.log('intent', result);
 
   return result;
 }
@@ -40,8 +36,6 @@ export async function login(orgId: string, data: any): Promise<any> {
     body: JSON.stringify(data),
   }).then((response) => response.json());
 
-  console.log('session', session);
-
   return session;
 }
 
@@ -54,8 +48,6 @@ export async function register(orgId: string, userData: any) {
     },
     body: JSON.stringify(userData),
   }).then((res) => res.json());
-
-  console.log('session', session);
 
   return session;
 }
@@ -72,7 +64,7 @@ export async function finalizeAuthRequest(params: {
 }> {
   const { orgId, authRequestId, session } = params;
 
-  const result = await fetch(`${appUrl}/api/oidc/auth_requests`, {
+  const result = await fetch(`${appUrl}/api/auth_request/finalize`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -86,8 +78,6 @@ export async function finalizeAuthRequest(params: {
       },
     }),
   }).then((res) => res.json());
-
-  console.log('result', result, result.callbackUrl);
 
   return result;
 }

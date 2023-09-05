@@ -1,12 +1,11 @@
 import LoginPage from '@/components/LoginPage';
-import { createSettingClient, getServiceAccount, createOIDCClient } from '@/instrumentation-node';
+import { createSettingClient, serviceAccount, createOIDCClient } from '@/instrumentation-node';
 import { getOrgIdFromAuthRequest } from '@/lib/helper';
 
 export default async function Page({ searchParams }: any) {
   const { authRequest: authRequestId } = searchParams;
   console.log({ authRequestId });
 
-  const serviceAccount = getServiceAccount();
   const oidcService = createOIDCClient(serviceAccount);
   const settingService = createSettingClient(serviceAccount);
 
@@ -17,8 +16,6 @@ export default async function Page({ searchParams }: any) {
         .catch((_) => undefined)
     : undefined;
 
-  // console.log('authRequest', authRequest);
-
   const orgId = getOrgIdFromAuthRequest(authRequest);
 
   const identityProviders = orgId
@@ -28,16 +25,8 @@ export default async function Page({ searchParams }: any) {
         .catch((_) => [])
     : [];
 
-  // const brandingSetting = orgId
-  //   ? await settingService
-  //       .getBrandingSettings({ ctx: { orgId } })
-  //       .then((e) => e.settings)
-  //       .catch((_) => null)
-  //   : null;
-
   return (
     <>
-      {/* {JSON.stringify(brandingSetting)} */}
       <LoginPage orgId={orgId} authRequestId={authRequestId} identityProviders={identityProviders} />
     </>
   );

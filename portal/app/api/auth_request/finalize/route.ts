@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { OrgMetadata, createOIDCClient, serviceAccount, ClientMiddleware } from '@/instrumentation-node';
+import { CreateCallbackRequest } from '@/zitadel-server/proto/zitadel/oidc/v2alpha/oidc_service';
 
 export async function POST(request: NextRequest) {
   try {
     const orgId = request.headers.get('org-id');
-    const body = await request.json();
-
-    const { authRequestId, session } = body;
+    const body: CreateCallbackRequest = await request.json();
+    const { ...data } = body;
+    const { authRequestId, session } = data;
 
     const interceptors: ClientMiddleware[] = [serviceAccount];
 
@@ -18,10 +19,7 @@ export async function POST(request: NextRequest) {
 
     const result = await oidcService.createCallback({
       authRequestId,
-      session: {
-        sessionId: session.sessionId,
-        sessionToken: session.sessionToken,
-      },
+      session,
     });
 
     console.log('result', result);
