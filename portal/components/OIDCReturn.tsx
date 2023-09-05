@@ -33,7 +33,7 @@ export default function OidcReturn(props: {
         return;
       }
 
-      finalizeAuthRequest({ orgId, authRequestId, session })
+      finalizeAuthRequest(orgId, { authRequestId, session })
         .then((result: any) => {
           if (result.callbackUrl) {
             window.location.href = result.callbackUrl;

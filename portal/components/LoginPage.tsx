@@ -90,10 +90,8 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
                 return;
               }
 
-              finalizeAuthRequest({ orgId, authRequestId, session })
-                .then((result: any) => {
-                  console.log('result', result, result.callbackUrl);
-
+              finalizeAuthRequest(orgId, { authRequestId, session })
+                .then((result) => {
                   if (result.callbackUrl) {
                     window.location.href = result.callbackUrl;
                   }
@@ -153,17 +151,11 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
                   return;
                 }
 
-                finalizeAuthRequest({
-                  orgId,
+                finalizeAuthRequest(orgId, {
                   authRequestId,
-                  session: {
-                    sessionId: session.sessionId,
-                    sessionToken: session.sessionToken,
-                  },
+                  session,
                 })
-                  .then((result: any) => {
-                    console.log('result', result, result.callbackUrl);
-
+                  .then((result) => {
                     if (result.callbackUrl) {
                       window.location.href = result.callbackUrl;
                     }

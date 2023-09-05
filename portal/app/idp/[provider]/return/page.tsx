@@ -75,7 +75,6 @@ export default async function Page({
   const { id: idpIntentId, token: idpIntentToken, user: userId, authRequest: authRequestId } = searchParams;
   const { provider } = params;
 
-  const userService = createUserClient(serviceAccount);
   const oidcService = createOIDCClient(serviceAccount);
 
   const authRequest = authRequestId
@@ -90,37 +89,39 @@ export default async function Page({
   if (!orgId) {
     return (
       <div className="flex flex-col items-center space-y-4">
-        <p>User is not exist in system.</p>
+        <p>Cant create user.</p>
       </div>
     );
   }
 
-  const result = await userService
+  const userService = createUserClient(serviceAccount);
+
+  const idpInformation = await userService
     .retrieveIdentityProviderIntent({
       idpIntentId,
       idpIntentToken,
     })
+    .then((e) => e.idpInformation)
     .catch((_) => undefined);
 
-  if (!result?.idpInformation) {
-    return (
-      <div className="flex flex-col items-center space-y-4">
-        <p>Invalid request.</p>
-      </div>
-    );
-  }
+  // if (!idpInformation) {
+  //   return (
+  //     <div className="flex flex-col items-center space-y-4">
+  //       <p>Invalid request.</p>
+  //     </div>
+  //   );
+  // }
 
-  const userData = PROVIDER_MAPPING[provider](result.idpInformation);
-  console.log('result', result);
-  console.log('userData', userData);
+  // const userData = PROVIDER_MAPPING[provider](idpInformation);
+  // console.log('idpInformation', idpInformation);
+  // console.log('userData', userData);
 
   if (!userId) {
     return (
       <div className="flex flex-col items-center space-y-4">
         <p>Creating user</p>
         <p>Loading...</p>
-
-        <RegisterButton {...{ orgId, userData, authRequestId }} />
+        <RegisterButton {...{ orgId, userData: undefined, authRequestId }} />
       </div>
     );
   }

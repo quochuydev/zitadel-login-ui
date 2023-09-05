@@ -1,4 +1,8 @@
 import { appUrl } from '@/config';
+import { AuthRequest } from '@/zitadel-server/proto/zitadel/oidc/v2alpha/authorization';
+import { IDPInformation } from '@/zitadel-server';
+import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
+import { CreateCallbackRequest } from '@/zitadel-server/proto/zitadel/oidc/v2alpha/oidc_service';
 
 export async function startIdpIntent(orgId: string, data: object) {
   const result = await fetch(`/api/intents/start`, {
@@ -13,7 +17,7 @@ export async function startIdpIntent(orgId: string, data: object) {
   return result;
 }
 
-export async function retrieveIntent(orgId: string, data: any): Promise<any> {
+export async function retrieveIntent(orgId: string, data: any): Promise<IDPInformation> {
   const result = await fetch(`${appUrl}/api/intents/retrieve`, {
     method: 'POST',
     headers: {
@@ -39,7 +43,7 @@ export async function login(orgId: string, data: any): Promise<any> {
   return session;
 }
 
-export async function register(orgId: string, userData: any) {
+export async function register(orgId: string, userData: Partial<AddHumanUserRequest>) {
   const session = await fetch(`${appUrl}/api/register`, {
     method: 'POST',
     headers: {
@@ -52,17 +56,29 @@ export async function register(orgId: string, userData: any) {
   return session;
 }
 
-export async function finalizeAuthRequest(params: {
-  orgId: string;
-  authRequestId: string;
-  session: {
-    sessionId: string;
-    sessionToken: string;
-  };
-}): Promise<{
+export async function retrieveAuthRequest(params: { authRequestId: string }): Promise<AuthRequest> {
+  const { authRequestId } = params;
+
+  const result = await fetch(`${appUrl}/api/auth_request/retrieve`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      authRequestId,
+    }),
+  }).then((res) => res.json());
+
+  return result;
+}
+
+export async function finalizeAuthRequest(
+  orgId: string,
+  params: CreateCallbackRequest,
+): Promise<{
   callbackUrl: string;
 }> {
-  const { orgId, authRequestId, session } = params;
+  const { authRequestId, session } = params;
 
   const result = await fetch(`${appUrl}/api/auth_request/finalize`, {
     method: 'POST',
@@ -72,10 +88,7 @@ export async function finalizeAuthRequest(params: {
     },
     body: JSON.stringify({
       authRequestId,
-      session: {
-        sessionId: session.sessionId,
-        sessionToken: session.sessionToken,
-      },
+      session,
     }),
   }).then((res) => res.json());
 

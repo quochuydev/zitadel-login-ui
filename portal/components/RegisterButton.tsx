@@ -1,8 +1,13 @@
 'use client';
 
 import { finalizeAuthRequest, register } from '@/lib/api';
+import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
 
-export default function RegisterButton(props: { orgId: string; authRequestId: string; userData: any }) {
+export default function RegisterButton(props: {
+  orgId: string;
+  authRequestId: string;
+  userData: Partial<AddHumanUserRequest>;
+}) {
   const { orgId, authRequestId, userData } = props;
 
   return (
@@ -10,13 +15,10 @@ export default function RegisterButton(props: { orgId: string; authRequestId: st
       onClick={async () => {
         const session = await register(orgId, userData);
 
-        const result = await finalizeAuthRequest({
-          orgId,
+        const result = await finalizeAuthRequest(orgId, {
           authRequestId,
           session,
         });
-
-        console.log('result', result, result.callbackUrl);
 
         if (result.callbackUrl) {
           window.location.href = result.callbackUrl;
