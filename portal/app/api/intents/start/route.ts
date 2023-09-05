@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { StartIdentityProviderIntentRequest } from '@/zitadel-server';
 
 const schema = z.object({
-  orgId: z.string().trim().nonempty(),
+  orgId: z.string().trim(),
 });
 
 export async function POST(request: NextRequest) {

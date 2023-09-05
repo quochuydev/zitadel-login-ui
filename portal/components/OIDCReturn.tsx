@@ -1,9 +1,17 @@
 'use client';
 
-import { login, finalizeAuthRequest } from '@/lib/api';
 import { useEffect } from 'react';
+import { login, finalizeAuthRequest } from '@/lib/api';
 
-export default function OIDCReturn({ orgId, userId, intentId: idpIntentId, token: idpIntentToken, authRequestId }: any) {
+export default function OidcReturn(props: {
+  orgId: string;
+  userId: string;
+  idpIntentId: string;
+  idpIntentToken: string;
+  authRequestId: string;
+}) {
+  const { orgId, userId, idpIntentId, idpIntentToken, authRequestId } = props;
+
   useEffect(() => {
     login(orgId, {
       checks: {
@@ -35,7 +43,7 @@ export default function OIDCReturn({ orgId, userId, intentId: idpIntentId, token
           window.location.href = '/';
         });
     });
-  }, []);
+  }, [orgId, userId, idpIntentId, idpIntentToken, authRequestId]);
 
   return (
     <div className="flex flex-col items-center space-y-4">

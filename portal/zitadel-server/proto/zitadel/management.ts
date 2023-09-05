@@ -14272,7 +14272,7 @@ export const ListOrgMembersRequest = {
       obj.query = ListQuery.toJSON(message.query);
     }
     if (message.queries?.length) {
-      obj.queries = message.queries.map((e) => SearchQuery.toJSON(e));
+      obj.queries = message.queries.map((e:any) => SearchQuery.toJSON(e));
     }
     return obj;
   },
@@ -18239,7 +18239,7 @@ export const ListProjectMembersRequest = {
       obj.query = ListQuery.toJSON(message.query);
     }
     if (message.queries?.length) {
-      obj.queries = message.queries.map((e) => SearchQuery.toJSON(e));
+      obj.queries = message.queries.map((e:any) => SearchQuery.toJSON(e));
     }
     return obj;
   },
@@ -23846,7 +23846,7 @@ export const ListProjectGrantMembersRequest = {
       obj.query = ListQuery.toJSON(message.query);
     }
     if (message.queries?.length) {
-      obj.queries = message.queries.map((e) => SearchQuery.toJSON(e));
+      obj.queries = message.queries.map((e:any) => SearchQuery.toJSON(e));
     }
     return obj;
   },

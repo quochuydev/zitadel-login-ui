@@ -28942,7 +28942,7 @@ export const DataOrg = {
       obj.userLinks = message.userLinks.map((e) => IDPUserLink.toJSON(e));
     }
     if (message.domains?.length) {
-      obj.domains = message.domains.map((e) => Domain.toJSON(e));
+      obj.domains = message.domains.map((e: any) => Domain.toJSON(e));
     }
     if (message.appKeys?.length) {
       obj.appKeys = message.appKeys.map((e) => DataAppKey.toJSON(e));

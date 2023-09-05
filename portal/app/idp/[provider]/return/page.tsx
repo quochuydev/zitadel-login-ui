@@ -1,4 +1,4 @@
-import OIDCReturn from '@/components/OIDCReturn';
+import OidcReturn from '@/components/OidcReturn';
 import RegisterButton from '@/components/RegisterButton';
 import { createOIDCClient, createUserClient, serviceAccount } from '@/instrumentation-node';
 import { getOrgIdFromAuthRequest } from '@/lib/helper';
@@ -57,7 +57,7 @@ const PROVIDER_MAPPING: {
 //   }
 // }
 
-export default async function ({
+export default async function Page({
   searchParams,
   params,
 }: {
@@ -72,7 +72,7 @@ export default async function ({
   };
 }) {
   console.log({ searchParams, params });
-  const { id: intentId, token, user: userId, authRequest: authRequestId } = searchParams;
+  const { id: idpIntentId, token: idpIntentToken, user: userId, authRequest: authRequestId } = searchParams;
   const { provider } = params;
 
   const userService = createUserClient(serviceAccount);
@@ -97,8 +97,8 @@ export default async function ({
 
   const result = await userService
     .retrieveIdentityProviderIntent({
-      idpIntentId: intentId,
-      idpIntentToken: token,
+      idpIntentId,
+      idpIntentToken,
     })
     .catch((_) => undefined);
 
@@ -126,11 +126,12 @@ export default async function ({
   }
 
   return (
-    <OIDCReturn
+    <OidcReturn
       {...{
+        orgId,
         userId,
-        token,
-        intentId,
+        idpIntentId,
+        idpIntentToken,
         authRequestId,
       }}
     />
