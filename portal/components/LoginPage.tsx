@@ -1,7 +1,7 @@
 'use client';
 
 import { IdentityProvider, IdentityProviderType } from '@/zitadel-server';
-import { finalizeAuthRequest, getIntent, login, startIdpIntents } from '@/services';
+import { finalizeAuthRequest, getIntent, login, startIdpIntents } from '@/lib/api';
 import { useState } from 'react';
 import { appUrl } from '@/config';
 
@@ -46,6 +46,7 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
       return (
         <SignInForm
           {...{
+            label: 'Sign-in with LDAP',
             defaultUsername: 'riemann',
             defaultPassword: 'password',
             handle: async ({ username, password }) => {
@@ -71,7 +72,7 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
               const session = await login(orgId, {
                 checks: {
                   user: {
-                    // TODO
+                    userId: username,
                   },
                   idpIntent: {
                     idpIntentId: result.idpIntent?.idpIntentId,
@@ -124,6 +125,7 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
         <div className="max-w-7xl">
           <SignInForm
             {...{
+              label: 'Sign-in',
               defaultUsername: 'lily',
               defaultPassword: 'Qwerty@123',
               handle: async ({ username, password }) => {
@@ -187,15 +189,18 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
 function SignInForm(props: {
   defaultUsername: string;
   defaultPassword: string;
+  label: string;
   handle: (params: { username: string; password: string }) => void;
 }) {
-  const { defaultUsername, defaultPassword, handle } = props;
+  const { label, defaultUsername, defaultPassword, handle } = props;
 
   const [username, setUsername] = useState(defaultUsername);
   const [password, setPassword] = useState(defaultPassword);
 
   return (
     <div className="my-4">
+      <h3 className="my-2 text-xl font-extrabold text-gray-900">{label}</h3>
+
       <div className="rounded-md shadow-sm -space-y-px">
         <div>
           <label htmlFor="email-address" className="sr-only">

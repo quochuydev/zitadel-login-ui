@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { addSessionToCookie } from '@/utils/cookies';
+import { addSessionToCookie } from '@/lib/cookies';
 import { createUserClient, createSessionClient, getServiceAccount } from '@/instrumentation-node';
 
 export async function POST(request: NextRequest) {

@@ -1,5 +1,5 @@
 import Home from '@/components/Home';
-import { getAllSessions } from '@/utils/cookies';
+import { getAllSessions } from '@/lib/cookies';
 import { createSessionClient, getServiceAccount } from '@/instrumentation-node';
 
 export default async function Page() {

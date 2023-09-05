@@ -1,7 +1,7 @@
 'use client';
 
 import { appUrl } from '@/config';
-import { finalizeAuthRequest, register } from '@/services';
+import { finalizeAuthRequest, register } from '@/lib/api';
 
 export default function RegisterButton(props: { orgId: string; authRequestId: string; userData: any }) {
   const { orgId, authRequestId, userData } = props;

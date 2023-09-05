@@ -1,6 +1,6 @@
 'use client';
 
-import { login, finalizeAuthRequest } from '@/services';
+import { login, finalizeAuthRequest } from '@/lib/api';
 import { useEffect } from 'react';
 
 export default function OIDCReturn({ orgId, userId, intentId: idpIntentId, token: idpIntentToken, authRequestId }: any) {

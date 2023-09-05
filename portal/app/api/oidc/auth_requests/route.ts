@@ -3,8 +3,10 @@ import { OrgMetadata, createOIDCClient, serviceAccount, ClientMiddleware } from 
 
 export async function POST(request: NextRequest) {
   try {
+    const orgId = request.headers.get('org-id');
     const body = await request.json();
-    const { orgId, authRequestId, session } = body;
+
+    const { authRequestId, session } = body;
 
     const interceptors: ClientMiddleware[] = [serviceAccount];
 

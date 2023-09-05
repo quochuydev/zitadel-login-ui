@@ -5,9 +5,10 @@ export async function startIdpIntents(orgId: string, data: object) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'org-id': orgId,
     },
-    body: JSON.stringify({ orgId, ...data }),
-  }).then((res: any) => res.json());
+    body: JSON.stringify({ ...data }),
+  }).then((res) => res.json());
 
   console.log('result', result);
 
@@ -19,11 +20,9 @@ export async function getIntent(orgId: string, data: any): Promise<any> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'org-id': orgId,
     },
-    body: JSON.stringify({
-      orgId,
-      ...data,
-    }),
+    body: JSON.stringify(data),
   }).then((response) => response.json());
 
   console.log('intent', result);
@@ -36,8 +35,9 @@ export async function login(orgId: string, data: any): Promise<any> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'org-id': orgId,
     },
-    body: JSON.stringify({ orgId, ...data }),
+    body: JSON.stringify(data),
   }).then((response) => response.json());
 
   console.log('session', session);
@@ -50,8 +50,9 @@ export async function register(orgId: string, userData: any) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'org-id': orgId,
     },
-    body: JSON.stringify({ orgId, userData }),
+    body: JSON.stringify(userData),
   }).then((res) => res.json());
 
   console.log('session', session);
@@ -75,9 +76,9 @@ export async function finalizeAuthRequest(params: {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'org-id': orgId,
     },
     body: JSON.stringify({
-      orgId,
       authRequestId,
       session: {
         sessionId: session.sessionId,
