@@ -5,13 +5,13 @@ import { finalizeAuthRequest, retrieveIntent, login, startIdpIntent } from '@/li
 import { useState } from 'react';
 import { appUrl } from '@/config';
 
+const PROVIDER_MAP = {
+  [IdentityProviderType.IDENTITY_PROVIDER_TYPE_GOOGLE.toString()]: 'google',
+  [IdentityProviderType.IDENTITY_PROVIDER_TYPE_LDAP.toString()]: 'ldap',
+};
+
 export default function LoginPage(props: { orgId: string; authRequestId: string; identityProviders: IdentityProvider[] }) {
   const { orgId, authRequestId, identityProviders } = props;
-
-  const PROVIDER_MAP = {
-    [IdentityProviderType.IDENTITY_PROVIDER_TYPE_GOOGLE.toString()]: 'google',
-    [IdentityProviderType.IDENTITY_PROVIDER_TYPE_LDAP.toString()]: 'ldap',
-  };
 
   const renderIdentityProvider = (identityProvider: IdentityProvider) => {
     if (identityProvider.type === IdentityProviderType.IDENTITY_PROVIDER_TYPE_GOOGLE) {
@@ -62,12 +62,12 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
                 return;
               }
 
-              const intent = await retrieveIntent(orgId, {
-                idpIntentId: result.idpIntent?.idpIntentId,
-                idpIntentToken: result.idpIntent?.idpIntentToken,
-              });
+              // const intent = await retrieveIntent(orgId, {
+              //   idpIntentId: result.idpIntent?.idpIntentId,
+              //   idpIntentToken: result.idpIntent?.idpIntentToken,
+              // });
 
-              console.log('intent', intent);
+              // console.log('intent', intent);
 
               const session = await login(orgId, {
                 checks: {

@@ -2,16 +2,20 @@ import OIDCReturn from '@/components/OIDCReturn';
 import RegisterButton from '@/components/RegisterButton';
 import { createOIDCClient, createUserClient, serviceAccount } from '@/instrumentation-node';
 import { getOrgIdFromAuthRequest } from '@/lib/helper';
+import { IDPInformation } from '@/zitadel-server';
+import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
 
-const PROVIDER_MAPPING = {
-  google: (idp: any) => {
+const PROVIDER_MAPPING: {
+  [provider: string]: (rI: IDPInformation) => Partial<AddHumanUserRequest>;
+} = {
+  google: (idp) => {
     const idpLink = {
       idpId: idp.idpId,
       userId: idp.userId,
       userName: idp.userName,
     };
 
-    const req = {
+    const req: Partial<AddHumanUserRequest> = {
       username: idp.userName,
       email: {
         email: idp.rawInformation?.User?.email,
@@ -19,8 +23,8 @@ const PROVIDER_MAPPING = {
       },
       profile: {
         displayName: idp.rawInformation?.User?.name ?? '',
-        firstName: idp.rawInformation?.User?.given_name ?? '',
-        lastName: idp.rawInformation?.User?.family_name ?? '',
+        givenName: idp.rawInformation?.User?.given_name ?? '',
+        familyName: idp.rawInformation?.User?.family_name ?? '',
       },
       idpLinks: [idpLink],
     };
@@ -53,7 +57,20 @@ const PROVIDER_MAPPING = {
 //   }
 // }
 
-export default async function ({ searchParams, params }: any) {
+export default async function ({
+  searchParams,
+  params,
+}: {
+  searchParams: {
+    id: string;
+    token: string;
+    user: string;
+    authRequest: string;
+  };
+  params: {
+    provider: string;
+  };
+}) {
   console.log({ searchParams, params });
   const { id: intentId, token, user: userId, authRequest: authRequestId } = searchParams;
   const { provider } = params;
@@ -70,6 +87,14 @@ export default async function ({ searchParams, params }: any) {
 
   const orgId = getOrgIdFromAuthRequest(authRequest);
 
+  if (!orgId) {
+    return (
+      <div className="flex flex-col items-center space-y-4">
+        <p>User is not exist in system.</p>
+      </div>
+    );
+  }
+
   const result = await userService
     .retrieveIdentityProviderIntent({
       idpIntentId: intentId,
@@ -77,7 +102,7 @@ export default async function ({ searchParams, params }: any) {
     })
     .catch((_) => undefined);
 
-  if (!orgId || !result?.idpInformation) {
+  if (!result?.idpInformation) {
     return (
       <div className="flex flex-col items-center space-y-4">
         <p>Invalid request.</p>
@@ -85,7 +110,7 @@ export default async function ({ searchParams, params }: any) {
     );
   }
 
-  const userData = PROVIDER_MAPPING[provider as 'google'](result.idpInformation);
+  const userData = PROVIDER_MAPPING[provider](result.idpInformation);
   console.log('result', result);
   console.log('userData', userData);
 
