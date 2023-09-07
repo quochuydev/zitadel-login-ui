@@ -14,6 +14,7 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
   const { orgId, authRequestId, identityProviders } = props;
 
   const renderIdentityProvider = (identityProvider: IdentityProvider) => {
+    //
     if (identityProvider.type === IdentityProviderType.IDENTITY_PROVIDER_TYPE_GOOGLE) {
       return (
         <div key={identityProvider.id} className="my-4">
@@ -125,7 +126,7 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
             {...{
               label: 'Sign-in',
               defaultUsername: 'lily',
-              defaultPassword: 'Qwerty@123',
+              defaultPassword: 'Qwerty!123',
               handle: async ({ username, password }) => {
                 const session = await login(orgId, {
                   checks: {

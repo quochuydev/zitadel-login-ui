@@ -6,11 +6,7 @@ import ProfileImage from '@/components/ProfileImage';
 import FormLayout from '@/components/FormLayout';
 
 export default function Page({ sessions }: any) {
-  console.log('sessions', sessions);
-
   const [session, setSession] = useState(sessions?.[0]);
-
-  console.log('session?.factors?.user', session?.factors?.user);
 
   return (
     <div className="bg-white">

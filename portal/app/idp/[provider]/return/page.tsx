@@ -104,24 +104,24 @@ export default async function Page({
     .then((e) => e.idpInformation)
     .catch((_) => undefined);
 
-  // if (!idpInformation) {
-  //   return (
-  //     <div className="flex flex-col items-center space-y-4">
-  //       <p>Invalid request.</p>
-  //     </div>
-  //   );
-  // }
+  if (!idpInformation) {
+    return (
+      <div className="flex flex-col items-center space-y-4">
+        <p>Invalid request.</p>
+      </div>
+    );
+  }
 
-  // const userData = PROVIDER_MAPPING[provider](idpInformation);
-  // console.log('idpInformation', idpInformation);
-  // console.log('userData', userData);
+  const userData = PROVIDER_MAPPING[provider](idpInformation);
+  console.log('idpInformation', idpInformation);
+  console.log('userData', userData);
 
   if (!userId) {
     return (
       <div className="flex flex-col items-center space-y-4">
         <p>Creating user</p>
         <p>Loading...</p>
-        <RegisterButton {...{ orgId, userData: undefined, authRequestId }} />
+        <RegisterButton {...{ orgId, userData, authRequestId }} />
       </div>
     );
   }
