@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import ProfileImage from '@/components/ProfileImage';
 import FormLayout from '@/components/FormLayout';
+import { Session } from '@/zitadel-server';
 
-export default function Page({ sessions }: any) {
+export default function Page({ sessions }: { sessions: Session[] }) {
   const [session, setSession] = useState(sessions?.[0]);
 
   return (
@@ -28,15 +29,7 @@ export default function Page({ sessions }: any) {
               </div>
 
               <div className="ml-auto flex items-center">
-                <ProfileImage
-                  setSession={(data: any) => setSession(data)}
-                  user={{
-                    loginName: session?.factors?.user?.loginName || '',
-                    displayName: session?.factors?.user?.displayName || '',
-                    orgId: session?.factors?.user?.organisationId || '',
-                  }}
-                  sessions={sessions}
-                />
+                <ProfileImage setSession={(data: Session) => setSession(data)} session={session} sessions={sessions} />
               </div>
             </div>
           </div>

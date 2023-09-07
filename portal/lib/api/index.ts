@@ -1,10 +1,15 @@
 import { appUrl } from '@/config';
 import { AuthRequest } from '@/zitadel-server/proto/zitadel/oidc/v2alpha/authorization';
 import { IDPInformation } from '@/zitadel-server';
-import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
+import {
+  AddHumanUserRequest,
+  RetrieveIdentityProviderIntentRequest,
+  StartIdentityProviderIntentRequest,
+} from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
 import { CreateCallbackRequest } from '@/zitadel-server/proto/zitadel/oidc/v2alpha/oidc_service';
+import { CreateSessionRequest } from '@/zitadel-server/proto/zitadel/session/v2alpha/session_service';
 
-export async function startIdpIntent(orgId: string, data: object) {
+export async function startIdpIntent(orgId: string, data: StartIdentityProviderIntentRequest) {
   const result = await fetch(`/api/intents/start`, {
     method: 'POST',
     headers: {
@@ -17,7 +22,7 @@ export async function startIdpIntent(orgId: string, data: object) {
   return result;
 }
 
-export async function retrieveIntent(orgId: string, data: any): Promise<IDPInformation> {
+export async function retrieveIntent(orgId: string, data: RetrieveIdentityProviderIntentRequest): Promise<IDPInformation> {
   const result = await fetch(`${appUrl}/api/intents/retrieve`, {
     method: 'POST',
     headers: {
@@ -30,7 +35,7 @@ export async function retrieveIntent(orgId: string, data: any): Promise<IDPInfor
   return result;
 }
 
-export async function login(orgId: string, data: any): Promise<any> {
+export async function login(orgId: string, data: Partial<CreateSessionRequest>): Promise<any> {
   const session = await fetch(`${appUrl}/api/login`, {
     method: 'POST',
     headers: {

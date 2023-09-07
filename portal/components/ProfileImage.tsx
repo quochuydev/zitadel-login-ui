@@ -4,10 +4,22 @@ import { Menu, Transition } from '@headlessui/react';
 import LogoutIcon from '@heroicons/react/outline/LogoutIcon';
 import { Fragment } from 'react';
 import { useRouter } from 'next/navigation';
+import { Session } from '@/zitadel-server';
 
-export default function ProfileImage(props: any) {
-  const { user, sessions, setSession } = props;
+export default function ProfileImage(props: {
+  session: Session;
+  sessions: Session[];
+  setSession: (session: Session) => void;
+}) {
+  const { session, sessions, setSession } = props;
   const router = useRouter();
+
+  const user = {
+    loginName: session?.factors?.user?.loginName,
+    displayName: session?.factors?.user?.displayName,
+    orgId: session?.factors?.user?.organisationId,
+    userId: session?.factors?.user?.id,
+  };
 
   const logout = async () => {
     //
@@ -23,11 +35,7 @@ export default function ProfileImage(props: any) {
       <div>
         {user.loginName}
         <Menu.Button className="items-center  justify-center ml-4 transition-all h-8 w-8 rounded-full shadow-lg ring-2 ring-opacity-50">
-          {user && user.image ? (
-            <img className="h-8 w-8 rounded-full" src={user.image} alt="user avatar" />
-          ) : (
-            <span className="text-sm">{user && user.loginName ? user.loginName.substring(0, 1) : 'A'}</span>
-          )}
+          <span className="text-sm">{user && user.loginName ? user.loginName.substring(0, 1) : 'A'}</span>
         </Menu.Button>
       </div>
 
