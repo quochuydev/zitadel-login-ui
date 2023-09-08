@@ -5,18 +5,18 @@ import { CreateSessionRequest } from '@/zitadel-server/proto/zitadel/session/v2a
 
 export async function POST(request: NextRequest) {
   try {
-    const orgId = request.headers.get('org-id') as string;
+    // const orgId = request.headers.get('org-id') as string;
     const body: CreateSessionRequest = await request.json();
     const { ...data } = body;
 
-    console.log('orgId', orgId);
-    console.log('create session', data);
+    // console.log('orgId', orgId);
+    // console.log('create session', data);
 
     const interceptors: ClientMiddleware[] = [serviceAccount];
 
-    if (orgId) {
-      interceptors.push(OrgMetadata(orgId));
-    }
+    // if (orgId) {
+    //   interceptors.push(OrgMetadata(orgId));
+    // }
 
     const sessionService = createSessionClient(...interceptors);
 

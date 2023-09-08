@@ -47,7 +47,7 @@ export const getServiceAccount = (params: { orgId?: string; additionalScopes?: s
   return createServiceAccountInterceptor(apiEndpoint, sa, authOptions);
 };
 
-export const serviceAccount = getAccessToken(process.env.ZITADEL_SERVICE_ACCOUNT_TOKEN as string);
+export const serviceAccount = getServiceAccount();
 
 export function getAccessToken(token: string) {
   return createAccessTokenInterceptor(token);

@@ -36,12 +36,17 @@ export async function retrieveIntent(orgId: string, data: RetrieveIdentityProvid
 }
 
 export async function login(orgId: string, data: Partial<CreateSessionRequest>): Promise<any> {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+
+  if (orgId) {
+    headers['org-id'] = orgId;
+  }
+
   const session = await fetch(`${appUrl}/api/login`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'org-id': orgId,
-    },
+    headers,
     body: JSON.stringify(data),
   }).then((response) => response.json());
 

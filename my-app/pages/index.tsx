@@ -10,14 +10,35 @@ export default function Home() {
   const { data: session } = useSession();
 
   useEffect(() => {
-    fetch('https://portal.local/oidc/v1/userinfo', {
+    if (!session?.accessToken) {
+      return;
+    }
+
+    fetch('https://portal.example.local/oidc/v1/userinfo', {
       headers: {
-        Authorization: `Bearer ${session?.accessToken}`,
+        Authorization: `Bearer ${session.accessToken}`,
       },
     })
       .then((res) => res.json())
-      .then(async (result) => setUserInfo(result))
-      .catch();
+      .then((result) => setUserInfo(result))
+      .catch((e) => console.log(e));
+  }, [session]);
+
+  useEffect(() => {
+    if (!session?.accessToken) {
+      return;
+    }
+
+    fetch('https://app.example.local/api/v2', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: {} }),
+    })
+      .then((res) => res.json())
+      .then((result) => console.log(result))
+      .catch((e) => console.log(e));
   }, [session]);
 
   return (

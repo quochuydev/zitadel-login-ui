@@ -183,12 +183,13 @@ function SignInForm(props: {
   defaultUsername: string;
   defaultPassword: string;
   label: string;
-  handle: (params: { username: string; password: string }) => void;
+  handle: (params: { username: string; password: string }) => Promise<void>;
 }) {
   const { label, defaultUsername, defaultPassword, handle } = props;
 
   const [username, setUsername] = useState(defaultUsername);
   const [password, setPassword] = useState(defaultPassword);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div className="my-4">
@@ -231,11 +232,15 @@ function SignInForm(props: {
       </div>
 
       <button
-        onClick={() => handle({ username, password })}
+        onClick={async () => {
+          setIsLoading(true);
+          await handle({ username, password });
+          setIsLoading(false);
+        }}
         type="button"
         className="mt-4 group relative w-full flex justify-center py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
-        Sign in
+        {isLoading ? 'Loading...' : 'Sign in'}
       </button>
     </div>
   );

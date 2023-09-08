@@ -14,6 +14,8 @@ function setSessionHttpOnlyCookie(sessions: SessionCookie[]) {
     value: JSON.stringify(sessions),
     httpOnly: true,
     path: '/',
+    domain: '.example.local',
+    // sameSite: 'none',
   });
 }
 

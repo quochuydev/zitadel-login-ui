@@ -11,9 +11,9 @@ export async function POST(request: NextRequest) {
 
     const interceptors: ClientMiddleware[] = [serviceAccount];
 
-    if (orgId) {
-      interceptors.push(OrgMetadata(orgId));
-    }
+    // if (orgId) {
+    //   interceptors.push(OrgMetadata(orgId));
+    // }
 
     const oidcService = createOIDCClient(...interceptors);
 

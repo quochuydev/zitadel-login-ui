@@ -39,7 +39,7 @@ export default NextAuth({
       name: 'Zitadel',
       type: 'oauth',
       version: '2',
-      wellKnown: `https://portal.local/.well-known/openid-configuration`,
+      wellKnown: `https://portal.example.local/.well-known/openid-configuration`,
       // wellKnown: `https://system-siqqmi.zitadel.cloud/.well-known/openid-configuration`,
       authorization: {
         params: {},
