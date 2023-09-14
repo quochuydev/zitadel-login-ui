@@ -14,7 +14,7 @@ export async function startIdpIntent(orgId: string, data: StartIdentityProviderI
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'org-id': orgId,
+      'x-zitadel-orgid': orgId,
     },
     body: JSON.stringify({ ...data }),
   }).then((res) => res.json());
@@ -27,7 +27,7 @@ export async function retrieveIntent(orgId: string, data: RetrieveIdentityProvid
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'org-id': orgId,
+      'x-zitadel-orgid': orgId,
     },
     body: JSON.stringify(data),
   }).then((response) => response.json());
@@ -41,7 +41,7 @@ export async function login(orgId: string, data: Partial<CreateSessionRequest>):
   };
 
   if (orgId) {
-    headers['org-id'] = orgId;
+    headers['x-zitadel-orgid'] = orgId;
   }
 
   const session = await fetch(`${appUrl}/api/login`, {
@@ -58,7 +58,7 @@ export async function register(orgId: string, userData: Partial<AddHumanUserRequ
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'org-id': orgId,
+      'x-zitadel-orgid': orgId,
     },
     body: JSON.stringify(userData),
   }).then((res) => res.json());
@@ -94,7 +94,7 @@ export async function finalizeAuthRequest(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'org-id': orgId,
+      'x-zitadel-orgid': orgId,
     },
     body: JSON.stringify({
       authRequestId,

@@ -18,6 +18,7 @@ import { SettingsServiceDefinition } from '@/zitadel-server/proto/zitadel/settin
 import type { SettingsServiceClient } from '@/zitadel-server/proto/zitadel/settings/v2alpha/settings_service';
 import type { ManagementServiceClient } from '@/zitadel-server/proto/zitadel/management';
 import { ManagementServiceDefinition } from '@/zitadel-server/proto/zitadel/management';
+import { CompatServiceDefinition, ServiceDefinition } from 'nice-grpc/lib/service-definitions';
 
 export type { ClientMiddleware };
 
@@ -105,7 +106,9 @@ export function createAuthClient(...interceptors: ClientMiddleware[]): AuthServi
   return factory.create(AuthServiceDefinition, channel);
 }
 
-export function createSessionClient(...interceptors: ClientMiddleware[]): SessionServiceClient {
+export function createClient<T>(params: { definition: CompatServiceDefinition; interceptors: ClientMiddleware[] }): T {
+  const { definition, interceptors } = params;
+
   const channel = createChannel(apiEndpoint);
   let factory = createClientFactory();
 
@@ -113,18 +116,41 @@ export function createSessionClient(...interceptors: ClientMiddleware[]): Sessio
     factory = factory.use(interceptor);
   }
 
-  return factory.create(SessionServiceDefinition, channel);
+  return factory.create(definition, channel) as T;
 }
 
-export function createUserClient(...interceptors: ClientMiddleware[]): UserServiceClient {
-  const channel = createChannel(apiEndpoint);
-  let factory = createClientFactory();
+export const createUserService = (params: { orgId?: string }): UserServiceClient => {
+  const interceptors: ClientMiddleware[] = [serviceAccount];
 
-  for (const interceptor of interceptors) {
-    factory = factory.use(interceptor);
+  const { orgId } = params;
+
+  if (orgId) {
+    interceptors.push(OrgMetadata(orgId));
   }
 
-  return factory.create(UserServiceDefinition, channel);
+  const service = createClient<UserServiceClient>({
+    definition: UserServiceDefinition,
+    interceptors,
+  });
+
+  return service;
+};
+
+export function createSessionService(params: { orgId?: string }): SessionServiceClient {
+  const interceptors: ClientMiddleware[] = [serviceAccount];
+
+  const { orgId } = params;
+
+  if (orgId) {
+    interceptors.push(OrgMetadata(orgId));
+  }
+
+  const service = createClient<SessionServiceClient>({
+    definition: SessionServiceDefinition,
+    interceptors,
+  });
+
+  return service;
 }
 
 export function createOIDCClient(...interceptors: ClientMiddleware[]): OIDCServiceClient {

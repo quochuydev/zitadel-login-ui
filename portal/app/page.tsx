@@ -1,11 +1,11 @@
 import Home from '@/components/Home';
 import { getAllSessions } from '@/lib/cookies';
-import { createSessionClient, serviceAccount } from '@/instrumentation-node';
+import { createSessionService } from '@/instrumentation-node';
 import { Session } from '@/zitadel-server';
 
 export default async function Page() {
   const sessionIds = getAllSessions().map((e) => e.sessionId);
-  const sessionService = createSessionClient(serviceAccount);
+  const sessionService = createSessionService({});
 
   const sessions: Session[] = sessionIds.length
     ? await sessionService

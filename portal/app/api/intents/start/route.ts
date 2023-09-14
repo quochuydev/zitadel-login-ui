@@ -1,31 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serviceAccount, createUserClient, OrgMetadata } from '@/instrumentation-node';
-import { ClientMiddleware } from 'nice-grpc';
+import { createUserService } from '@/instrumentation-node';
 import { z } from 'zod';
 import { StartIdentityProviderIntentRequest } from '@/zitadel-server';
 
 const schema = z.object({
-  orgId: z.string().trim(),
+  orgId: z.string().trim().optional(),
 });
 
 export async function POST(request: NextRequest) {
   try {
-    const orgId = request.headers.get('org-id') as string;
+    const orgId = request.headers.get('x-zitadel-orgid') as string;
     const body: StartIdentityProviderIntentRequest = await request.json();
     const { ...data } = body;
-
-    console.log('orgId', orgId);
-    console.log('request', data);
-
     schema.parse({ orgId });
 
-    const interceptors: ClientMiddleware[] = [serviceAccount];
-
-    if (orgId) {
-      interceptors.push(OrgMetadata(orgId));
-    }
-
-    const userService = createUserClient(...interceptors);
+    const userService = createUserService({ orgId });
     const result = await userService.startIdentityProviderIntent(data);
 
     console.log('result', result);

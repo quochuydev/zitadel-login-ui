@@ -1,6 +1,6 @@
 import OidcReturn from '@/components/OidcReturn';
 import RegisterButton from '@/components/RegisterButton';
-import { createOIDCClient, createUserClient, serviceAccount } from '@/instrumentation-node';
+import { createOIDCClient, createUserService, serviceAccount } from '@/instrumentation-node';
 import { getOrgIdFromAuthRequest } from '@/lib/helper';
 import { IDPInformation } from '@/zitadel-server';
 import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
@@ -94,7 +94,7 @@ export default async function Page({
     );
   }
 
-  const userService = createUserClient(serviceAccount);
+  const userService = createUserService({});
 
   const idpInformation = await userService
     .retrieveIdentityProviderIntent({

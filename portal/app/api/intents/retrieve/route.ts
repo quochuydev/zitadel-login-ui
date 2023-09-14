@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serviceAccount, createUserClient } from '@/instrumentation-node';
+import { createUserService } from '@/instrumentation-node';
 import { RetrieveIdentityProviderIntentRequest } from '@/zitadel-server';
 import { z } from 'zod';
 
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     schema.parse({ ...data });
 
-    const userService = createUserClient(serviceAccount);
+    const userService = createUserService({});
     const idpInformation = await userService.retrieveIdentityProviderIntent(data).then((e) => e.idpInformation);
 
     return NextResponse.json(idpInformation, { status: 200 });
