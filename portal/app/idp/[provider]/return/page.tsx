@@ -1,6 +1,6 @@
 import OidcReturn from '@/components/OidcReturn';
 import RegisterButton from '@/components/RegisterButton';
-import { createOIDCClient, createUserService, serviceAccount } from '@/instrumentation-node';
+import { createOIDCService, createUserService, serviceAccount } from '@/instrumentation-node';
 import { getOrgIdFromAuthRequest } from '@/lib/helper';
 import { IDPInformation } from '@/zitadel-server';
 import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
@@ -75,7 +75,7 @@ export default async function Page({
   const { id: idpIntentId, token: idpIntentToken, user: userId, authRequest: authRequestId } = searchParams;
   const { provider } = params;
 
-  const oidcService = createOIDCClient(serviceAccount);
+  const oidcService = createOIDCService();
 
   const authRequest = authRequestId
     ? await oidcService
@@ -89,7 +89,7 @@ export default async function Page({
   if (!orgId) {
     return (
       <div className="flex flex-col items-center space-y-4">
-        <p>Cant create user.</p>
+        <p>Can not create user.</p>
       </div>
     );
   }

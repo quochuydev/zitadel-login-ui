@@ -18,7 +18,7 @@ import { SettingsServiceDefinition } from '@/zitadel-server/proto/zitadel/settin
 import type { SettingsServiceClient } from '@/zitadel-server/proto/zitadel/settings/v2alpha/settings_service';
 import type { ManagementServiceClient } from '@/zitadel-server/proto/zitadel/management';
 import { ManagementServiceDefinition } from '@/zitadel-server/proto/zitadel/management';
-import { CompatServiceDefinition, ServiceDefinition } from 'nice-grpc/lib/service-definitions';
+import { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
 
 export type { ClientMiddleware };
 
@@ -30,22 +30,14 @@ if (!process.env.ZITADEL_SERVICE_ACCOUNT_TOKEN) {
   throw new Error('Invalid ZITADEL_SERVICE_ACCOUNT_TOKEN');
 }
 
-export const getServiceAccount = (params: { orgId?: string; additionalScopes?: string[] } = {}) => {
-  const { orgId = '226727705079452014', additionalScopes = [] } = params;
-
-  const file = config[orgId].serviceAccountJSON;
+export const getServiceAccount = () => {
+  const file = 'sa/227355825121810019.json';
   const saJSON = String(fs.readFileSync(path.resolve(file)));
   const sa = credentials.ServiceAccount.fromJson(JSON.parse(saJSON));
 
-  const authOptions: AuthenticationOptions = {
+  return createServiceAccountInterceptor(apiEndpoint, sa, {
     apiAccess: true,
-  };
-
-  if (additionalScopes.length) {
-    authOptions.additionalScopes = additionalScopes;
-  }
-
-  return createServiceAccountInterceptor(apiEndpoint, sa, authOptions);
+  });
 };
 
 export const serviceAccount = getServiceAccount();
@@ -119,7 +111,7 @@ export function createClient<T>(params: { definition: CompatServiceDefinition; i
   return factory.create(definition, channel) as T;
 }
 
-export const createUserService = (params: { orgId?: string }): UserServiceClient => {
+export const createUserService = (params: { orgId?: string } = {}): UserServiceClient => {
   const interceptors: ClientMiddleware[] = [serviceAccount];
 
   const { orgId } = params;
@@ -136,7 +128,7 @@ export const createUserService = (params: { orgId?: string }): UserServiceClient
   return service;
 };
 
-export function createSessionService(params: { orgId?: string }): SessionServiceClient {
+export function createSessionService(params: { orgId?: string } = {}): SessionServiceClient {
   const interceptors: ClientMiddleware[] = [serviceAccount];
 
   const { orgId } = params;
@@ -153,15 +145,21 @@ export function createSessionService(params: { orgId?: string }): SessionService
   return service;
 }
 
-export function createOIDCClient(...interceptors: ClientMiddleware[]): OIDCServiceClient {
-  const channel = createChannel(apiEndpoint);
-  let factory = createClientFactory();
+export function createOIDCService(params: { orgId?: string } = {}): OIDCServiceClient {
+  const interceptors: ClientMiddleware[] = [serviceAccount];
 
-  for (const interceptor of interceptors) {
-    factory = factory.use(interceptor);
+  const { orgId } = params;
+
+  if (orgId) {
+    interceptors.push(OrgMetadata(orgId));
   }
 
-  return factory.create(OIDCServiceDefinition, channel);
+  const service = createClient<OIDCServiceClient>({
+    definition: OIDCServiceDefinition,
+    interceptors,
+  });
+
+  return service;
 }
 
 export function createSettingClient(...interceptors: ClientMiddleware[]): SettingsServiceClient {

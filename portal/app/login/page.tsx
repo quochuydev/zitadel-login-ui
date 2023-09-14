@@ -1,12 +1,12 @@
 import LoginPage from '@/components/LoginPage';
-import { createSettingClient, serviceAccount, createOIDCClient } from '@/instrumentation-node';
+import { createSettingClient, serviceAccount, createOIDCService } from '@/instrumentation-node';
 import { getOrgIdFromAuthRequest } from '@/lib/helper';
 
 export default async function Page({ searchParams }: any) {
   const { authRequest: authRequestId } = searchParams;
   console.log({ authRequestId });
 
-  const oidcService = createOIDCClient(serviceAccount);
+  const oidcService = createOIDCService();
   const settingService = createSettingClient(serviceAccount);
 
   const authRequest = authRequestId

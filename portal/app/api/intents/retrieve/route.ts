@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     schema.parse({ ...data });
 
-    const userService = createUserService({});
+    const userService = createUserService();
     const idpInformation = await userService.retrieveIdentityProviderIntent(data).then((e) => e.idpInformation);
 
     return NextResponse.json(idpInformation, { status: 200 });

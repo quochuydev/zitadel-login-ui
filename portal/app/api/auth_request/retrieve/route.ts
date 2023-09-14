@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createOIDCClient, serviceAccount, ClientMiddleware } from '@/instrumentation-node';
+import { createOIDCService } from '@/instrumentation-node';
 import { GetAuthRequestRequest } from '@/zitadel-server/proto/zitadel/oidc/v2alpha/oidc_service';
 
 export async function POST(request: NextRequest) {
@@ -8,8 +8,7 @@ export async function POST(request: NextRequest) {
     const { ...data } = body;
     const { authRequestId } = data;
 
-    const interceptors: ClientMiddleware[] = [serviceAccount];
-    const oidcService = createOIDCClient(...interceptors);
+    const oidcService = createOIDCService();
 
     const result = await oidcService.getAuthRequest({
       authRequestId,
