@@ -26,10 +26,6 @@ if (!process.env.ZITADEL_API_URL) {
   throw new Error('Invalid ZITADEL_API_URL');
 }
 
-if (!process.env.ZITADEL_SERVICE_ACCOUNT_TOKEN) {
-  throw new Error('Invalid ZITADEL_SERVICE_ACCOUNT_TOKEN');
-}
-
 export const getServiceAccount = () => {
   const file = 'sa/227355825121810019.json';
   const saJSON = String(fs.readFileSync(path.resolve(file)));
@@ -49,9 +45,11 @@ export function getAccessToken(token: string) {
 export function createAccessTokenInterceptor(token: string): ClientMiddleware {
   return async function* <Request, Response>(call: ClientMiddlewareCall<Request, Response>, options: CallOptions) {
     options.metadata ??= new Metadata();
+
     if (!options.metadata.has('authorization')) {
       options.metadata.set('authorization', `Bearer ${token}`);
     }
+
     return yield* call.next(call.request, options);
   };
 }
@@ -75,6 +73,7 @@ export function createServiceAccountInterceptor(
       }
       options.metadata.set('authorization', `Bearer ${token}`);
     }
+
     return yield* call.next(call.request, options);
   };
 }
@@ -85,17 +84,6 @@ export function OrgMetadata(orgId: string): ClientMiddleware {
     options.metadata.set('x-zitadel-orgid', orgId);
     return yield* call.next(call.request, options);
   };
-}
-
-export function createAuthClient(...interceptors: ClientMiddleware[]): AuthServiceClient {
-  const channel = createChannel(apiEndpoint);
-  let factory = createClientFactory();
-
-  for (const interceptor of interceptors) {
-    factory = factory.use(interceptor);
-  }
-
-  return factory.create(AuthServiceDefinition, channel);
 }
 
 export function createClient<T>(params: { definition: CompatServiceDefinition; interceptors: ClientMiddleware[] }): T {
@@ -162,24 +150,47 @@ export function createOIDCService(params: { orgId?: string } = {}): OIDCServiceC
   return service;
 }
 
-export function createSettingClient(...interceptors: ClientMiddleware[]): SettingsServiceClient {
-  const channel = createChannel(apiEndpoint);
-  let factory = createClientFactory();
+export function createSettingService(params: { orgId?: string } = {}): SettingsServiceClient {
+  const interceptors: ClientMiddleware[] = [serviceAccount];
 
-  for (const interceptor of interceptors) {
-    factory = factory.use(interceptor);
+  const { orgId } = params;
+
+  if (orgId) {
+    interceptors.push(OrgMetadata(orgId));
   }
 
-  return factory.create(SettingsServiceDefinition, channel);
+  return createClient<SettingsServiceClient>({
+    definition: SettingsServiceDefinition,
+    interceptors,
+  });
 }
 
-export function createManagementServiceClient(...interceptors: ClientMiddleware[]): ManagementServiceClient {
-  const channel = createChannel(apiEndpoint);
-  let factory = createClientFactory();
+export function createManagementService(params: { orgId?: string } = {}): ManagementServiceClient {
+  const interceptors: ClientMiddleware[] = [serviceAccount];
 
-  for (const interceptor of interceptors) {
-    factory = factory.use(interceptor);
+  const { orgId } = params;
+
+  if (orgId) {
+    interceptors.push(OrgMetadata(orgId));
   }
 
-  return factory.create(ManagementServiceDefinition, channel);
+  return createClient<ManagementServiceClient>({
+    definition: ManagementServiceDefinition,
+    interceptors,
+  });
+}
+
+export function createAuthService(params: { orgId?: string } = {}): AuthServiceClient {
+  const interceptors: ClientMiddleware[] = [serviceAccount];
+
+  const { orgId } = params;
+
+  if (orgId) {
+    interceptors.push(OrgMetadata(orgId));
+  }
+
+  return createClient<AuthServiceClient>({
+    definition: AuthServiceDefinition,
+    interceptors,
+  });
 }

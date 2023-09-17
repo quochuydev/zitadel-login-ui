@@ -1,67 +1,148 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
+import { JWT } from 'next-auth/jwt';
+import fetch from 'node-fetch';
 
-export default NextAuth({
-  callbacks: {
-    async redirect({ url, baseUrl }) {
-      return `${baseUrl}`;
-    },
-    async jwt({ token, user, account, profile }) {
-      if (profile?.sub) {
-        token.sub = profile.sub;
-      }
-      if (account?.access_token) {
-        token.accessToken = account.access_token;
-      }
-      token.idToken ??= account?.id_token;
-      if (typeof user !== typeof undefined) {
-        token.user = user;
-      }
+const clientId = '229793446041332810@app'; //web
+// const host = 'https://system-siqqmi.zitadel.cloud';
+const host = 'https://portal.example.local';
 
-      return token;
-    },
-    async session({ session, token }) {
-      const { id, sub, user, error: tokenError, accessToken, idToken } = token;
-
-      session.accessToken = accessToken;
-      session.id = id;
-      session.sub = sub;
-      session.user = user;
-      session.idToken = idToken;
-      session.error = tokenError;
-
-      return session;
-    },
-  },
-  debug: true,
-  providers: [
-    {
-      id: 'zitadel',
-      name: 'Zitadel',
-      type: 'oauth',
-      version: '2',
-      wellKnown: `https://portal.example.local/.well-known/openid-configuration`,
-      // wellKnown: `https://system-siqqmi.zitadel.cloud/.well-known/openid-configuration`,
-      authorization: {
-        params: {},
+const nextAuthOptions = (): NextAuthOptions => {
+  return {
+    callbacks: {
+      async redirect({ baseUrl }) {
+        return `${baseUrl}/startup`;
       },
-      idToken: true,
-      checks: ['pkce', 'state'],
-      client: {
-        token_endpoint_auth_method: 'none',
+      async jwt({ token, user, account, profile }) {
+        if (profile?.sub) {
+          token.sub = profile.sub;
+        }
+
+        if (typeof user !== typeof undefined) {
+          token.user = user;
+        }
+
+        if (account?.access_token) {
+          token.accessToken = account.access_token;
+        }
+
+        if (account?.access_token) {
+          token.refreshToken = account.refresh_token;
+        }
+
+        if (account?.expires_at) {
+          token.expiresAt = account.expires_at;
+        }
+
+        return refreshAccessToken(token);
+
+        // if (account?.expires_at && Date.now() > account?.expires_at * 1000) {
+        //   return refreshAccessToken(token);
+        // }
+
+        // return token;
       },
-      async profile(profile) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          firstName: profile.given_name,
-          lastName: profile.family_name,
-          email: profile.email,
-          loginName: profile.preferred_username,
-          image: profile.picture,
-          roles: profile['urn:zitadel:iam:org:project:roles'],
+      async session({ session, token }) {
+        const { sub, accessToken } = token;
+
+        const user = token.user as {
+          id: string;
+          firstName: string;
+          lastName: string;
+          orgId: string;
+          metadata: {
+            [key: string]: string;
+          };
+          roleMap: {
+            [role: string]: {
+              [orgId: string]: string;
+            };
+          };
         };
+
+        session.sub = sub;
+        session.accessToken = accessToken;
+        session.user = user as unknown;
+
+        return session;
       },
-      clientId: '229793446041332810@app', //web
     },
-  ],
-});
+    debug: true,
+    providers: [
+      {
+        id: 'zitadel',
+        name: 'Zitadel',
+        type: 'oauth',
+        version: '2',
+        wellKnown: `${host}/.well-known/openid-configuration`,
+        authorization: {
+          params: {},
+        },
+        idToken: true,
+        checks: ['pkce', 'state'],
+        client: {
+          token_endpoint_auth_method: 'none',
+        },
+        async profile(profile) {
+          return {
+            id: profile.sub,
+            name: profile.name,
+            firstName: profile.given_name,
+            lastName: profile.family_name,
+            email: profile.email,
+            loginName: profile.preferred_username,
+            image: profile.picture,
+            roleMap: profile['urn:zitadel:iam:org:project:roles'],
+            metadata: profile['urn:zitadel:iam:user:metadata'],
+            orgId: profile['urn:zitadel:iam:org:id'],
+          };
+        },
+        clientId,
+      },
+    ],
+  };
+};
+
+export default (request, response) => {
+  return NextAuth(request, response, nextAuthOptions());
+};
+
+async function refreshAccessToken(token: JWT) {
+  try {
+    console.log('token', token);
+
+    const searchParams = new URLSearchParams();
+    searchParams.append('client_id', clientId);
+    searchParams.append('grant_type', 'refresh_token');
+    searchParams.append('refresh_token', token.refreshToken as string);
+
+    const result: {
+      access_token: string;
+      token_type: string;
+      refresh_token: string;
+      expires_in: number;
+      id_token: string;
+    } = await fetch(`${host}/oauth/v2/token`, {
+      method: 'POST',
+      body: searchParams,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }).then((res) => res.json());
+
+    console.log('refreshed token', result);
+
+    return {
+      ...token,
+      expiresAt: (token.expiresAt as number) + result.expires_in,
+      accessToken: result.access_token,
+      refreshToken: result.refresh_token,
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError',
+    };
+  }
+}

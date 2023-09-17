@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { login, finalizeAuthRequest } from '@/lib/api';
+import { login, finalizeAuthRequest } from '@/api';
 
 export default function OidcReturn(props: {
   orgId: string;

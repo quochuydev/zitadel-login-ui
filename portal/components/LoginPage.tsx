@@ -1,8 +1,8 @@
 'use client';
 
-import { IdentityProvider, IdentityProviderType } from '@/zitadel-server';
-import { finalizeAuthRequest, retrieveIntent, login, startIdpIntent } from '@/lib/api';
 import { useState } from 'react';
+import { IdentityProvider, IdentityProviderType } from '@/zitadel-server';
+import { finalizeAuthRequest, login, startIdpIntent } from '@/api';
 import { appUrl } from '@/config';
 
 const PROVIDER_MAP = {
@@ -62,13 +62,6 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
               if (!result.idpIntent) {
                 return;
               }
-
-              // const intent = await retrieveIntent(orgId, {
-              //   idpIntentId: result.idpIntent?.idpIntentId,
-              //   idpIntentToken: result.idpIntent?.idpIntentToken,
-              // });
-
-              // console.log('intent', intent);
 
               const session = await login(orgId, {
                 checks: {

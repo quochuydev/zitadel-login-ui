@@ -3,7 +3,7 @@ import { client } from './client';
 import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
 
-client.execute(async ({ admin, manager, auth, config, createAuthClient, createManagerClient }) => {
+client.execute(async ({ manager, auth, config }) => {
   console.log('getMyOrg', await manager.getMyOrg({}));
   console.log('getMyUser', await auth.getMyUser({}));
 
