@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     const body: CreateSessionRequest = await request.json();
     const { ...data } = body;
 
-    const sessionService = createSessionService({});
+    const sessionService = createSessionService();
 
     const result = await sessionService.createSession(data);
     const session = await sessionService.getSession({ sessionId: result.sessionId }).then((e) => e.session);

@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     const { ...data } = body;
     schema.parse({ orgId });
 
-    const userService = createUserService({ orgId });
+    const userService = createUserService(orgId);
     const result = await userService.startIdentityProviderIntent(data);
 
     console.log('result', result);

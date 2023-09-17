@@ -94,7 +94,7 @@ export default async function Page({
     );
   }
 
-  const userService = createUserService({});
+  const userService = createUserService();
 
   const idpInformation = await userService
     .retrieveIdentityProviderIntent({

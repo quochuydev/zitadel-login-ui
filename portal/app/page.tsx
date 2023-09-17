@@ -5,7 +5,7 @@ import { Session } from '@/zitadel-server';
 
 export default async function Page() {
   const sessionIds = getAllSessions().map((e) => e.sessionId);
-  const sessionService = createSessionService({});
+  const sessionService = createSessionService();
 
   const sessions: Session[] = sessionIds.length
     ? await sessionService

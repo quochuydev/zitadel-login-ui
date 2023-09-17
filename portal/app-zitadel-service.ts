@@ -1,16 +1,15 @@
 import { createChannel, createClientFactory, CallOptions, ClientMiddleware, ClientMiddlewareCall } from 'nice-grpc';
 import { Metadata } from 'nice-grpc-common';
-import { apiEndpoint } from '@/config';
+import { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
+import { apiEndpoint, appUrl } from '@/config';
 import { AuthenticationOptions, ServiceAccount } from '@zitadel/node/dist/credentials/service-account';
-import { SettingsServiceDefinition } from '@/zitadel-server/proto/zitadel/settings/v2alpha/settings_service';
-import type { SettingsServiceClient } from '@/zitadel-server/proto/zitadel/settings/v2alpha/settings_service';
 import type { ManagementServiceClient } from '@/zitadel-server/proto/zitadel/management';
 import { ManagementServiceDefinition } from '@/zitadel-server/proto/zitadel/management';
-import { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
+import fetch from 'node-fetch';
 
 export type { ClientMiddleware };
 
-if (!process.env.ZITADEL_API_URL) {
+if (!apiEndpoint) {
   throw new Error('Invalid ZITADEL_API_URL');
 }
 
@@ -62,25 +61,32 @@ export function createAccessTokenByClientInterceptor(clientId: string, clientSec
     searchParams.append('client_secret', clientSecret);
     searchParams.append('scope', 'openid profile email urn:zitadel:iam:org:project:id:zitadel:aud');
 
-    const result: {
-      access_token: string;
-      token_type: string;
-      refresh_token: string;
-      expires_in: number;
-      id_token: string;
-    } = await fetch(`https://portal.example.local/oauth/v2/token`, {
+    const result = await fetch(`${appUrl}/oauth/v2/token`, {
       method: 'POST',
       body: searchParams,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-    }).then((res) => res.json());
+    }).then(async (response) => {
+      const res = (await response.json()) as {
+        access_token: string;
+        token_type: string;
+        refresh_token: string;
+        expires_in: number;
+        id_token: string;
+      };
+
+      return res;
+    });
 
     console.log('result', result);
     const token = result.access_token;
 
     options.metadata ??= new Metadata();
-    options.metadata.set('authorization', `Bearer ${token}`);
+
+    if (token) {
+      options.metadata.set('authorization', `Bearer ${token}`);
+    }
 
     return yield* call.next(call.request, options);
   };

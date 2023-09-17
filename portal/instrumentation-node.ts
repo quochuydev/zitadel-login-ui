@@ -103,8 +103,7 @@ export function createClient<T>(params: { definition: CompatServiceDefinition; i
   return factory.create(definition, channel) as T;
 }
 
-export const createUserService = (params: { orgId?: string } = {}): UserServiceClient => {
-  const { orgId } = params;
+export const createUserService = (orgId?: string): UserServiceClient => {
   const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   const service = createClient<UserServiceClient>({
@@ -115,8 +114,7 @@ export const createUserService = (params: { orgId?: string } = {}): UserServiceC
   return service;
 };
 
-export function createSessionService(params: { orgId?: string } = {}): SessionServiceClient {
-  const { orgId } = params;
+export function createSessionService(orgId?: string): SessionServiceClient {
   const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   const service = createClient<SessionServiceClient>({
@@ -127,8 +125,7 @@ export function createSessionService(params: { orgId?: string } = {}): SessionSe
   return service;
 }
 
-export function createOIDCService(params: { orgId?: string } = {}): OIDCServiceClient {
-  const { orgId } = params;
+export function createOIDCService(orgId?: string): OIDCServiceClient {
   const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   const service = createClient<OIDCServiceClient>({
@@ -139,8 +136,7 @@ export function createOIDCService(params: { orgId?: string } = {}): OIDCServiceC
   return service;
 }
 
-export function createSettingService(params: { orgId?: string } = {}): SettingsServiceClient {
-  const { orgId } = params;
+export function createSettingService(orgId?: string): SettingsServiceClient {
   const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   return createClient<SettingsServiceClient>({
@@ -149,8 +145,7 @@ export function createSettingService(params: { orgId?: string } = {}): SettingsS
   });
 }
 
-export function createManagementService(params: { orgId?: string } = {}): ManagementServiceClient {
-  const { orgId } = params;
+export function createManagementService(orgId?: string): ManagementServiceClient {
   const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   return createClient<ManagementServiceClient>({
@@ -159,8 +154,7 @@ export function createManagementService(params: { orgId?: string } = {}): Manage
   });
 }
 
-export function createAuthService(params: { orgId?: string } = {}): AuthServiceClient {
-  const { orgId } = params;
+export function createAuthService(orgId?: string): AuthServiceClient {
   const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   return createClient<AuthServiceClient>({

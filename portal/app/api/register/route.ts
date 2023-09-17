@@ -9,8 +9,8 @@ export async function POST(request: NextRequest) {
     const body: AddHumanUserRequest = await request.json();
     const { ...data } = body;
 
-    const userService = createUserService({ orgId });
-    const sessionService = createSessionService({ orgId });
+    const userService = createUserService(orgId);
+    const sessionService = createSessionService(orgId);
 
     const newUser = await userService.addHumanUser(data);
     const userId = newUser.userId;
