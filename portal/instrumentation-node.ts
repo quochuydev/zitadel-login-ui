@@ -78,10 +78,14 @@ export function createServiceAccountInterceptor(
   };
 }
 
-export function OrgMetadata(orgId: string): ClientMiddleware {
+export function OrgMetadata(orgId?: string): ClientMiddleware {
   return async function* <Request, Response>(call: ClientMiddlewareCall<Request, Response>, options: CallOptions) {
     options.metadata ??= new Metadata();
-    options.metadata.set('x-zitadel-orgid', orgId);
+
+    if (orgId) {
+      options.metadata.set('x-zitadel-orgid', orgId);
+    }
+
     return yield* call.next(call.request, options);
   };
 }
@@ -100,13 +104,8 @@ export function createClient<T>(params: { definition: CompatServiceDefinition; i
 }
 
 export const createUserService = (params: { orgId?: string } = {}): UserServiceClient => {
-  const interceptors: ClientMiddleware[] = [serviceAccount];
-
   const { orgId } = params;
-
-  if (orgId) {
-    interceptors.push(OrgMetadata(orgId));
-  }
+  const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   const service = createClient<UserServiceClient>({
     definition: UserServiceDefinition,
@@ -117,13 +116,8 @@ export const createUserService = (params: { orgId?: string } = {}): UserServiceC
 };
 
 export function createSessionService(params: { orgId?: string } = {}): SessionServiceClient {
-  const interceptors: ClientMiddleware[] = [serviceAccount];
-
   const { orgId } = params;
-
-  if (orgId) {
-    interceptors.push(OrgMetadata(orgId));
-  }
+  const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   const service = createClient<SessionServiceClient>({
     definition: SessionServiceDefinition,
@@ -134,13 +128,8 @@ export function createSessionService(params: { orgId?: string } = {}): SessionSe
 }
 
 export function createOIDCService(params: { orgId?: string } = {}): OIDCServiceClient {
-  const interceptors: ClientMiddleware[] = [serviceAccount];
-
   const { orgId } = params;
-
-  if (orgId) {
-    interceptors.push(OrgMetadata(orgId));
-  }
+  const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   const service = createClient<OIDCServiceClient>({
     definition: OIDCServiceDefinition,
@@ -151,13 +140,8 @@ export function createOIDCService(params: { orgId?: string } = {}): OIDCServiceC
 }
 
 export function createSettingService(params: { orgId?: string } = {}): SettingsServiceClient {
-  const interceptors: ClientMiddleware[] = [serviceAccount];
-
   const { orgId } = params;
-
-  if (orgId) {
-    interceptors.push(OrgMetadata(orgId));
-  }
+  const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   return createClient<SettingsServiceClient>({
     definition: SettingsServiceDefinition,
@@ -166,13 +150,8 @@ export function createSettingService(params: { orgId?: string } = {}): SettingsS
 }
 
 export function createManagementService(params: { orgId?: string } = {}): ManagementServiceClient {
-  const interceptors: ClientMiddleware[] = [serviceAccount];
-
   const { orgId } = params;
-
-  if (orgId) {
-    interceptors.push(OrgMetadata(orgId));
-  }
+  const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   return createClient<ManagementServiceClient>({
     definition: ManagementServiceDefinition,
@@ -181,13 +160,8 @@ export function createManagementService(params: { orgId?: string } = {}): Manage
 }
 
 export function createAuthService(params: { orgId?: string } = {}): AuthServiceClient {
-  const interceptors: ClientMiddleware[] = [serviceAccount];
-
   const { orgId } = params;
-
-  if (orgId) {
-    interceptors.push(OrgMetadata(orgId));
-  }
+  const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
   return createClient<AuthServiceClient>({
     definition: AuthServiceDefinition,
