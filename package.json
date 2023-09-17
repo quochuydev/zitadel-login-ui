@@ -6,9 +6,6 @@
     "server",
     "my-app"
   ],
-  "scripts": {
-    "generate": "buf generate --path ./proto/zitadel"
-  },
   "dependencies": {
     "@bufbuild/buf": "^1.26.1",
     "@fastify/cookie": "^9.0.4",
