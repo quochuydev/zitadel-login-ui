@@ -1,5 +1,6 @@
 export const apiEndpoint = process.env.ZITADEL_API_URL as string;
 export const appUrl = process.env.APP_URL || 'https://portal.example.local';
+export const serviceAccountJSON = 'sa/227355825121810019.json';
 
 export const config: { [key: string]: any } = {
   '226727705079452014': {

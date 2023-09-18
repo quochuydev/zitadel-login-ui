@@ -5,7 +5,6 @@ import { CreateSessionRequest } from '@/zitadel-server/proto/zitadel/session/v2a
 
 export async function POST(request: NextRequest) {
   try {
-    // const orgId = request.headers.get('x-zitadel-orgid') as string;
     const body: CreateSessionRequest = await request.json();
     const { ...data } = body;
 

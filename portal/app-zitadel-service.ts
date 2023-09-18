@@ -1,20 +1,19 @@
+import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
 import { createChannel, createClientFactory, CallOptions, ClientMiddleware, ClientMiddlewareCall } from 'nice-grpc';
 import { Metadata } from 'nice-grpc-common';
 import { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
-import { apiEndpoint, appUrl } from '@/config';
 import { AuthenticationOptions, ServiceAccount } from '@zitadel/node/dist/credentials/service-account';
 import type { ManagementServiceClient } from '@/zitadel-server/proto/zitadel/management';
 import { ManagementServiceDefinition } from '@/zitadel-server/proto/zitadel/management';
-import fetch from 'node-fetch';
+import { credentials } from '@zitadel/node';
+import { apiEndpoint, appUrl } from '@/config';
 
 export type { ClientMiddleware };
 
 if (!apiEndpoint) {
   throw new Error('Invalid ZITADEL_API_URL');
-}
-
-export function getAccessToken(token: string) {
-  return createAccessTokenInterceptor(token);
 }
 
 export function createAccessTokenInterceptor(token: string): ClientMiddleware {
@@ -53,7 +52,7 @@ export function createServiceAccountInterceptor(
   };
 }
 
-export function createAccessTokenByClientInterceptor(clientId: string, clientSecret: string): ClientMiddleware {
+export function createClientCredentialsInterceptor(clientId: string, clientSecret: string): ClientMiddleware {
   return async function* <Request, Response>(call: ClientMiddlewareCall<Request, Response>, options: CallOptions) {
     const searchParams = new URLSearchParams();
     searchParams.append('grant_type', 'client_credentials');
@@ -92,7 +91,7 @@ export function createAccessTokenByClientInterceptor(clientId: string, clientSec
   };
 }
 
-export function OrgMetadata(orgId?: string): ClientMiddleware {
+export function createOrgMetadataInterceptor(orgId?: string): ClientMiddleware {
   return async function* <Request, Response>(call: ClientMiddlewareCall<Request, Response>, options: CallOptions) {
     options.metadata ??= new Metadata();
 
@@ -104,7 +103,60 @@ export function OrgMetadata(orgId?: string): ClientMiddleware {
   };
 }
 
-export function createClient<T>(params: { definition: CompatServiceDefinition; interceptors: ClientMiddleware[] }): T {
+type AuthorizationInterceptorParams =
+  | {
+      type: 'clientCredentials';
+      clientId: string;
+      clientSecret: string;
+    }
+  | {
+      type: 'token';
+      token: string;
+    }
+  | {
+      type: 'serviceAccount';
+      serviceAccountJSON: string;
+    };
+
+function createAuthorizationInterceptor(params: AuthorizationInterceptorParams) {
+  const { type } = params;
+
+  if (type === 'clientCredentials') {
+    const { clientId, clientSecret } = params;
+    return createClientCredentialsInterceptor(clientId, clientSecret);
+  }
+
+  if (type === 'serviceAccount') {
+    const { serviceAccountJSON } = params;
+    const saJSON = String(fs.readFileSync(path.resolve(serviceAccountJSON)));
+    const sa = credentials.ServiceAccount.fromJson(JSON.parse(saJSON));
+    const authOptions: AuthenticationOptions = { apiAccess: true };
+    return createServiceAccountInterceptor(apiEndpoint, sa, authOptions);
+  }
+
+  if (type === 'token') {
+    const { token } = params;
+    return createAccessTokenInterceptor(token);
+  }
+
+  throw new Error(`Invalid authorization type: ${type}`);
+}
+
+export function createManagementService(
+  params: AuthorizationInterceptorParams,
+  options: {
+    orgId: string;
+  },
+): ManagementServiceClient {
+  const { orgId } = options;
+
+  return createClient<ManagementServiceClient>({
+    definition: ManagementServiceDefinition,
+    interceptors: [createAuthorizationInterceptor(params), createOrgMetadataInterceptor(orgId)],
+  });
+}
+
+function createClient<T>(params: { definition: CompatServiceDefinition; interceptors: ClientMiddleware[] }): T {
   const { definition, interceptors } = params;
 
   const channel = createChannel(apiEndpoint);
@@ -115,22 +167,4 @@ export function createClient<T>(params: { definition: CompatServiceDefinition; i
   }
 
   return factory.create(definition, channel) as T;
-}
-
-export function createManagementService(params: {
-  orgId: string;
-  clientId: string;
-  clientSecret: string;
-}): ManagementServiceClient {
-  const { orgId, clientId, clientSecret } = params;
-
-  const interceptors: ClientMiddleware[] = [
-    createAccessTokenByClientInterceptor(clientId, clientSecret),
-    OrgMetadata(orgId),
-  ];
-
-  return createClient<ManagementServiceClient>({
-    definition: ManagementServiceDefinition,
-    interceptors,
-  });
 }
