@@ -3,7 +3,7 @@ import _m0 from "protobufjs/minimal";
 import { Duration } from "../../../google/protobuf/duration";
 import { ResourceOwnerType, resourceOwnerTypeFromJSON, resourceOwnerTypeToJSON } from "./settings";
 
-export const protobufPackage = "zitadel.settings.v2alpha";
+export const protobufPackage = "zitadel.settings.v2beta";
 
 export enum SecondFactorType {
   SECOND_FACTOR_TYPE_UNSPECIFIED = 0,

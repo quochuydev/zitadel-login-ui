@@ -3,7 +3,7 @@ import RegisterButton from '@/components/RegisterButton';
 import { createOIDCService, createUserService, serviceAccount } from '@/instrumentation-node';
 import { getOrgIdFromAuthRequest } from '@/lib/helper';
 import { IDPInformation } from '@/zitadel-server';
-import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
+import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2beta/user_service';
 
 const PROVIDER_MAPPING: {
   [provider: string]: (rI: IDPInformation) => Partial<AddHumanUserRequest>;

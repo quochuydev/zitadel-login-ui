@@ -271,6 +271,7 @@ export interface AddSMTPConfigRequest {
   host: string;
   user: string;
   password: string;
+  replyToAddress: string;
 }
 
 export interface AddSMTPConfigResponse {
@@ -283,6 +284,7 @@ export interface UpdateSMTPConfigRequest {
   tls: boolean;
   host: string;
   user: string;
+  replyToAddress: string;
 }
 
 export interface UpdateSMTPConfigResponse {
@@ -1011,6 +1013,37 @@ export interface UpdateLDAPProviderRequest {
 }
 
 export interface UpdateLDAPProviderResponse {
+  details: ObjectDetails | undefined;
+}
+
+export interface AddAppleProviderRequest {
+  /** Apple will be used as default, if no name is provided */
+  name: string;
+  clientId: string;
+  teamId: string;
+  keyId: string;
+  privateKey: Buffer;
+  scopes: string[];
+  providerOptions: Options | undefined;
+}
+
+export interface AddAppleProviderResponse {
+  details: ObjectDetails | undefined;
+  id: string;
+}
+
+export interface UpdateAppleProviderRequest {
+  id: string;
+  name: string;
+  clientId: string;
+  teamId: string;
+  keyId: string;
+  privateKey: Buffer;
+  scopes: string[];
+  providerOptions: Options | undefined;
+}
+
+export interface UpdateAppleProviderResponse {
   details: ObjectDetails | undefined;
 }
 
@@ -3637,7 +3670,7 @@ export const GetSMTPConfigResponse = {
 };
 
 function createBaseAddSMTPConfigRequest(): AddSMTPConfigRequest {
-  return { senderAddress: "", senderName: "", tls: false, host: "", user: "", password: "" };
+  return { senderAddress: "", senderName: "", tls: false, host: "", user: "", password: "", replyToAddress: "" };
 }
 
 export const AddSMTPConfigRequest = {
@@ -3659,6 +3692,9 @@ export const AddSMTPConfigRequest = {
     }
     if (message.password !== "") {
       writer.uint32(50).string(message.password);
+    }
+    if (message.replyToAddress !== "") {
+      writer.uint32(58).string(message.replyToAddress);
     }
     return writer;
   },
@@ -3712,6 +3748,13 @@ export const AddSMTPConfigRequest = {
 
           message.password = reader.string();
           continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.replyToAddress = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -3729,6 +3772,7 @@ export const AddSMTPConfigRequest = {
       host: isSet(object.host) ? String(object.host) : "",
       user: isSet(object.user) ? String(object.user) : "",
       password: isSet(object.password) ? String(object.password) : "",
+      replyToAddress: isSet(object.replyToAddress) ? String(object.replyToAddress) : "",
     };
   },
 
@@ -3752,6 +3796,9 @@ export const AddSMTPConfigRequest = {
     if (message.password !== "") {
       obj.password = message.password;
     }
+    if (message.replyToAddress !== "") {
+      obj.replyToAddress = message.replyToAddress;
+    }
     return obj;
   },
 
@@ -3766,6 +3813,7 @@ export const AddSMTPConfigRequest = {
     message.host = object.host ?? "";
     message.user = object.user ?? "";
     message.password = object.password ?? "";
+    message.replyToAddress = object.replyToAddress ?? "";
     return message;
   },
 };
@@ -3830,7 +3878,7 @@ export const AddSMTPConfigResponse = {
 };
 
 function createBaseUpdateSMTPConfigRequest(): UpdateSMTPConfigRequest {
-  return { senderAddress: "", senderName: "", tls: false, host: "", user: "" };
+  return { senderAddress: "", senderName: "", tls: false, host: "", user: "", replyToAddress: "" };
 }
 
 export const UpdateSMTPConfigRequest = {
@@ -3849,6 +3897,9 @@ export const UpdateSMTPConfigRequest = {
     }
     if (message.user !== "") {
       writer.uint32(42).string(message.user);
+    }
+    if (message.replyToAddress !== "") {
+      writer.uint32(50).string(message.replyToAddress);
     }
     return writer;
   },
@@ -3895,6 +3946,13 @@ export const UpdateSMTPConfigRequest = {
 
           message.user = reader.string();
           continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.replyToAddress = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -3911,6 +3969,7 @@ export const UpdateSMTPConfigRequest = {
       tls: isSet(object.tls) ? Boolean(object.tls) : false,
       host: isSet(object.host) ? String(object.host) : "",
       user: isSet(object.user) ? String(object.user) : "",
+      replyToAddress: isSet(object.replyToAddress) ? String(object.replyToAddress) : "",
     };
   },
 
@@ -3931,6 +3990,9 @@ export const UpdateSMTPConfigRequest = {
     if (message.user !== "") {
       obj.user = message.user;
     }
+    if (message.replyToAddress !== "") {
+      obj.replyToAddress = message.replyToAddress;
+    }
     return obj;
   },
 
@@ -3944,6 +4006,7 @@ export const UpdateSMTPConfigRequest = {
     message.tls = object.tls ?? false;
     message.host = object.host ?? "";
     message.user = object.user ?? "";
+    message.replyToAddress = object.replyToAddress ?? "";
     return message;
   },
 };
@@ -14305,6 +14368,475 @@ export const UpdateLDAPProviderResponse = {
   },
   fromPartial(object: DeepPartial<UpdateLDAPProviderResponse>): UpdateLDAPProviderResponse {
     const message = createBaseUpdateLDAPProviderResponse();
+    message.details = (object.details !== undefined && object.details !== null)
+      ? ObjectDetails.fromPartial(object.details)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseAddAppleProviderRequest(): AddAppleProviderRequest {
+  return {
+    name: "",
+    clientId: "",
+    teamId: "",
+    keyId: "",
+    privateKey: Buffer.alloc(0),
+    scopes: [],
+    providerOptions: undefined,
+  };
+}
+
+export const AddAppleProviderRequest = {
+  encode(message: AddAppleProviderRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.clientId !== "") {
+      writer.uint32(18).string(message.clientId);
+    }
+    if (message.teamId !== "") {
+      writer.uint32(26).string(message.teamId);
+    }
+    if (message.keyId !== "") {
+      writer.uint32(34).string(message.keyId);
+    }
+    if (message.privateKey.length !== 0) {
+      writer.uint32(42).bytes(message.privateKey);
+    }
+    for (const v of message.scopes) {
+      writer.uint32(50).string(v!);
+    }
+    if (message.providerOptions !== undefined) {
+      Options.encode(message.providerOptions, writer.uint32(58).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): AddAppleProviderRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAddAppleProviderRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.clientId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.teamId = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.keyId = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.privateKey = reader.bytes() as Buffer;
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.scopes.push(reader.string());
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.providerOptions = Options.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AddAppleProviderRequest {
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+      clientId: isSet(object.clientId) ? String(object.clientId) : "",
+      teamId: isSet(object.teamId) ? String(object.teamId) : "",
+      keyId: isSet(object.keyId) ? String(object.keyId) : "",
+      privateKey: isSet(object.privateKey) ? Buffer.from(bytesFromBase64(object.privateKey)) : Buffer.alloc(0),
+      scopes: Array.isArray(object?.scopes) ? object.scopes.map((e: any) => String(e)) : [],
+      providerOptions: isSet(object.providerOptions) ? Options.fromJSON(object.providerOptions) : undefined,
+    };
+  },
+
+  toJSON(message: AddAppleProviderRequest): unknown {
+    const obj: any = {};
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.clientId !== "") {
+      obj.clientId = message.clientId;
+    }
+    if (message.teamId !== "") {
+      obj.teamId = message.teamId;
+    }
+    if (message.keyId !== "") {
+      obj.keyId = message.keyId;
+    }
+    if (message.privateKey.length !== 0) {
+      obj.privateKey = base64FromBytes(message.privateKey);
+    }
+    if (message.scopes?.length) {
+      obj.scopes = message.scopes;
+    }
+    if (message.providerOptions !== undefined) {
+      obj.providerOptions = Options.toJSON(message.providerOptions);
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<AddAppleProviderRequest>): AddAppleProviderRequest {
+    return AddAppleProviderRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<AddAppleProviderRequest>): AddAppleProviderRequest {
+    const message = createBaseAddAppleProviderRequest();
+    message.name = object.name ?? "";
+    message.clientId = object.clientId ?? "";
+    message.teamId = object.teamId ?? "";
+    message.keyId = object.keyId ?? "";
+    message.privateKey = object.privateKey ?? Buffer.alloc(0);
+    message.scopes = object.scopes?.map((e) => e) || [];
+    message.providerOptions = (object.providerOptions !== undefined && object.providerOptions !== null)
+      ? Options.fromPartial(object.providerOptions)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseAddAppleProviderResponse(): AddAppleProviderResponse {
+  return { details: undefined, id: "" };
+}
+
+export const AddAppleProviderResponse = {
+  encode(message: AddAppleProviderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.details !== undefined) {
+      ObjectDetails.encode(message.details, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.id !== "") {
+      writer.uint32(18).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): AddAppleProviderResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAddAppleProviderResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.details = ObjectDetails.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AddAppleProviderResponse {
+    return {
+      details: isSet(object.details) ? ObjectDetails.fromJSON(object.details) : undefined,
+      id: isSet(object.id) ? String(object.id) : "",
+    };
+  },
+
+  toJSON(message: AddAppleProviderResponse): unknown {
+    const obj: any = {};
+    if (message.details !== undefined) {
+      obj.details = ObjectDetails.toJSON(message.details);
+    }
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<AddAppleProviderResponse>): AddAppleProviderResponse {
+    return AddAppleProviderResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<AddAppleProviderResponse>): AddAppleProviderResponse {
+    const message = createBaseAddAppleProviderResponse();
+    message.details = (object.details !== undefined && object.details !== null)
+      ? ObjectDetails.fromPartial(object.details)
+      : undefined;
+    message.id = object.id ?? "";
+    return message;
+  },
+};
+
+function createBaseUpdateAppleProviderRequest(): UpdateAppleProviderRequest {
+  return {
+    id: "",
+    name: "",
+    clientId: "",
+    teamId: "",
+    keyId: "",
+    privateKey: Buffer.alloc(0),
+    scopes: [],
+    providerOptions: undefined,
+  };
+}
+
+export const UpdateAppleProviderRequest = {
+  encode(message: UpdateAppleProviderRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.clientId !== "") {
+      writer.uint32(26).string(message.clientId);
+    }
+    if (message.teamId !== "") {
+      writer.uint32(34).string(message.teamId);
+    }
+    if (message.keyId !== "") {
+      writer.uint32(42).string(message.keyId);
+    }
+    if (message.privateKey.length !== 0) {
+      writer.uint32(50).bytes(message.privateKey);
+    }
+    for (const v of message.scopes) {
+      writer.uint32(58).string(v!);
+    }
+    if (message.providerOptions !== undefined) {
+      Options.encode(message.providerOptions, writer.uint32(66).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): UpdateAppleProviderRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUpdateAppleProviderRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.clientId = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.teamId = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.keyId = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.privateKey = reader.bytes() as Buffer;
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.scopes.push(reader.string());
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.providerOptions = Options.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UpdateAppleProviderRequest {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      name: isSet(object.name) ? String(object.name) : "",
+      clientId: isSet(object.clientId) ? String(object.clientId) : "",
+      teamId: isSet(object.teamId) ? String(object.teamId) : "",
+      keyId: isSet(object.keyId) ? String(object.keyId) : "",
+      privateKey: isSet(object.privateKey) ? Buffer.from(bytesFromBase64(object.privateKey)) : Buffer.alloc(0),
+      scopes: Array.isArray(object?.scopes) ? object.scopes.map((e: any) => String(e)) : [],
+      providerOptions: isSet(object.providerOptions) ? Options.fromJSON(object.providerOptions) : undefined,
+    };
+  },
+
+  toJSON(message: UpdateAppleProviderRequest): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.clientId !== "") {
+      obj.clientId = message.clientId;
+    }
+    if (message.teamId !== "") {
+      obj.teamId = message.teamId;
+    }
+    if (message.keyId !== "") {
+      obj.keyId = message.keyId;
+    }
+    if (message.privateKey.length !== 0) {
+      obj.privateKey = base64FromBytes(message.privateKey);
+    }
+    if (message.scopes?.length) {
+      obj.scopes = message.scopes;
+    }
+    if (message.providerOptions !== undefined) {
+      obj.providerOptions = Options.toJSON(message.providerOptions);
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<UpdateAppleProviderRequest>): UpdateAppleProviderRequest {
+    return UpdateAppleProviderRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<UpdateAppleProviderRequest>): UpdateAppleProviderRequest {
+    const message = createBaseUpdateAppleProviderRequest();
+    message.id = object.id ?? "";
+    message.name = object.name ?? "";
+    message.clientId = object.clientId ?? "";
+    message.teamId = object.teamId ?? "";
+    message.keyId = object.keyId ?? "";
+    message.privateKey = object.privateKey ?? Buffer.alloc(0);
+    message.scopes = object.scopes?.map((e) => e) || [];
+    message.providerOptions = (object.providerOptions !== undefined && object.providerOptions !== null)
+      ? Options.fromPartial(object.providerOptions)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseUpdateAppleProviderResponse(): UpdateAppleProviderResponse {
+  return { details: undefined };
+}
+
+export const UpdateAppleProviderResponse = {
+  encode(message: UpdateAppleProviderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.details !== undefined) {
+      ObjectDetails.encode(message.details, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): UpdateAppleProviderResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUpdateAppleProviderResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.details = ObjectDetails.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UpdateAppleProviderResponse {
+    return { details: isSet(object.details) ? ObjectDetails.fromJSON(object.details) : undefined };
+  },
+
+  toJSON(message: UpdateAppleProviderResponse): unknown {
+    const obj: any = {};
+    if (message.details !== undefined) {
+      obj.details = ObjectDetails.toJSON(message.details);
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<UpdateAppleProviderResponse>): UpdateAppleProviderResponse {
+    return UpdateAppleProviderResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<UpdateAppleProviderResponse>): UpdateAppleProviderResponse {
+    const message = createBaseUpdateAppleProviderResponse();
     message.details = (object.details !== undefined && object.details !== null)
       ? ObjectDetails.fromPartial(object.details)
       : undefined;
@@ -28942,7 +29474,7 @@ export const DataOrg = {
       obj.userLinks = message.userLinks.map((e) => IDPUserLink.toJSON(e));
     }
     if (message.domains?.length) {
-      obj.domains = message.domains.map((e: any) => Domain.toJSON(e));
+      obj.domains = message.domains.map((e) => Domain.toJSON(e));
     }
     if (message.appKeys?.length) {
       obj.appKeys = message.appKeys.map((e) => DataAppKey.toJSON(e));
@@ -38250,7 +38782,7 @@ export const AdminServiceDefinition = {
         _unknownFields: {
           8338: [
             Buffer.from([
-              164,
+              145,
               2,
               10,
               13,
@@ -38289,25 +38821,15 @@ export const AdminServiceDefinition = {
               111,
               110,
               26,
-              167,
+              148,
               1,
-              83,
+              68,
+              101,
+              108,
               101,
               116,
+              101,
               115,
-              32,
-              116,
-              104,
-              101,
-              32,
-              115,
-              116,
-              97,
-              116,
-              101,
-              32,
-              111,
-              102,
               32,
               116,
               104,
@@ -38346,6 +38868,7 @@ export const AdminServiceDefinition = {
               114,
               99,
               101,
+              115,
               32,
               40,
               85,
@@ -38392,16 +38915,6 @@ export const AdminServiceDefinition = {
               114,
               103,
               41,
-              32,
-              116,
-              111,
-              32,
-              114,
-              101,
-              109,
-              111,
-              118,
-              101,
               46,
               32,
               85,
@@ -44479,6 +44992,170 @@ export const AdminServiceDefinition = {
           400002: [Buffer.from([15, 10, 13, 111, 114, 103, 46, 105, 100, 112, 46, 119, 114, 105, 116, 101])],
           578365826: [
             Buffer.from([20, 58, 1, 42, 26, 15, 47, 105, 100, 112, 115, 47, 108, 100, 97, 112, 47, 123, 105, 100, 125]),
+          ],
+        },
+      },
+    },
+    /** Add a new Apple identity provider on the instance */
+    addAppleProvider: {
+      name: "AddAppleProvider",
+      requestType: AddAppleProviderRequest,
+      requestStream: false,
+      responseType: AddAppleProviderResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          8338: [
+            Buffer.from([
+              49,
+              10,
+              18,
+              73,
+              100,
+              101,
+              110,
+              116,
+              105,
+              116,
+              121,
+              32,
+              80,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+              115,
+              18,
+              27,
+              65,
+              100,
+              100,
+              32,
+              65,
+              112,
+              112,
+              108,
+              101,
+              32,
+              73,
+              100,
+              101,
+              110,
+              116,
+              105,
+              116,
+              121,
+              32,
+              80,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+            ]),
+          ],
+          400002: [Buffer.from([15, 10, 13, 105, 97, 109, 46, 105, 100, 112, 46, 119, 114, 105, 116, 101])],
+          578365826: [Buffer.from([16, 58, 1, 42, 34, 11, 47, 105, 100, 112, 115, 47, 97, 112, 112, 108, 101])],
+        },
+      },
+    },
+    /** Change an existing Apple identity provider on the instance */
+    updateAppleProvider: {
+      name: "UpdateAppleProvider",
+      requestType: UpdateAppleProviderRequest,
+      requestStream: false,
+      responseType: UpdateAppleProviderResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          8338: [
+            Buffer.from([
+              52,
+              10,
+              18,
+              73,
+              100,
+              101,
+              110,
+              116,
+              105,
+              116,
+              121,
+              32,
+              80,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+              115,
+              18,
+              30,
+              85,
+              112,
+              100,
+              97,
+              116,
+              101,
+              32,
+              65,
+              112,
+              112,
+              108,
+              101,
+              32,
+              73,
+              100,
+              101,
+              110,
+              116,
+              105,
+              116,
+              121,
+              32,
+              80,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+            ]),
+          ],
+          400002: [Buffer.from([15, 10, 13, 105, 97, 109, 46, 105, 100, 112, 46, 119, 114, 105, 116, 101])],
+          578365826: [
+            Buffer.from([
+              21,
+              58,
+              1,
+              42,
+              26,
+              16,
+              47,
+              105,
+              100,
+              112,
+              115,
+              47,
+              97,
+              112,
+              112,
+              108,
+              101,
+              47,
+              123,
+              105,
+              100,
+              125,
+            ]),
           ],
         },
       },
@@ -85058,6 +85735,16 @@ export interface AdminServiceImplementation<CallContextExt = {}> {
     request: UpdateLDAPProviderRequest,
     context: CallContext & CallContextExt,
   ): Promise<DeepPartial<UpdateLDAPProviderResponse>>;
+  /** Add a new Apple identity provider on the instance */
+  addAppleProvider(
+    request: AddAppleProviderRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<AddAppleProviderResponse>>;
+  /** Change an existing Apple identity provider on the instance */
+  updateAppleProvider(
+    request: UpdateAppleProviderRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<UpdateAppleProviderResponse>>;
   /**
    * Remove an identity provider
    * Will remove all linked providers of this configuration on the users
@@ -85733,6 +86420,16 @@ export interface AdminServiceClient<CallOptionsExt = {}> {
     request: DeepPartial<UpdateLDAPProviderRequest>,
     options?: CallOptions & CallOptionsExt,
   ): Promise<UpdateLDAPProviderResponse>;
+  /** Add a new Apple identity provider on the instance */
+  addAppleProvider(
+    request: DeepPartial<AddAppleProviderRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<AddAppleProviderResponse>;
+  /** Change an existing Apple identity provider on the instance */
+  updateAppleProvider(
+    request: DeepPartial<UpdateAppleProviderRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<UpdateAppleProviderResponse>;
   /**
    * Remove an identity provider
    * Will remove all linked providers of this configuration on the users
@@ -86147,6 +86844,31 @@ const tsProtoGlobalThis: any = (() => {
   }
   throw "Unable to locate global object";
 })();
+
+function bytesFromBase64(b64: string): Uint8Array {
+  if (tsProtoGlobalThis.Buffer) {
+    return Uint8Array.from(tsProtoGlobalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = tsProtoGlobalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
+  }
+}
+
+function base64FromBytes(arr: Uint8Array): string {
+  if (tsProtoGlobalThis.Buffer) {
+    return tsProtoGlobalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return tsProtoGlobalThis.btoa(bin.join(""));
+  }
+}
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 

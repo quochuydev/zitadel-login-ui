@@ -1,7 +1,7 @@
 'use client';
 
 import { finalizeAuthRequest, register } from '@/api';
-import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
+import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2beta/user_service';
 
 export default function RegisterButton(props: {
   orgId: string;

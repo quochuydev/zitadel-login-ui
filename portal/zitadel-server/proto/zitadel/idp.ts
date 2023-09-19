@@ -244,6 +244,7 @@ export enum ProviderType {
   PROVIDER_TYPE_GITLAB = 8,
   PROVIDER_TYPE_GITLAB_SELF_HOSTED = 9,
   PROVIDER_TYPE_GOOGLE = 10,
+  PROVIDER_TYPE_APPLE = 11,
   UNRECOGNIZED = -1,
 }
 
@@ -282,6 +283,9 @@ export function providerTypeFromJSON(object: any): ProviderType {
     case 10:
     case "PROVIDER_TYPE_GOOGLE":
       return ProviderType.PROVIDER_TYPE_GOOGLE;
+    case 11:
+    case "PROVIDER_TYPE_APPLE":
+      return ProviderType.PROVIDER_TYPE_APPLE;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -313,6 +317,8 @@ export function providerTypeToJSON(object: ProviderType): string {
       return "PROVIDER_TYPE_GITLAB_SELF_HOSTED";
     case ProviderType.PROVIDER_TYPE_GOOGLE:
       return "PROVIDER_TYPE_GOOGLE";
+    case ProviderType.PROVIDER_TYPE_APPLE:
+      return "PROVIDER_TYPE_APPLE";
     case ProviderType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -435,6 +441,7 @@ export interface ProviderConfig {
   gitlab?: GitLabConfig | undefined;
   gitlabSelfHosted?: GitLabSelfHostedConfig | undefined;
   azureAd?: AzureADConfig | undefined;
+  apple?: AppleConfig | undefined;
 }
 
 export interface OAuthConfig {
@@ -527,6 +534,13 @@ export interface LDAPAttributes {
 export interface AzureADTenant {
   tenantType?: AzureADTenantType | undefined;
   tenantId?: string | undefined;
+}
+
+export interface AppleConfig {
+  clientId: string;
+  teamId: string;
+  keyId: string;
+  scopes: string[];
 }
 
 function createBaseIDP(): IDP {
@@ -1524,6 +1538,7 @@ function createBaseProviderConfig(): ProviderConfig {
     gitlab: undefined,
     gitlabSelfHosted: undefined,
     azureAd: undefined,
+    apple: undefined,
   };
 }
 
@@ -1561,6 +1576,9 @@ export const ProviderConfig = {
     }
     if (message.azureAd !== undefined) {
       AzureADConfig.encode(message.azureAd, writer.uint32(90).fork()).ldelim();
+    }
+    if (message.apple !== undefined) {
+      AppleConfig.encode(message.apple, writer.uint32(98).fork()).ldelim();
     }
     return writer;
   },
@@ -1649,6 +1667,13 @@ export const ProviderConfig = {
 
           message.azureAd = AzureADConfig.decode(reader, reader.uint32());
           continue;
+        case 12:
+          if (tag !== 98) {
+            break;
+          }
+
+          message.apple = AppleConfig.decode(reader, reader.uint32());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1673,6 +1698,7 @@ export const ProviderConfig = {
         ? GitLabSelfHostedConfig.fromJSON(object.gitlabSelfHosted)
         : undefined,
       azureAd: isSet(object.azureAd) ? AzureADConfig.fromJSON(object.azureAd) : undefined,
+      apple: isSet(object.apple) ? AppleConfig.fromJSON(object.apple) : undefined,
     };
   },
 
@@ -1710,6 +1736,9 @@ export const ProviderConfig = {
     }
     if (message.azureAd !== undefined) {
       obj.azureAd = AzureADConfig.toJSON(message.azureAd);
+    }
+    if (message.apple !== undefined) {
+      obj.apple = AppleConfig.toJSON(message.apple);
     }
     return obj;
   },
@@ -1749,6 +1778,9 @@ export const ProviderConfig = {
       : undefined;
     message.azureAd = (object.azureAd !== undefined && object.azureAd !== null)
       ? AzureADConfig.fromPartial(object.azureAd)
+      : undefined;
+    message.apple = (object.apple !== undefined && object.apple !== null)
+      ? AppleConfig.fromPartial(object.apple)
       : undefined;
     return message;
   },
@@ -3154,6 +3186,110 @@ export const AzureADTenant = {
     const message = createBaseAzureADTenant();
     message.tenantType = object.tenantType ?? undefined;
     message.tenantId = object.tenantId ?? undefined;
+    return message;
+  },
+};
+
+function createBaseAppleConfig(): AppleConfig {
+  return { clientId: "", teamId: "", keyId: "", scopes: [] };
+}
+
+export const AppleConfig = {
+  encode(message: AppleConfig, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.clientId !== "") {
+      writer.uint32(10).string(message.clientId);
+    }
+    if (message.teamId !== "") {
+      writer.uint32(18).string(message.teamId);
+    }
+    if (message.keyId !== "") {
+      writer.uint32(26).string(message.keyId);
+    }
+    for (const v of message.scopes) {
+      writer.uint32(34).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): AppleConfig {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAppleConfig();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.clientId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.teamId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.keyId = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.scopes.push(reader.string());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AppleConfig {
+    return {
+      clientId: isSet(object.clientId) ? String(object.clientId) : "",
+      teamId: isSet(object.teamId) ? String(object.teamId) : "",
+      keyId: isSet(object.keyId) ? String(object.keyId) : "",
+      scopes: Array.isArray(object?.scopes) ? object.scopes.map((e: any) => String(e)) : [],
+    };
+  },
+
+  toJSON(message: AppleConfig): unknown {
+    const obj: any = {};
+    if (message.clientId !== "") {
+      obj.clientId = message.clientId;
+    }
+    if (message.teamId !== "") {
+      obj.teamId = message.teamId;
+    }
+    if (message.keyId !== "") {
+      obj.keyId = message.keyId;
+    }
+    if (message.scopes?.length) {
+      obj.scopes = message.scopes;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<AppleConfig>): AppleConfig {
+    return AppleConfig.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<AppleConfig>): AppleConfig {
+    const message = createBaseAppleConfig();
+    message.clientId = object.clientId ?? "";
+    message.teamId = object.teamId ?? "";
+    message.keyId = object.keyId ?? "";
+    message.scopes = object.scopes?.map((e) => e) || [];
     return message;
   },
 };

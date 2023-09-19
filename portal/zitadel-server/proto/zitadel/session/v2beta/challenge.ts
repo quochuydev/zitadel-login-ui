@@ -2,7 +2,7 @@
 import _m0 from "protobufjs/minimal";
 import { Struct } from "../../../google/protobuf/struct";
 
-export const protobufPackage = "zitadel.session.v2alpha";
+export const protobufPackage = "zitadel.session.v2beta";
 
 export enum UserVerificationRequirement {
   USER_VERIFICATION_REQUIREMENT_UNSPECIFIED = 0,

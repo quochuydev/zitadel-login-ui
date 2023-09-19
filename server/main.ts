@@ -1,12 +1,8 @@
 import fastify from 'fastify';
-import { client } from './client';
 import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
 
-client.execute(async ({ manager, auth, config }) => {
-  console.log('getMyOrg', await manager.getMyOrg({}));
-  console.log('getMyUser', await auth.getMyUser({}));
-
+(async () => {
   const server = fastify({});
 
   await server.register(cors, {});
@@ -21,8 +17,7 @@ client.execute(async ({ manager, auth, config }) => {
   });
 
   server.get('/create-org', async (req, res) => {
-    const org = await manager.getMyOrg({});
-    res.status(200).send({ org });
+    res.status(200).send({});
   });
 
   server.post('/api/v2', async (req, res) => {
@@ -32,8 +27,8 @@ client.execute(async ({ manager, auth, config }) => {
   });
 
   server.listen({
-    port: config.server.port,
+    port: 4000,
   });
 
-  console.log('server is listening at port', config.server.port);
-});
+  console.log('server is listening at port');
+})();

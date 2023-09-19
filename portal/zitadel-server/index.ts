@@ -1,15 +1,15 @@
-export { BrandingSettings, Theme } from './proto/zitadel/settings/v2alpha/branding_settings';
-export { LoginSettings, IdentityProvider, IdentityProviderType } from './proto/zitadel/settings/v2alpha/login_settings';
-export { Challenges } from './proto/zitadel/session/v2alpha/challenge';
-export { Session, Factors } from './proto/zitadel/session/v2alpha/session';
-export { IDPInformation, IDPLink } from './proto/zitadel/user/v2alpha/idp';
+export { BrandingSettings, Theme } from './proto/zitadel/settings/v2beta/branding_settings';
+export { LoginSettings, IdentityProvider, IdentityProviderType } from './proto/zitadel/settings/v2beta/login_settings';
+export { Challenges } from './proto/zitadel/session/v2beta/challenge';
+export { Session, Factors } from './proto/zitadel/session/v2beta/session';
+export { IDPInformation, IDPLink } from './proto/zitadel/user/v2beta/idp';
 export {
   ListSessionsResponse,
   GetSessionResponse,
   CreateSessionResponse,
   SetSessionResponse,
   DeleteSessionResponse,
-} from './proto/zitadel/session/v2alpha/session_service';
+} from './proto/zitadel/session/v2beta/session_service';
 export {
   GetPasswordComplexitySettingsResponse,
   GetBrandingSettingsResponse,
@@ -19,7 +19,7 @@ export {
   GetLoginSettingsRequest,
   GetActiveIdentityProvidersResponse,
   GetActiveIdentityProvidersRequest,
-} from './proto/zitadel/settings/v2alpha/settings_service';
+} from './proto/zitadel/settings/v2beta/settings_service';
 export {
   AddHumanUserResponse,
   AddHumanUserRequest,
@@ -37,9 +37,9 @@ export {
   StartIdentityProviderIntentRequest,
   RetrieveIdentityProviderIntentRequest,
   RetrieveIdentityProviderIntentResponse,
-} from './proto/zitadel/user/v2alpha/user_service';
+} from './proto/zitadel/user/v2beta/user_service';
 export { SetHumanPasswordResponse, SetHumanPasswordRequest } from './proto/zitadel/management';
 export * from './proto/zitadel/idp';
-export { LegalAndSupportSettings } from './proto/zitadel/settings/v2alpha/legal_settings';
-export { PasswordComplexitySettings } from './proto/zitadel/settings/v2alpha/password_settings';
-export { ResourceOwnerType } from './proto/zitadel/settings/v2alpha/settings';
+export { LegalAndSupportSettings } from './proto/zitadel/settings/v2beta/legal_settings';
+export { PasswordComplexitySettings } from './proto/zitadel/settings/v2beta/password_settings';
+export { ResourceOwnerType } from './proto/zitadel/settings/v2beta/settings';

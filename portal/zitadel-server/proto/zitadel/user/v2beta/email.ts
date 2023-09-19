@@ -1,7 +1,7 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "zitadel.user.v2alpha";
+export const protobufPackage = "zitadel.user.v2beta";
 
 export interface SetHumanEmail {
   email: string;

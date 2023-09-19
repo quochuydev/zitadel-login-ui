@@ -1,13 +1,13 @@
 import { appUrl } from '@/config';
-import { AuthRequest } from '@/zitadel-server/proto/zitadel/oidc/v2alpha/authorization';
+import { AuthRequest } from '@/zitadel-server/proto/zitadel/oidc/v2beta/authorization';
 import { IDPInformation } from '@/zitadel-server';
 import {
   AddHumanUserRequest,
   RetrieveIdentityProviderIntentRequest,
   StartIdentityProviderIntentRequest,
-} from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
-import { CreateCallbackRequest } from '@/zitadel-server/proto/zitadel/oidc/v2alpha/oidc_service';
-import { CreateSessionRequest } from '@/zitadel-server/proto/zitadel/session/v2alpha/session_service';
+} from '@/zitadel-server/proto/zitadel/user/v2beta/user_service';
+import { CreateCallbackRequest } from '@/zitadel-server/proto/zitadel/oidc/v2beta/oidc_service';
+import { CreateSessionRequest } from '@/zitadel-server/proto/zitadel/session/v2beta/session_service';
 
 export async function startIdpIntent(orgId: string, data: StartIdentityProviderIntentRequest) {
   const result = await fetch(`/api/intents/start`, {

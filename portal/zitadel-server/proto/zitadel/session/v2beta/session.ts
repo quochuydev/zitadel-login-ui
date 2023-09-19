@@ -3,7 +3,7 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Timestamp } from "../../../google/protobuf/timestamp";
 
-export const protobufPackage = "zitadel.session.v2alpha";
+export const protobufPackage = "zitadel.session.v2beta";
 
 export interface Session {
   id: string;

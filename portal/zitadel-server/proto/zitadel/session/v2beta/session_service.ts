@@ -2,11 +2,11 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import _m0 from "protobufjs/minimal";
 import { Struct } from "../../../google/protobuf/struct";
-import { Details, ListDetails, ListQuery } from "../../object/v2alpha/object";
+import { Details, ListDetails, ListQuery } from "../../object/v2beta/object";
 import { Challenges, RequestChallenges } from "./challenge";
 import { SearchQuery, Session } from "./session";
 
-export const protobufPackage = "zitadel.session.v2alpha";
+export const protobufPackage = "zitadel.session.v2beta";
 
 export interface ListSessionsRequest {
   query: ListQuery | undefined;
@@ -102,11 +102,11 @@ export interface CheckIDPIntent {
 }
 
 export interface CheckTOTP {
-  totp: string;
+  code: string;
 }
 
 export interface CheckOTP {
-  otp: string;
+  code: string;
 }
 
 function createBaseListSessionsRequest(): ListSessionsRequest {
@@ -1562,13 +1562,13 @@ export const CheckIDPIntent = {
 };
 
 function createBaseCheckTOTP(): CheckTOTP {
-  return { totp: "" };
+  return { code: "" };
 }
 
 export const CheckTOTP = {
   encode(message: CheckTOTP, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.totp !== "") {
-      writer.uint32(10).string(message.totp);
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
     }
     return writer;
   },
@@ -1585,7 +1585,7 @@ export const CheckTOTP = {
             break;
           }
 
-          message.totp = reader.string();
+          message.code = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1597,13 +1597,13 @@ export const CheckTOTP = {
   },
 
   fromJSON(object: any): CheckTOTP {
-    return { totp: isSet(object.totp) ? String(object.totp) : "" };
+    return { code: isSet(object.code) ? String(object.code) : "" };
   },
 
   toJSON(message: CheckTOTP): unknown {
     const obj: any = {};
-    if (message.totp !== "") {
-      obj.totp = message.totp;
+    if (message.code !== "") {
+      obj.code = message.code;
     }
     return obj;
   },
@@ -1613,19 +1613,19 @@ export const CheckTOTP = {
   },
   fromPartial(object: DeepPartial<CheckTOTP>): CheckTOTP {
     const message = createBaseCheckTOTP();
-    message.totp = object.totp ?? "";
+    message.code = object.code ?? "";
     return message;
   },
 };
 
 function createBaseCheckOTP(): CheckOTP {
-  return { otp: "" };
+  return { code: "" };
 }
 
 export const CheckOTP = {
   encode(message: CheckOTP, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.otp !== "") {
-      writer.uint32(10).string(message.otp);
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
     }
     return writer;
   },
@@ -1642,7 +1642,7 @@ export const CheckOTP = {
             break;
           }
 
-          message.otp = reader.string();
+          message.code = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1654,13 +1654,13 @@ export const CheckOTP = {
   },
 
   fromJSON(object: any): CheckOTP {
-    return { otp: isSet(object.otp) ? String(object.otp) : "" };
+    return { code: isSet(object.code) ? String(object.code) : "" };
   },
 
   toJSON(message: CheckOTP): unknown {
     const obj: any = {};
-    if (message.otp !== "") {
-      obj.otp = message.otp;
+    if (message.code !== "") {
+      obj.code = message.code;
     }
     return obj;
   },
@@ -1670,7 +1670,7 @@ export const CheckOTP = {
   },
   fromPartial(object: DeepPartial<CheckOTP>): CheckOTP {
     const message = createBaseCheckOTP();
-    message.otp = object.otp ?? "";
+    message.code = object.code ?? "";
     return message;
   },
 };
@@ -1678,7 +1678,7 @@ export const CheckOTP = {
 export type SessionServiceDefinition = typeof SessionServiceDefinition;
 export const SessionServiceDefinition = {
   name: "SessionService",
-  fullName: "zitadel.session.v2alpha.SessionService",
+  fullName: "zitadel.session.v2beta.SessionService",
   methods: {
     /** Search sessions */
     listSessions: {
@@ -1806,19 +1806,18 @@ export const SessionServiceDefinition = {
           400010: [Buffer.from([17, 10, 15, 10, 13, 97, 117, 116, 104, 101, 110, 116, 105, 99, 97, 116, 101, 100])],
           578365826: [
             Buffer.from([
-              29,
+              28,
               58,
               1,
               42,
               34,
-              24,
+              23,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,
@@ -1976,16 +1975,15 @@ export const SessionServiceDefinition = {
           400010: [Buffer.from([17, 10, 15, 10, 13, 97, 117, 116, 104, 101, 110, 116, 105, 99, 97, 116, 101, 100])],
           578365826: [
             Buffer.from([
-              32,
+              31,
               18,
-              30,
+              29,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,
@@ -2196,19 +2194,18 @@ export const SessionServiceDefinition = {
           ],
           578365826: [
             Buffer.from([
-              22,
+              21,
               58,
               1,
               42,
               34,
-              17,
+              16,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,
@@ -2332,19 +2329,18 @@ export const SessionServiceDefinition = {
           400010: [Buffer.from([17, 10, 15, 10, 13, 97, 117, 116, 104, 101, 110, 116, 105, 99, 97, 116, 101, 100])],
           578365826: [
             Buffer.from([
-              35,
+              34,
               58,
               1,
               42,
               50,
-              30,
+              29,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,
@@ -2495,19 +2491,18 @@ export const SessionServiceDefinition = {
           400010: [Buffer.from([17, 10, 15, 10, 13, 97, 117, 116, 104, 101, 110, 116, 105, 99, 97, 116, 101, 100])],
           578365826: [
             Buffer.from([
-              35,
+              34,
               58,
               1,
               42,
               42,
-              30,
+              29,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,

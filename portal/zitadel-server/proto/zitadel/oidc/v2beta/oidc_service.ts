@@ -1,10 +1,10 @@
 /* eslint-disable */
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import _m0 from "protobufjs/minimal";
-import { Details } from "../../object/v2alpha/object";
+import { Details } from "../../object/v2beta/object";
 import { AuthorizationError, AuthRequest } from "./authorization";
 
-export const protobufPackage = "zitadel.oidc.v2alpha";
+export const protobufPackage = "zitadel.oidc.v2beta";
 
 export interface GetAuthRequestRequest {
   authRequestId: string;
@@ -392,7 +392,7 @@ export const CreateCallbackResponse = {
 export type OIDCServiceDefinition = typeof OIDCServiceDefinition;
 export const OIDCServiceDefinition = {
   name: "OIDCService",
-  fullName: "zitadel.oidc.v2alpha.OIDCService",
+  fullName: "zitadel.oidc.v2beta.OIDCService",
   methods: {
     getAuthRequest: {
       name: "GetAuthRequest",
@@ -595,16 +595,15 @@ export const OIDCServiceDefinition = {
           400010: [Buffer.from([17, 10, 15, 10, 13, 97, 117, 116, 104, 101, 110, 116, 105, 99, 97, 116, 101, 100])],
           578365826: [
             Buffer.from([
-              47,
+              46,
               18,
-              45,
+              44,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               111,
@@ -1046,19 +1045,18 @@ export const OIDCServiceDefinition = {
           400010: [Buffer.from([17, 10, 15, 10, 13, 97, 117, 116, 104, 101, 110, 116, 105, 99, 97, 116, 101, 100])],
           578365826: [
             Buffer.from([
-              50,
+              49,
               58,
               1,
               42,
               34,
-              45,
+              44,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               111,

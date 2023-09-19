@@ -1,4 +1,4 @@
-import { AuthRequest } from '@/zitadel-server/proto/zitadel/oidc/v2alpha/authorization';
+import { AuthRequest } from '@/zitadel-server/proto/zitadel/oidc/v2beta/authorization';
 
 const orgIDScopePrefix = 'urn:zitadel:iam:org:id:';
 

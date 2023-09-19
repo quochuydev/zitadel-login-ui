@@ -145,6 +145,7 @@ export interface SMTPConfig {
   tls: boolean;
   host: string;
   user: string;
+  replyToAddress: string;
 }
 
 export interface SMSProvider {
@@ -476,7 +477,7 @@ export const SecretGeneratorTypeQuery = {
 };
 
 function createBaseSMTPConfig(): SMTPConfig {
-  return { details: undefined, senderAddress: "", senderName: "", tls: false, host: "", user: "" };
+  return { details: undefined, senderAddress: "", senderName: "", tls: false, host: "", user: "", replyToAddress: "" };
 }
 
 export const SMTPConfig = {
@@ -498,6 +499,9 @@ export const SMTPConfig = {
     }
     if (message.user !== "") {
       writer.uint32(50).string(message.user);
+    }
+    if (message.replyToAddress !== "") {
+      writer.uint32(58).string(message.replyToAddress);
     }
     return writer;
   },
@@ -551,6 +555,13 @@ export const SMTPConfig = {
 
           message.user = reader.string();
           continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.replyToAddress = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -568,6 +579,7 @@ export const SMTPConfig = {
       tls: isSet(object.tls) ? Boolean(object.tls) : false,
       host: isSet(object.host) ? String(object.host) : "",
       user: isSet(object.user) ? String(object.user) : "",
+      replyToAddress: isSet(object.replyToAddress) ? String(object.replyToAddress) : "",
     };
   },
 
@@ -591,6 +603,9 @@ export const SMTPConfig = {
     if (message.user !== "") {
       obj.user = message.user;
     }
+    if (message.replyToAddress !== "") {
+      obj.replyToAddress = message.replyToAddress;
+    }
     return obj;
   },
 
@@ -607,6 +622,7 @@ export const SMTPConfig = {
     message.tls = object.tls ?? false;
     message.host = object.host ?? "";
     message.user = object.user ?? "";
+    message.replyToAddress = object.replyToAddress ?? "";
     return message;
   },
 };

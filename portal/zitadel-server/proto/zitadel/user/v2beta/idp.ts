@@ -2,7 +2,7 @@
 import _m0 from "protobufjs/minimal";
 import { Struct } from "../../../google/protobuf/struct";
 
-export const protobufPackage = "zitadel.user.v2alpha";
+export const protobufPackage = "zitadel.user.v2beta";
 
 export interface LDAPCredentials {
   username: string;

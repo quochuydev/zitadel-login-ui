@@ -1,7 +1,7 @@
 /* eslint-disable */
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import _m0 from "protobufjs/minimal";
-import { Details, ListDetails, RequestContext } from "../../object/v2alpha/object";
+import { Details, ListDetails, RequestContext } from "../../object/v2beta/object";
 import { BrandingSettings } from "./branding_settings";
 import { DomainSettings } from "./domain_settings";
 import { LegalAndSupportSettings } from "./legal_settings";
@@ -9,7 +9,7 @@ import { LockoutSettings } from "./lockout_settings";
 import { IdentityProvider, LoginSettings } from "./login_settings";
 import { PasswordComplexitySettings } from "./password_settings";
 
-export const protobufPackage = "zitadel.settings.v2alpha";
+export const protobufPackage = "zitadel.settings.v2beta";
 
 export interface GetLoginSettingsRequest {
   ctx: RequestContext | undefined;
@@ -1179,7 +1179,7 @@ export const GetGeneralSettingsResponse = {
 export type SettingsServiceDefinition = typeof SettingsServiceDefinition;
 export const SettingsServiceDefinition = {
   name: "SettingsService",
-  fullName: "zitadel.settings.v2alpha.SettingsService",
+  fullName: "zitadel.settings.v2beta.SettingsService",
   methods: {
     /** Get basic information over the instance */
     getGeneralSettings: {
@@ -1323,7 +1323,7 @@ export const SettingsServiceDefinition = {
           ],
           400010: [Buffer.from([15, 10, 13, 10, 11, 112, 111, 108, 105, 99, 121, 46, 114, 101, 97, 100])],
           578365826: [
-            Buffer.from([19, 18, 17, 47, 118, 50, 97, 108, 112, 104, 97, 47, 115, 101, 116, 116, 105, 110, 103, 115]),
+            Buffer.from([18, 18, 16, 47, 118, 50, 98, 101, 116, 97, 47, 115, 101, 116, 116, 105, 110, 103, 115]),
           ],
         },
       },
@@ -1429,16 +1429,15 @@ export const SettingsServiceDefinition = {
           400010: [Buffer.from([15, 10, 13, 10, 11, 112, 111, 108, 105, 99, 121, 46, 114, 101, 97, 100])],
           578365826: [
             Buffer.from([
-              25,
+              24,
               18,
-              23,
+              22,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,
@@ -1606,16 +1605,15 @@ export const SettingsServiceDefinition = {
           400010: [Buffer.from([15, 10, 13, 10, 11, 112, 111, 108, 105, 99, 121, 46, 114, 101, 97, 100])],
           578365826: [
             Buffer.from([
-              30,
+              29,
               18,
-              28,
+              27,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,
@@ -1777,16 +1775,15 @@ export const SettingsServiceDefinition = {
           400010: [Buffer.from([15, 10, 13, 10, 11, 112, 111, 108, 105, 99, 121, 46, 114, 101, 97, 100])],
           578365826: [
             Buffer.from([
-              39,
+              38,
               18,
-              37,
+              36,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,
@@ -1965,16 +1962,15 @@ export const SettingsServiceDefinition = {
           400010: [Buffer.from([15, 10, 13, 10, 11, 112, 111, 108, 105, 99, 121, 46, 114, 101, 97, 100])],
           578365826: [
             Buffer.from([
-              28,
+              27,
               18,
-              26,
+              25,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,
@@ -2108,16 +2104,15 @@ export const SettingsServiceDefinition = {
           400010: [Buffer.from([15, 10, 13, 10, 11, 112, 111, 108, 105, 99, 121, 46, 114, 101, 97, 100])],
           578365826: [
             Buffer.from([
-              26,
+              25,
               18,
-              24,
+              23,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,
@@ -2259,16 +2254,15 @@ export const SettingsServiceDefinition = {
           400010: [Buffer.from([15, 10, 13, 10, 11, 112, 111, 108, 105, 99, 121, 46, 114, 101, 97, 100])],
           578365826: [
             Buffer.from([
-              33,
+              32,
               18,
-              31,
+              30,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,
@@ -2451,16 +2445,15 @@ export const SettingsServiceDefinition = {
           400010: [Buffer.from([15, 10, 13, 10, 11, 112, 111, 108, 105, 99, 121, 46, 114, 101, 97, 100])],
           578365826: [
             Buffer.from([
-              27,
+              26,
               18,
-              25,
+              24,
               47,
               118,
               50,
-              97,
-              108,
-              112,
-              104,
+              98,
+              101,
+              116,
               97,
               47,
               115,

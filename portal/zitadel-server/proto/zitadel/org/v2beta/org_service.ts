@@ -1,8 +1,8 @@
 /* eslint-disable */
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import _m0 from "protobufjs/minimal";
-import { Details } from "../../object/v2alpha/object";
-import { AddHumanUserRequest } from "../../user/v2alpha/user_service";
+import { Details } from "../../object/v2beta/object";
+import { AddHumanUserRequest } from "../../user/v2beta/user_service";
 
 export const protobufPackage = "zitadel.org.v2beta";
 
