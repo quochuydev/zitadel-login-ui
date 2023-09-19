@@ -1,9 +1,6 @@
 export { BrandingSettings, Theme } from './proto/zitadel/settings/v2alpha/branding_settings';
-
 export { LoginSettings, IdentityProvider, IdentityProviderType } from './proto/zitadel/settings/v2alpha/login_settings';
-
 export { Challenges } from './proto/zitadel/session/v2alpha/challenge';
-
 export { Session, Factors } from './proto/zitadel/session/v2alpha/session';
 export { IDPInformation, IDPLink } from './proto/zitadel/user/v2alpha/idp';
 export {

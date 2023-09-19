@@ -16,6 +16,8 @@ export default async function Page({ searchParams }: any) {
         .catch((_) => undefined)
     : undefined;
 
+  console.log('authRequest', authRequest);
+
   const orgId = getOrgIdFromAuthRequest(authRequest) as string;
 
   const identityProviders = orgId

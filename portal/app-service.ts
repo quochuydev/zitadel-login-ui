@@ -103,7 +103,7 @@ export function createOrgMetadataInterceptor(orgId?: string): ClientMiddleware {
   };
 }
 
-type AuthorizationInterceptorParams =
+export type AuthorizationInterceptorParams =
   | {
       type: 'clientCredentials';
       clientId: string;
@@ -118,7 +118,7 @@ type AuthorizationInterceptorParams =
       serviceAccountJSON: string;
     };
 
-function createAuthorizationInterceptor(params: AuthorizationInterceptorParams) {
+export function createAuthorizationInterceptor(params: AuthorizationInterceptorParams) {
   const { type } = params;
 
   if (type === 'clientCredentials') {
@@ -156,7 +156,7 @@ export function createManagementService(
   });
 }
 
-function createClient<T>(params: { definition: CompatServiceDefinition; interceptors: ClientMiddleware[] }): T {
+export function createClient<T>(params: { definition: CompatServiceDefinition; interceptors: ClientMiddleware[] }): T {
   const { definition, interceptors } = params;
 
   const channel = createChannel(apiEndpoint);

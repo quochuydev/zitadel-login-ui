@@ -1,10 +1,9 @@
-import { createChannel, createClientFactory, CallOptions, ClientMiddleware, ClientMiddlewareCall } from 'nice-grpc';
+import { CallOptions, ClientMiddleware, ClientMiddlewareCall } from 'nice-grpc';
 import { Metadata } from 'nice-grpc-common';
 import fs from 'fs';
 import path from 'path';
 import { credentials } from '@zitadel/node';
-import { config, apiEndpoint } from '@/config';
-
+import { apiEndpoint } from '@/config';
 import type { UserServiceClient } from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
 import { UserServiceDefinition } from '@/zitadel-server/proto/zitadel/user/v2alpha/user_service';
 import type { SessionServiceClient } from '@/zitadel-server/proto/zitadel/session/v2alpha/session_service';
@@ -18,7 +17,7 @@ import { SettingsServiceDefinition } from '@/zitadel-server/proto/zitadel/settin
 import type { SettingsServiceClient } from '@/zitadel-server/proto/zitadel/settings/v2alpha/settings_service';
 import type { ManagementServiceClient } from '@/zitadel-server/proto/zitadel/management';
 import { ManagementServiceDefinition } from '@/zitadel-server/proto/zitadel/management';
-import { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
+import { createAuthorizationInterceptor, createClient, createOrgMetadataInterceptor } from './app-service';
 
 export type { ClientMiddleware };
 
@@ -90,19 +89,6 @@ export function OrgMetadata(orgId?: string): ClientMiddleware {
   };
 }
 
-export function createClient<T>(params: { definition: CompatServiceDefinition; interceptors: ClientMiddleware[] }): T {
-  const { definition, interceptors } = params;
-
-  const channel = createChannel(apiEndpoint);
-  let factory = createClientFactory();
-
-  for (const interceptor of interceptors) {
-    factory = factory.use(interceptor);
-  }
-
-  return factory.create(definition, channel) as T;
-}
-
 export const createUserService = (orgId?: string): UserServiceClient => {
   const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
 
@@ -145,12 +131,19 @@ export function createSettingService(orgId?: string): SettingsServiceClient {
   });
 }
 
-export function createManagementService(orgId?: string): ManagementServiceClient {
-  const interceptors: ClientMiddleware[] = [serviceAccount, OrgMetadata(orgId)];
+const authorizationInterceptor = createAuthorizationInterceptor({
+  type: 'serviceAccount',
+  serviceAccountJSON: 'sa/227355825121810019.json',
+});
+
+type ManagementServiceOptions = { orgId: string };
+
+export function createManagementService(options: ManagementServiceOptions): ManagementServiceClient {
+  const { orgId } = options;
 
   return createClient<ManagementServiceClient>({
     definition: ManagementServiceDefinition,
-    interceptors,
+    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId)],
   });
 }
 

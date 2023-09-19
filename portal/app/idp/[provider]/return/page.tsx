@@ -84,6 +84,8 @@ export default async function Page({
         .catch((_) => undefined)
     : undefined;
 
+  console.log('authRequest', authRequest);
+
   const orgId = getOrgIdFromAuthRequest(authRequest);
 
   if (!orgId) {

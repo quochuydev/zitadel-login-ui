@@ -13,6 +13,8 @@ export async function POST(request: NextRequest) {
     const result = await sessionService.createSession(data);
     const session = await sessionService.getSession({ sessionId: result.sessionId }).then((e) => e.session);
 
+    console.log('session', session);
+
     addSessionToCookie({
       sessionId: result.sessionId,
       sessionToken: result.sessionToken,
