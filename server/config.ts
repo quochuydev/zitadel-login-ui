@@ -1,4 +1,3 @@
-import { create } from '@submodule/core';
 import { z } from 'zod';
 import { config as dotenvConfig } from 'dotenv';
 
@@ -12,7 +11,7 @@ const configSchema = z.object({
   }),
 });
 
-export const config = create(() => {
+export const config = () => {
   dotenvConfig();
 
   return configSchema.parse({
@@ -24,4 +23,4 @@ export const config = create(() => {
       serviceAccountJSON: 'sa/227355825121810019.json',
     },
   });
-});
+};
