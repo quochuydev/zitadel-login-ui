@@ -5,7 +5,7 @@ import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/management';
 
 export async function POST(request: NextRequest) {
   try {
-    const orgId = request.headers.get('x-zitadel-orgid') as string;
+    const orgId = request.headers.get('org-id') as string;
     const body: AddHumanUserRequest = await request.json();
     const { ...data } = body;
 

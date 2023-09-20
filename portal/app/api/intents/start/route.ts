@@ -9,7 +9,7 @@ const schema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const orgId = request.headers.get('x-zitadel-orgid') as string;
+    const orgId = request.headers.get('org-id') as string;
     const body: StartIdentityProviderIntentRequest = await request.json();
     const { ...data } = body;
     schema.parse({ orgId });

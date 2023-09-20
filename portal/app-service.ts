@@ -5,8 +5,6 @@ import { createChannel, createClientFactory, CallOptions, ClientMiddleware, Clie
 import { Metadata } from 'nice-grpc-common';
 import { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
 import { AuthenticationOptions, ServiceAccount } from '@zitadel/node/dist/credentials/service-account';
-import type { ManagementServiceClient } from '@/zitadel-server/proto/zitadel/management';
-import { ManagementServiceDefinition } from '@/zitadel-server/proto/zitadel/management';
 import { credentials } from '@zitadel/node';
 import { apiEndpoint, appUrl } from '@/config';
 

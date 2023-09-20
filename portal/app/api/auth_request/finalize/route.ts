@@ -4,7 +4,6 @@ import { CreateCallbackRequest } from '@/zitadel-server/proto/zitadel/oidc/v2bet
 
 export async function POST(request: NextRequest) {
   try {
-    // const orgId = request.headers.get('x-zitadel-orgid');
     const body: CreateCallbackRequest = await request.json();
     const { ...data } = body;
     const { authRequestId, session } = data;
