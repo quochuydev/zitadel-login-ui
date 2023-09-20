@@ -4,4 +4,3 @@ tasks:
   up:
     deps:
       - :fe:d
-      - :be:d

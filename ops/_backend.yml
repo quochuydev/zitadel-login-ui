@@ -4,4 +4,4 @@ tasks:
   dev:
     aliases: [d]
     cmds:
-      - yarn workspace @zitadel/server dev
+      - node -v
