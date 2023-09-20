@@ -12,12 +12,16 @@ import type { OIDCServiceClient } from '@/zitadel-server/proto/zitadel/oidc/v2be
 import { OIDCServiceDefinition } from '@/zitadel-server/proto/zitadel/oidc/v2beta/oidc_service';
 import { AuthServiceDefinition } from '@/zitadel-server/proto/zitadel/auth';
 import type { AuthServiceClient } from '@/zitadel-server/proto/zitadel/auth';
-import { AuthenticationOptions, ServiceAccount } from '@zitadel/node/dist/credentials/service-account';
 import { SettingsServiceDefinition } from '@/zitadel-server/proto/zitadel/settings/v2beta/settings_service';
 import type { SettingsServiceClient } from '@/zitadel-server/proto/zitadel/settings/v2beta/settings_service';
 import type { ManagementServiceClient } from '@/zitadel-server/proto/zitadel/management';
 import { ManagementServiceDefinition } from '@/zitadel-server/proto/zitadel/management';
-import { createAuthorizationInterceptor, createClient, createOrgMetadataInterceptor } from './app-service';
+import {
+  createAuthorizationInterceptor,
+  createClient,
+  createOrgMetadataInterceptor,
+  createServiceAccountInterceptor,
+} from './app-service';
 
 export type { ClientMiddleware };
 
@@ -37,39 +41,11 @@ export const getServiceAccount = () => {
 
 export const serviceAccount = getServiceAccount();
 
-export function getAccessToken(token: string) {
-  return createAccessTokenInterceptor(token);
-}
-
 export function createAccessTokenInterceptor(token: string): ClientMiddleware {
   return async function* <Request, Response>(call: ClientMiddlewareCall<Request, Response>, options: CallOptions) {
     options.metadata ??= new Metadata();
 
     if (!options.metadata.has('authorization')) {
-      options.metadata.set('authorization', `Bearer ${token}`);
-    }
-
-    return yield* call.next(call.request, options);
-  };
-}
-
-export function createServiceAccountInterceptor(
-  audience: string,
-  serviceAccount: ServiceAccount,
-  authOptions?: AuthenticationOptions,
-): ClientMiddleware {
-  let token: string | undefined;
-  let expiryDate = new Date(0);
-
-  return async function* <Request, Response>(call: ClientMiddlewareCall<Request, Response>, options: CallOptions) {
-    options.metadata ??= new Metadata();
-
-    if (!options.metadata.has('authorization')) {
-      if (expiryDate < new Date()) {
-        console.log(`Need to create new token for org:`, authOptions);
-        token = await serviceAccount.authenticate(audience, authOptions);
-        expiryDate.setTime(new Date().getTime() + 59 * 60 * 1000);
-      }
       options.metadata.set('authorization', `Bearer ${token}`);
     }
 

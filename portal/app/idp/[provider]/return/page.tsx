@@ -1,6 +1,6 @@
 import OidcReturn from '@/components/OidcReturn';
 import RegisterButton from '@/components/RegisterButton';
-import { createOIDCService, createUserService, serviceAccount } from '@/instrumentation-node';
+import { createOIDCService, createUserService } from '@/instrumentation-node';
 import { getOrgIdFromAuthRequest } from '@/lib/helper';
 import { IDPInformation } from '@/zitadel-server';
 import { AddHumanUserRequest } from '@/zitadel-server/proto/zitadel/user/v2beta/user_service';

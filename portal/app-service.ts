@@ -142,20 +142,6 @@ export function createAuthorizationInterceptor(params: AuthorizationInterceptorP
   throw new Error(`Invalid authorization type: ${type}`);
 }
 
-export function createManagementService(
-  params: AuthorizationInterceptorParams,
-  options: {
-    orgId: string;
-  },
-): ManagementServiceClient {
-  const { orgId } = options;
-
-  return createClient<ManagementServiceClient>({
-    definition: ManagementServiceDefinition,
-    interceptors: [createAuthorizationInterceptor(params), createOrgMetadataInterceptor(orgId)],
-  });
-}
-
 export function createClient<T>(params: { definition: CompatServiceDefinition; interceptors: ClientMiddleware[] }): T {
   const { definition, interceptors } = params;
 
