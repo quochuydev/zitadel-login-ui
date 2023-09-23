@@ -62,13 +62,13 @@ export default function Home() {
               orgId: '226742452134923939', //adminX
               // loginClient: '226760022309212526', //adminX
               // loginClient: '227893642738577880', //app
-              loginClient: '226761232584085870', //zitadel
+              // loginClient: '226761232584085870', //zitadel
             },
             '44e54ccf-1307-4df6-9117-609f9e0f2458': {
               orgId: '226760083948752547', //adminY
               // loginClient: '227761428495376237', //adminY
               // loginClient: '227893642738577880', //app
-              loginClient: '226761232584085870', //zitadel
+              // loginClient: '226761232584085870', //zitadel
             },
           };
 
@@ -80,7 +80,6 @@ export default function Home() {
           const config = mapOrg[careProviderId];
 
           const options = {
-            login_client: config.loginClient,
             scope: `openid userinfo email profile address urn:zitadel:iam:user:metadata urn:zitadel:iam:user:resourceowner urn:zitadel:iam:org:id:${config.orgId}`,
           };
 

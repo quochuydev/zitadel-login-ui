@@ -1,5 +1,5 @@
-export const apiEndpoint = process.env.ZITADEL_API_URL as string;
-export const appUrl = process.env.APP_URL || 'https://portal.example.local';
+export const apiEndpoint = 'https://system-siqqmi.zitadel.cloud';
+export const appUrl = 'https://portal.example.local';
 export const serviceAccountJSON = 'sa/227355825121810019.json';
 
 export const config: { [key: string]: any } = {
