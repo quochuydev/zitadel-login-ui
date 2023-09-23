@@ -29,16 +29,16 @@ export default function Home() {
       return;
     }
 
-    fetch('https://app.example.local/api/v2', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ data: {} }),
-    })
-      .then((res) => res.json())
-      .then((result) => console.log(result))
-      .catch((e) => console.log(e));
+    // fetch('https://app.example.local/api/v2', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ data: {} }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((result) => console.log(result))
+    //   .catch((e) => console.log(e));
   }, [session]);
 
   return (
@@ -52,6 +52,9 @@ export default function Home() {
       <>{JSON.stringify(userInfo)}</>
 
       <br />
+      <>-----------------------------</>
+      <br />
+
       <button
         onClick={() => {
           const careProviderId = '1dfca9ee-f4ae-4fac-9dd4-49e06f47fe81';
@@ -60,15 +63,11 @@ export default function Home() {
           const mapOrg = {
             '1dfca9ee-f4ae-4fac-9dd4-49e06f47fe81': {
               orgId: '226742452134923939', //adminX
-              // loginClient: '226760022309212526', //adminX
-              // loginClient: '227893642738577880', //app
-              // loginClient: '226761232584085870', //zitadel
+              loginClient: '232230774466745007',
             },
             '44e54ccf-1307-4df6-9117-609f9e0f2458': {
               orgId: '226760083948752547', //adminY
-              // loginClient: '227761428495376237', //adminY
-              // loginClient: '227893642738577880', //app
-              // loginClient: '226761232584085870', //zitadel
+              loginClient: '232230774466745007',
             },
           };
 
@@ -80,7 +79,8 @@ export default function Home() {
           const config = mapOrg[careProviderId];
 
           const options = {
-            scope: `openid userinfo email profile address urn:zitadel:iam:user:metadata urn:zitadel:iam:user:resourceowner urn:zitadel:iam:org:id:${config.orgId}`,
+            login_client: config.loginClient,
+            scope: `openid userinfo email profile address offline_access urn:zitadel:iam:user:metadata urn:zitadel:iam:user:resourceowner urn:zitadel:iam:org:id:${config.orgId}`,
           };
 
           signIn('zitadel', {}, options);

@@ -2,7 +2,7 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import fetch from 'node-fetch';
 
-const clientId = '229793446041332810@app'; //web
+const clientId = '233104669482875562@garriocom'; //web
 // const host = 'https://system-siqqmi.zitadel.cloud';
 const host = 'https://portal.example.local';
 
@@ -10,7 +10,7 @@ const nextAuthOptions = (): NextAuthOptions => {
   return {
     callbacks: {
       async redirect({ baseUrl }) {
-        return `${baseUrl}/startup`;
+        return `${baseUrl}`;
       },
       async jwt({ token, user, account, profile }) {
         if (profile?.sub) {
@@ -33,13 +33,13 @@ const nextAuthOptions = (): NextAuthOptions => {
           token.expiresAt = account.expires_at;
         }
 
-        return refreshAccessToken(token);
+        // return refreshAccessToken(token);
 
-        // if (account?.expires_at && Date.now() > account?.expires_at * 1000) {
-        //   return refreshAccessToken(token);
-        // }
+        if (account?.expires_at && Date.now() > account?.expires_at * 1000) {
+          return refreshAccessToken(token);
+        }
 
-        // return token;
+        return token;
       },
       async session({ session, token }) {
         const { sub, accessToken } = token;
@@ -58,6 +58,9 @@ const nextAuthOptions = (): NextAuthOptions => {
             };
           };
         };
+
+        console.log('debug token', token);
+        console.log('debug session', session);
 
         session.sub = sub;
         session.accessToken = accessToken;

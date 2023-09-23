@@ -50,33 +50,30 @@ export async function updateSessionCookie(sessionId: string, session: SessionCoo
   }
 }
 
-export async function removeSessionFromCookie(session: SessionCookie): Promise<any> {
+export function removeSessionFromCookie(sessionId: string) {
   const cookiesList = cookies();
   const stringifiedCookie = cookiesList.get('sessions');
 
-  const sessions: SessionCookie[] = stringifiedCookie?.value ? JSON.parse(stringifiedCookie?.value) : [session];
+  const sessions: SessionCookie[] = stringifiedCookie?.value ? JSON.parse(stringifiedCookie?.value) : [];
 
-  const filteredSessions = sessions.filter((s) => s.sessionId !== session.sessionId);
+  const filteredSessions = sessions.filter((s) => s.sessionId !== sessionId);
 
   return setSessionHttpOnlyCookie(filteredSessions);
 }
 
-export async function getSessionCookieById(id: string): Promise<SessionCookie> {
+export function getSessionCookieById(id: string): SessionCookie {
   const cookiesList = cookies();
   const stringifiedCookie = cookiesList.get('sessions');
 
-  if (stringifiedCookie?.value) {
-    const sessions: SessionCookie[] = JSON.parse(stringifiedCookie?.value);
-
-    const found = sessions.find((s) => s.sessionId === id);
-    if (found) {
-      return found;
-    } else {
-      return Promise.reject();
-    }
-  } else {
-    return Promise.reject();
+  if (!stringifiedCookie?.value) {
+    throw new Error();
   }
+
+  const sessions: SessionCookie[] = JSON.parse(stringifiedCookie?.value);
+
+  const found = sessions.find((s) => s.sessionId === id);
+
+  return found;
 }
 
 export async function getSessionCookieByLoginName(userId: string): Promise<SessionCookie> {

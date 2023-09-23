@@ -19,15 +19,20 @@ if (!process.env.ZITADEL_API_URL) {
   throw new Error('Invalid ZITADEL_API_URL');
 }
 
+// export const authorizationInterceptor = createAuthorizationInterceptor({
+//   type: 'serviceAccount',
+//   serviceAccountJSON: 'sa/227355825121810019.json',
+// });
+
 export const authorizationInterceptor = createAuthorizationInterceptor({
-  type: 'serviceAccount',
-  serviceAccountJSON: 'sa/227355825121810019.json',
+  type: 'token',
+  token: 'bN2IktlBOURs94FKRDeCPBkpPDW1Gw00Lfs3xYsS4MTIF7CaeqUwrxtnoZS0Hl7MwFXLsZA',
 });
 
-export function createManagementService(orgId: string): ManagementServiceClient {
+export function createManagementService(orgId: string, interceptors = []): ManagementServiceClient {
   return createClient<ManagementServiceClient>({
     definition: ManagementServiceDefinition,
-    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId)],
+    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId), ...interceptors],
   });
 }
 
@@ -45,10 +50,10 @@ export const createUserService = (orgId?: string): UserServiceClient => {
   });
 };
 
-export function createSessionService(orgId?: string): SessionServiceClient {
+export function createSessionService(orgId?: string, interceptors: ClientMiddleware[] = []): SessionServiceClient {
   return createClient<SessionServiceClient>({
     definition: SessionServiceDefinition,
-    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId)],
+    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId), ...interceptors],
   });
 }
 

@@ -7,7 +7,7 @@ import {
   StartIdentityProviderIntentRequest,
 } from '@/zitadel-server/proto/zitadel/user/v2beta/user_service';
 import { CreateCallbackRequest } from '@/zitadel-server/proto/zitadel/oidc/v2beta/oidc_service';
-import { CreateSessionRequest } from '@/zitadel-server/proto/zitadel/session/v2beta/session_service';
+import { CreateSessionRequest, DeleteSessionRequest } from '@/zitadel-server/proto/zitadel/session/v2beta/session_service';
 
 export async function startIdpIntent(orgId: string, data: StartIdentityProviderIntentRequest) {
   const result = await fetch(`/api/intents/start`, {
@@ -101,6 +101,20 @@ export async function finalizeAuthRequest(
       session,
     }),
   }).then((res) => res.json());
+
+  return result;
+}
+
+export async function logout(data: Partial<DeleteSessionRequest>): Promise<any> {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+
+  const result = await fetch(`${appUrl}/api/logout`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(data),
+  }).then((response) => response.json());
 
   return result;
 }

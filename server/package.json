@@ -1,0 +1,12 @@
+{
+  "name": "@zitadel/server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch main"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^9.1.0",
+    "fastify": "^4.23.2"
+  }
+}

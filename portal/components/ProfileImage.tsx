@@ -5,6 +5,7 @@ import LogoutIcon from '@heroicons/react/outline/LogoutIcon';
 import { Fragment } from 'react';
 import { useRouter } from 'next/navigation';
 import { Session } from '@/zitadel-server';
+import { logout } from '@/api';
 
 export default function ProfileImage(props: {
   session: Session;
@@ -19,10 +20,6 @@ export default function ProfileImage(props: {
     displayName: session?.factors?.user?.displayName,
     orgId: session?.factors?.user?.organisationId,
     userId: session?.factors?.user?.id,
-  };
-
-  const logout = async () => {
-    //
   };
 
   function signInWithHint(session: any): void {
@@ -102,7 +99,17 @@ export default function ProfileImage(props: {
             <Menu.Item>
               {({ active }) => (
                 <button
-                  onClick={() => logout()}
+                  onClick={async () => {
+                    try {
+                      await logout({ sessionId: session.id }).then((result) => {
+                        console.log('result', result);
+                      });
+                    } catch (error) {
+                      console.log('error', error);
+                    }
+
+                    router.push(`/login`);
+                  }}
                   className={`${
                     active ? 'bg-zitadelaccent-800 text-gray-500' : ''
                   } group flex rounded-md justify-center items-center w-full px-2 py-2 text-sm`}
