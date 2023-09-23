@@ -6,13 +6,9 @@ import { Metadata } from 'nice-grpc-common';
 import { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
 import { AuthenticationOptions, ServiceAccount } from '@zitadel/node/dist/credentials/service-account';
 import { credentials } from '@zitadel/node';
-import { apiEndpoint, appUrl } from '@/config';
+import { config } from '@/config';
 
 export type { ClientMiddleware };
-
-if (!apiEndpoint) {
-  throw new Error('Invalid ZITADEL_API_URL');
-}
 
 export function createAccessTokenInterceptor(token: string): ClientMiddleware {
   return async function* <Request, Response>(call: ClientMiddlewareCall<Request, Response>, options: CallOptions) {
@@ -58,7 +54,7 @@ export function createClientCredentialsInterceptor(clientId: string, clientSecre
     searchParams.append('client_secret', clientSecret);
     searchParams.append('scope', 'openid profile email urn:zitadel:iam:org:project:id:zitadel:aud');
 
-    const result = await fetch(`${appUrl}/oauth/v2/token`, {
+    const result = await fetch(`${config.appUrl}/oauth/v2/token`, {
       method: 'POST',
       body: searchParams,
       headers: {
@@ -80,10 +76,7 @@ export function createClientCredentialsInterceptor(clientId: string, clientSecre
     const token = result.access_token;
 
     options.metadata ??= new Metadata();
-
-    if (token) {
-      options.metadata.set('authorization', `Bearer ${token}`);
-    }
+    options.metadata.set('authorization', `Bearer ${token}`);
 
     return yield* call.next(call.request, options);
   };
@@ -129,7 +122,7 @@ export function createAuthorizationInterceptor(params: AuthorizationInterceptorP
     const saJSON = String(fs.readFileSync(path.resolve(serviceAccountJSON)));
     const sa = credentials.ServiceAccount.fromJson(JSON.parse(saJSON));
     const authOptions: AuthenticationOptions = { apiAccess: true };
-    return createServiceAccountInterceptor(apiEndpoint, sa, authOptions);
+    return createServiceAccountInterceptor(config.apiEndpoint, sa, authOptions);
   }
 
   if (type === 'token') {
@@ -143,7 +136,7 @@ export function createAuthorizationInterceptor(params: AuthorizationInterceptorP
 export function createClient<T>(params: { definition: CompatServiceDefinition; interceptors: ClientMiddleware[] }): T {
   const { definition, interceptors } = params;
 
-  const channel = createChannel(apiEndpoint);
+  const channel = createChannel(config.apiEndpoint);
   let factory = createClientFactory();
 
   for (const interceptor of interceptors) {

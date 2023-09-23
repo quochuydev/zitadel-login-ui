@@ -1,10 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import fetch from 'node-fetch';
-
-const clientId = '233104669482875562@garriocom'; //web
-// const host = 'https://system-siqqmi.zitadel.cloud';
-const host = 'https://portal.example.local';
+import { config } from '@/config';
 
 const nextAuthOptions = (): NextAuthOptions => {
   return {
@@ -76,7 +73,7 @@ const nextAuthOptions = (): NextAuthOptions => {
         name: 'Zitadel',
         type: 'oauth',
         version: '2',
-        wellKnown: `${host}/.well-known/openid-configuration`,
+        wellKnown: `${config.issuer}/.well-known/openid-configuration`,
         authorization: {
           params: {},
         },
@@ -99,7 +96,7 @@ const nextAuthOptions = (): NextAuthOptions => {
             orgId: profile['urn:zitadel:iam:org:id'],
           };
         },
-        clientId,
+        clientId: config.clientId,
       },
     ],
   };
@@ -114,7 +111,7 @@ async function refreshAccessToken(token: JWT) {
     console.log('token', token);
 
     const searchParams = new URLSearchParams();
-    searchParams.append('client_id', clientId);
+    searchParams.append('client_id', config.clientId);
     searchParams.append('grant_type', 'refresh_token');
     searchParams.append('refresh_token', token.refreshToken as string);
 
@@ -124,7 +121,7 @@ async function refreshAccessToken(token: JWT) {
       refresh_token: string;
       expires_in: number;
       id_token: string;
-    } = await fetch(`${host}/oauth/v2/token`, {
+    } = await fetch(`${config.issuer}/oauth/v2/token`, {
       method: 'POST',
       body: searchParams,
       headers: {

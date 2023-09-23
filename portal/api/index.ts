@@ -1,4 +1,4 @@
-import { appUrl } from '@/config';
+import { config } from '@/config';
 import { AuthRequest } from '@/zitadel-server/proto/zitadel/oidc/v2beta/authorization';
 import { IDPInformation } from '@/zitadel-server';
 import {
@@ -23,7 +23,7 @@ export async function startIdpIntent(orgId: string, data: StartIdentityProviderI
 }
 
 export async function retrieveIntent(orgId: string, data: RetrieveIdentityProviderIntentRequest): Promise<IDPInformation> {
-  const result = await fetch(`${appUrl}/api/intents/retrieve`, {
+  const result = await fetch(`${config.appUrl}/api/intents/retrieve`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export async function login(orgId: string, data: Partial<CreateSessionRequest>):
     headers['org-id'] = orgId;
   }
 
-  const session = await fetch(`${appUrl}/api/login`, {
+  const session = await fetch(`${config.appUrl}/api/login`, {
     method: 'POST',
     headers,
     body: JSON.stringify(data),
@@ -54,7 +54,7 @@ export async function login(orgId: string, data: Partial<CreateSessionRequest>):
 }
 
 export async function register(orgId: string, userData: Partial<AddHumanUserRequest>) {
-  const session = await fetch(`${appUrl}/api/register`, {
+  const session = await fetch(`${config.appUrl}/api/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export async function register(orgId: string, userData: Partial<AddHumanUserRequ
 export async function retrieveAuthRequest(params: { authRequestId: string }): Promise<AuthRequest> {
   const { authRequestId } = params;
 
-  const result = await fetch(`${appUrl}/api/auth_request/retrieve`, {
+  const result = await fetch(`${config.appUrl}/api/auth_request/retrieve`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export async function finalizeAuthRequest(
 }> {
   const { authRequestId, session } = params;
 
-  const result = await fetch(`${appUrl}/api/auth_request/finalize`, {
+  const result = await fetch(`${config.appUrl}/api/auth_request/finalize`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ export async function logout(data: Partial<DeleteSessionRequest>): Promise<any> 
     'Content-Type': 'application/json',
   };
 
-  const result = await fetch(`${appUrl}/api/logout`, {
+  const result = await fetch(`${config.appUrl}/api/logout`, {
     method: 'POST',
     headers,
     body: JSON.stringify(data),

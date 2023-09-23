@@ -1,8 +1,11 @@
-export const apiEndpoint = 'https://system-siqqmi.zitadel.cloud';
-export const appUrl = 'https://portal.example.local';
-export const serviceAccountJSON = 'sa/227355825121810019.json';
+export const config = {
+  apiEndpoint: 'https://system-siqqmi.zitadel.cloud',
+  appUrl: 'https://portal.example.local',
+  clientId: 'portal',
+  clientSecret: 'KyFlwPWCnY1cXbsbhboBZihcSlQk6Z2dhqNkO16Ebqhz4LLTpIehudf77fIExYCS',
+};
 
-export const config: { [key: string]: any } = {
+export const mapServiceAccount: { [key: string]: any } = {
   '226727705079452014': {
     org: 'zitadel',
     orgId: '226727705079452014',

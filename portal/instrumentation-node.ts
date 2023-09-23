@@ -12,27 +12,20 @@ import type { SettingsServiceClient } from '@/zitadel-server/proto/zitadel/setti
 import type { ManagementServiceClient } from '@/zitadel-server/proto/zitadel/management';
 import { ManagementServiceDefinition } from '@/zitadel-server/proto/zitadel/management';
 import { createAuthorizationInterceptor, createClient, createOrgMetadataInterceptor } from './app-service';
+import { config } from '@/config';
 
 export type { ClientMiddleware };
 
-if (!process.env.ZITADEL_API_URL) {
-  throw new Error('Invalid ZITADEL_API_URL');
-}
-
-// export const authorizationInterceptor = createAuthorizationInterceptor({
-//   type: 'serviceAccount',
-//   serviceAccountJSON: 'sa/227355825121810019.json',
-// });
-
 export const authorizationInterceptor = createAuthorizationInterceptor({
-  type: 'token',
-  token: 'bN2IktlBOURs94FKRDeCPBkpPDW1Gw00Lfs3xYsS4MTIF7CaeqUwrxtnoZS0Hl7MwFXLsZA',
+  type: 'clientCredentials',
+  clientId: config.clientId,
+  clientSecret: config.clientSecret,
 });
 
-export function createManagementService(orgId: string, interceptors = []): ManagementServiceClient {
+export function createManagementService(orgId: string): ManagementServiceClient {
   return createClient<ManagementServiceClient>({
     definition: ManagementServiceDefinition,
-    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId), ...interceptors],
+    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId)],
   });
 }
 
@@ -50,10 +43,10 @@ export const createUserService = (orgId?: string): UserServiceClient => {
   });
 };
 
-export function createSessionService(orgId?: string, interceptors: ClientMiddleware[] = []): SessionServiceClient {
+export function createSessionService(orgId?: string): SessionServiceClient {
   return createClient<SessionServiceClient>({
     definition: SessionServiceDefinition,
-    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId), ...interceptors],
+    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId)],
   });
 }
 

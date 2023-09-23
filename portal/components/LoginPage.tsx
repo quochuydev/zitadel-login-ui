@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { IdentityProvider, IdentityProviderType } from '@/zitadel-server';
 import { finalizeAuthRequest, login, startIdpIntent } from '@/api';
-import { appUrl } from '@/config';
+import { config } from '@/config';
 
 const PROVIDER_MAP = {
   [IdentityProviderType.IDENTITY_PROVIDER_TYPE_GOOGLE.toString()]: 'google',
@@ -25,8 +25,8 @@ export default function LoginPage(props: { orgId: string; authRequestId: string;
               const result = await startIdpIntent(orgId, {
                 idpId: identityProvider.id,
                 urls: {
-                  successUrl: `${appUrl}/idp/${provider}/return?authRequest=${authRequestId}`,
-                  failureUrl: `${appUrl}/idp/${provider}/return`,
+                  successUrl: `${config.appUrl}/idp/${provider}/return?authRequest=${authRequestId}`,
+                  failureUrl: `${config.appUrl}/idp/${provider}/return`,
                 },
               });
 
