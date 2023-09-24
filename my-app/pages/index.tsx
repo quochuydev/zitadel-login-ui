@@ -15,7 +15,7 @@ export default function Home() {
       return;
     }
 
-    fetch('https://portal.example.local/oidc/v1/userinfo', {
+    fetch(`${config.issuer}/oidc/v1/userinfo`, {
       headers: {
         Authorization: `Bearer ${session.accessToken}`,
       },

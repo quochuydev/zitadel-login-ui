@@ -1,1 +1,1 @@
-export { config } from './localhost:8044';
+export { config } from './system-siqqmi.zitadel.cloud';

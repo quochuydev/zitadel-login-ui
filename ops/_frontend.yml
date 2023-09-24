@@ -4,7 +4,7 @@ tasks:
   dev:
     aliases: [d]
     deps:
-      - task: dev:portal
+      # - task: dev:portal
       - task: dev:app
 
   dev:portal:

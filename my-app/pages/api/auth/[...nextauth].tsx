@@ -39,7 +39,7 @@ const nextAuthOptions = (): NextAuthOptions => {
         return token;
       },
       async session({ session, token }) {
-        const { sub, accessToken } = token;
+        const { sub, accessToken, refreshToken } = token;
 
         const user = token.user as {
           id: string;
@@ -61,6 +61,7 @@ const nextAuthOptions = (): NextAuthOptions => {
 
         session.sub = sub;
         session.accessToken = accessToken;
+        session.refreshToken = refreshToken;
         session.user = user as unknown;
 
         return session;
