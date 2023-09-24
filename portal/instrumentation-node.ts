@@ -21,22 +21,9 @@ import type { CreateSession, CreateCallback, GetAuthRequest, GetSession } from '
 
 export type { ClientMiddleware };
 
-export const authorizationInterceptor = createAuthorizationInterceptor({
-  type: 'clientCredentials',
-  clientId: config.clientId,
-  clientSecret: config.clientSecret,
-});
-
-export const createUserService = (orgId?: string): UserServiceClient => {
-  return createClient<UserServiceClient>({
-    definition: UserServiceDefinition,
-    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId)],
-  });
-};
-
 const portalService = PortalService(config.apiEndpoint);
 
-export function createSessionServiceV2(orgId?: string): SessionServiceClient {
+export function createSessionServiceV2(orgId?: string): Partial<SessionServiceClient> {
   const headers: RequestInit['headers'] = {
     'Content-Type': 'application/json',
   };
@@ -110,6 +97,19 @@ export function createOIDCServiceV2(orgId?: string): OIDCServiceClient {
       }),
   };
 }
+
+export const authorizationInterceptor = createAuthorizationInterceptor({
+  type: 'clientCredentials',
+  clientId: config.clientId,
+  clientSecret: config.clientSecret,
+});
+
+export const createUserService = (orgId?: string): UserServiceClient => {
+  return createClient<UserServiceClient>({
+    definition: UserServiceDefinition,
+    interceptors: [authorizationInterceptor, createOrgMetadataInterceptor(orgId)],
+  });
+};
 
 export function createManagementService(orgId: string): ManagementServiceClient {
   return createClient<ManagementServiceClient>({
