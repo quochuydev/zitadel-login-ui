@@ -74,7 +74,7 @@ export function createSessionServiceV2(orgId?: string): SessionServiceClient {
   };
 }
 
-export function createOIDCService(orgId?: string): OIDCServiceClient {
+export function createOIDCServiceV2(orgId?: string): OIDCServiceClient {
   return {
     getAuthRequest: async (data) => {
       const headers: RequestInit['headers'] = {

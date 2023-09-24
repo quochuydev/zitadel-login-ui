@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createOIDCService } from '@/instrumentation-node';
+import { createOIDCServiceV2 as createOIDCService } from '@/instrumentation-node';
 import { CreateCallbackRequest } from '@/zitadel-server/proto/zitadel/oidc/v2beta/oidc_service';
 
 export async function POST(request: NextRequest) {

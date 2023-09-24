@@ -1,5 +1,5 @@
 import LoginPage from '@/components/LoginPage';
-import { createOIDCService } from '@/instrumentation-node';
+import { createOIDCServiceV2 as createOIDCService } from '@/instrumentation-node';
 import { createSettingService } from '@/instrumentation-node';
 import { getOrgIdFromAuthRequest } from '@/lib/helper';
 
@@ -16,8 +16,6 @@ export default async function Page({ searchParams }: any) {
         .then((e) => e.authRequest)
         .catch((_) => undefined)
     : undefined;
-
-  console.log('authRequest', authRequest);
 
   const orgId = getOrgIdFromAuthRequest(authRequest) as string;
 
