@@ -1,15 +1,6 @@
-# docker run -d -p 8888:80 coudot/lemonldap-ng
 version: "3.3"
 
 services:
-  lemonldap:
-    image: coudot/lemonldap-ng
-    container_name: "lemonldap"
-    ports:
-      - 8888:80
-    volumes:
-      - ./lemonldap-ng.ini:/etc/lemonldap-ng/lemonldap-ng.ini
-
   # nginx:
   #   image: nginx:alpine
   #   container_name: 'nginx'
