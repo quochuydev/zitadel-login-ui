@@ -37,6 +37,14 @@ export const createUserService = (orgId?: string): UserServiceClient => {
 const portalService = PortalService(config.apiEndpoint);
 
 export function createSessionServiceV2(orgId?: string): SessionServiceClient {
+  const headers: RequestInit['headers'] = {
+    'Content-Type': 'application/json',
+  };
+
+  if (orgId) {
+    headers['x-zitadel-orgid'] = orgId;
+  }
+
   return {
     createSession: async (data) =>
       portalService.request<CreateSession>({
@@ -64,16 +72,16 @@ export function createSessionServiceV2(orgId?: string): SessionServiceClient {
 }
 
 export function createOIDCServiceV2(orgId?: string): OIDCServiceClient {
+  const headers: RequestInit['headers'] = {
+    'Content-Type': 'application/json',
+  };
+
+  if (orgId) {
+    headers['x-zitadel-orgid'] = orgId;
+  }
+
   return {
     getAuthRequest: async (data) => {
-      const headers: RequestInit['headers'] = {
-        'Content-Type': 'application/json',
-      };
-
-      if (orgId) {
-        headers['x-zitadel-orgid'] = orgId;
-      }
-
       return portalService.request<GetAuthRequest>({
         url: '/v2beta/oidc/auth_requests/{authRequestId}',
         method: 'get',
