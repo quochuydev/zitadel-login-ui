@@ -39,6 +39,6 @@ export type CreateCallback = {
   params: {
     authRequestId: string;
   };
-  data: CreateCallbackRequest;
+  data: Pick<CreateCallbackRequest, 'session'>;
   result: CreateCallbackResponse;
 };

@@ -5,7 +5,7 @@ import type {
   CreateSessionRequest,
   SessionServiceClient,
 } from '@/zitadel-server/proto/zitadel/session/v2beta/session_service';
-import type { CreateCallbackRequest, OIDCServiceClient } from '@/zitadel-server/proto/zitadel/oidc/v2beta/oidc_service';
+import type { OIDCServiceClient } from '@/zitadel-server/proto/zitadel/oidc/v2beta/oidc_service';
 import { SessionServiceDefinition } from '@/zitadel-server/proto/zitadel/session/v2beta/session_service';
 import { OIDCServiceDefinition } from '@/zitadel-server/proto/zitadel/oidc/v2beta/oidc_service';
 import { AuthServiceDefinition } from '@/zitadel-server/proto/zitadel/auth';
@@ -89,7 +89,7 @@ export function createOIDCServiceV2(orgId?: string): OIDCServiceClient {
         params: {
           authRequestId: data.authRequestId as string,
         },
-        data: data as CreateCallbackRequest,
+        data: data as CreateCallback['data'],
         credentials: {
           clientId: config.clientId,
           clientSecret: config.clientSecret,
