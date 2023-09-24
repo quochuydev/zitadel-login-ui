@@ -7,6 +7,7 @@ import { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
 import { AuthenticationOptions, ServiceAccount } from '@zitadel/node/dist/credentials/service-account';
 import { credentials } from '@zitadel/node';
 import { config } from '@/config';
+import https from 'https';
 
 export type { ClientMiddleware };
 
@@ -60,17 +61,25 @@ export function createClientCredentialsInterceptor(clientId: string, clientSecre
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-    }).then(async (response) => {
-      const res = (await response.json()) as {
-        access_token: string;
-        token_type: string;
-        refresh_token: string;
-        expires_in: number;
-        id_token: string;
-      };
+      agent: new https.Agent({
+        ca: fs.readFileSync(path.join(process.cwd(), 'localhost.crt')),
+      }),
+    })
+      .then(async (response) => {
+        const res = (await response.json()) as {
+          access_token: string;
+          token_type: string;
+          refresh_token: string;
+          expires_in: number;
+          id_token: string;
+        };
 
-      return res;
-    });
+        return res;
+      })
+      .catch((error) => {
+        console.log('error', error);
+        throw error;
+      });
 
     console.log('result', result);
     const token = result.access_token;

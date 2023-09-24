@@ -1,5 +1,6 @@
 import LoginPage from '@/components/LoginPage';
-import { createSettingService, createOIDCService } from '@/instrumentation-node';
+import { createOIDCService } from '@/instrumentation-node';
+import { createSettingService } from '@/instrumentation-node';
 import { getOrgIdFromAuthRequest } from '@/lib/helper';
 
 export default async function Page({ searchParams }: any) {

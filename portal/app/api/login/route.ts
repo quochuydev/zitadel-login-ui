@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { addSessionToCookie } from '@/lib/cookies';
-import { createSessionService } from '@/instrumentation-node';
+import { createSessionServiceV2 as createSessionService } from '@/instrumentation-node';
 import { CreateSessionRequest } from '@/zitadel-server/proto/zitadel/session/v2beta/session_service';
 
 export async function POST(request: NextRequest) {
