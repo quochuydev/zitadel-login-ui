@@ -1,5 +1,4 @@
 export const config = {
-  // apiEndpoint: 'http://localhost:8044',
   apiEndpoint: 'https://portal.example.local',
   appUrl: 'https://portal.example.local',
   clientId: 'portal',

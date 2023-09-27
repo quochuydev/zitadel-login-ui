@@ -59,7 +59,7 @@ export default function Home() {
       <button
         onClick={() => {
           const options = {
-            login_client: config.loginClient,
+            // login_client: config.loginClient,
             scope: `openid userinfo email profile address offline_access urn:zitadel:iam:user:metadata urn:zitadel:iam:user:resourceowner urn:zitadel:iam:org:id:${config.orgId}`,
           };
 
