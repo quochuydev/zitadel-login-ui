@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="3" failures="0" errors="0" time="0.895">
+    <testsuite name="portal/service-portal/tests/sysadmin.spec.ts" timestamp="2023-10-05T01:30:54.528Z" hostname="MacBook-Pro-cua-silentium.local" tests="3" failures="0" errors="0" skipped="0" time="0.004">
+        <testcase classname="portal/service-portal/tests/sysadmin.spec.ts" name="test &gt; test app 1" time="0.001">
+        </testcase>
+        <testcase classname="portal/service-portal/tests/sysadmin.spec.ts" name="test &gt; test app 2" time="0">
+        </testcase>
+        <testcase classname="portal/service-portal/tests/sysadmin.spec.ts" name="test &gt; test app" time="0.001">
+        </testcase>
+    </testsuite>
+</testsuites>

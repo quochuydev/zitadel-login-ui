@@ -5,11 +5,13 @@ import path from 'path';
 import * as jwt from 'jsonwebtoken';
 
 (async () => {
-  console.log(123132132);
+  console.log('start');
 
   await getServiceAccountToken({
     host: 'https://system-siqqmi.zitadel.cloud',
   });
+
+  console.log('end');
 })();
 
 async function getServiceAccountToken(params: { host: string }): Promise<string> {
@@ -36,14 +38,12 @@ async function getServiceAccountToken(params: { host: string }): Promise<string>
     },
     serviceAccount.key,
     {
-      headers: {
+      header: {
         alg: 'RS256',
         kid: serviceAccount.keyId,
       },
     },
   );
-
-  console.log('assertion', assertion);
 
   const searchParams = new URLSearchParams();
   searchParams.append('grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
@@ -58,8 +58,6 @@ async function getServiceAccountToken(params: { host: string }): Promise<string>
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   });
-
-  console.log('result', result);
 
   return result.access_token;
 }
@@ -113,7 +111,7 @@ async function sendRequest<T extends Default>(host: string, request: Request<T>)
   };
 
   if (data) {
-    if (headers['Content-Type'] === 'application/json') {
+    if (options.headers['Content-Type'] === 'application/json') {
       options.body = JSON.stringify(data);
     }
 
@@ -190,7 +188,7 @@ async function getClientCredentialsToken(params: { host: string; clientId: strin
 }
 
 function compile<T extends Pick<Default, 'url' | 'params'>>(url: T['url'], data: T['params']) {
-  return url.toString().replace(/{.+?}/g, function (matcher) {
+  return url.toString().replace(/{.+?}/g, (matcher) => {
     const path = matcher.slice(1, -1).trim();
     const value = path.split('.').reduce((obj, key) => obj[key], data);
     return value !== undefined ? value : '';
