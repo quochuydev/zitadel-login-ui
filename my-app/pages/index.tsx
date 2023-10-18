@@ -25,23 +25,6 @@ export default function Home() {
       .catch((e) => console.log(e));
   }, [session]);
 
-  useEffect(() => {
-    if (!session?.accessToken) {
-      return;
-    }
-
-    // fetch('https://app.example.local/api/v2', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ data: {} }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((result) => console.log(result))
-    //   .catch((e) => console.log(e));
-  }, [session]);
-
   return (
     <main className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}>
       <>{JSON.stringify(session)}</>
@@ -58,12 +41,25 @@ export default function Home() {
 
       <button
         onClick={() => {
-          const options = {
-            // login_client: config.loginClient,
-            scope: `openid userinfo email profile address offline_access urn:zitadel:iam:user:metadata urn:zitadel:iam:user:resourceowner urn:zitadel:iam:org:id:${config.orgId}`,
-          };
+          const scopes = [
+            'openid',
+            'userinfo',
+            'email',
+            'profile',
+            'address',
+            'offline_access',
+            'urn:zitadel:iam:user:metadata',
+            'urn:zitadel:iam:user:resourceowner',
+            'urn:zitadel:iam:org:project:id:zitadel:aud',
+          ];
 
-          signIn('zitadel', {}, options);
+          signIn(
+            'zitadel',
+            {},
+            {
+              scope: scopes.join(' '),
+            },
+          );
         }}
       >
         Login

@@ -30,11 +30,9 @@ const nextAuthOptions = (): NextAuthOptions => {
           token.expiresAt = account.expires_at;
         }
 
-        // return refreshAccessToken(token);
-
-        if (account?.expires_at && Date.now() > account?.expires_at * 1000) {
-          return refreshAccessToken(token);
-        }
+        // if (account?.expires_at && Date.now() > account?.expires_at * 1000) {
+        //   return refreshAccessToken(token);
+        // }
 
         return token;
       },

@@ -85,7 +85,6 @@ type Request<T extends Default> = {
   data?: T['data'];
   credentials?: Credentials;
   before?: (options: RequestInit) => Promise<void>;
-  after?: (result: T['result']) => Promise<void>;
 };
 
 type Response<T extends Default> = T['result'];
@@ -101,7 +100,6 @@ async function sendRequest<T extends Default>(host: string, request: Request<T>)
     },
     data,
     before,
-    after,
     credentials,
   } = request;
 
@@ -150,10 +148,6 @@ async function sendRequest<T extends Default>(host: string, request: Request<T>)
   }
 
   console.log('*****', pathUrl, result); //TODO remove later
-
-  if (after) {
-    await after(result);
-  }
 
   return result;
 }
