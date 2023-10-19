@@ -47,9 +47,6 @@ async function sendRequest<T extends Default>(host: string, request: Request<T>)
   const options: any = {
     method,
     headers,
-    agent: new https.Agent({
-      ca: fs.readFileSync(path.join(process.cwd(), 'localhost.crt')),
-    }),
   };
 
   if (data) {
@@ -96,20 +93,19 @@ async function getClientCredentialsToken(params: { host: string; clientId: strin
   searchParams.append('client_secret', clientSecret);
   searchParams.append('scope', 'openid profile email urn:zitadel:iam:org:project:id:zitadel:aud');
 
-  const result: {
-    access_token: string;
-  } = await fetch(new URL('/oauth/v2/token', host).toString(), {
+  const result = await fetch(new URL('/oauth/v2/token', host).toString(), {
     method: 'post',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    agent: new https.Agent({
-      ca: fs.readFileSync(path.join(process.cwd(), 'localhost.crt')),
-    }),
     body: searchParams,
   }).then((res) => res.json());
 
-  return result.access_token;
+  return (
+    result as {
+      access_token: string;
+    }
+  ).access_token;
 }
 
 function compile<T extends Pick<Default, 'url' | 'params'>>(url: T['url'], data: T['params']) {

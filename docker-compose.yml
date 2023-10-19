@@ -1,20 +1,19 @@
 version: "3.3"
 
 services:
-  # nginx:
-  #   image: nginx:alpine
-  #   container_name: 'nginx'
-  #   extra_hosts:
-  #     - 'host.docker.internal:host-gateway'
-  #   ports:
-  #     - '80:80'
-  #     - '443:443'
-  #   volumes:
-  #     - type: bind
-  #       source: ./proxy
-  #       target: /conf
-  #       read_only: true
-  #   command: 'nginx -c /conf/nginx.local.cfg'
+  nginx:
+    image: nginx:alpine
+    container_name: 'nginx-zitadel'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - '81:80'
+    volumes:
+      - type: bind
+        source: ./proxy
+        target: /conf
+        read_only: true
+    command: 'nginx -c /conf/nginx.local.cfg'
 
 # ldapsearch -H ldap://ldap.forumsys.com:389 -x -D "cn=read-only-admin,dc=example,dc=com" -w password -b "dc=example,dc=com" -s sub "(objectClass=*)"
 

@@ -61,9 +61,6 @@ export function createClientCredentialsInterceptor(clientId: string, clientSecre
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      agent: new https.Agent({
-        ca: fs.readFileSync(path.join(process.cwd(), 'localhost.crt')),
-      }),
     })
       .then(async (response) => {
         const res = (await response.json()) as {
