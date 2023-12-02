@@ -2,7 +2,7 @@
 import type { ToastType } from '#/modules/Components/Toast';
 import Toast from '#/modules/Components/Toast';
 import ApiService from '#/services/frontend/api.service';
-import type { APIChangePassword } from '#/types/api';
+import type { APIChangePassword, APIFinalizeAuthRequest } from '#/types/api';
 import { ROUTING } from '#/types/router';
 import type { Session } from '#/types/zitadel';
 import Image from 'next/image';
@@ -50,9 +50,13 @@ const Page = (props: {
       });
 
       if (authRequestId) {
-        const result = await apiService.finalizeAuthRequest({
-          authRequestId,
-          userId: activeSession.factors.user.id,
+        const result = await apiService.request<APIFinalizeAuthRequest>({
+          url:'/api/auth_request/finalize',
+          method:'post',
+          data:{
+            authRequestId,
+            userId: activeSession.factors.user.id,
+          }
         });
 
         if (result.callbackUrl) {

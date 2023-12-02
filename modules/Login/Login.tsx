@@ -3,6 +3,7 @@ import type { ToastType } from '#/modules/Components/Toast';
 import Toast from '#/modules/Components/Toast';
 import SignInForm from '#/modules/Login/components/SignInForm';
 import ApiService from '#/services/frontend/api.service';
+import { APILogin } from '#/types/api';
 import { ROUTING } from '#/types/router';
 import type { Application, AuthRequest } from '#/types/zitadel';
 import Image from 'next/image';
@@ -29,10 +30,14 @@ const LoginPage = (props: {
     try {
       setIsLoading(true);
 
-      const session = await apiService.login({
-        username,
-        password,
-        authRequestId: authRequest?.id,
+      const session = await apiService.request<APILogin>({
+        url:'/api/login',
+        method:'post',
+        data:{
+          username,
+          password,
+          authRequestId: authRequest?.id,
+        }
       });
 
       if (!session || !session.userId) {

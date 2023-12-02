@@ -3,7 +3,6 @@ import type {
   CreateCallbackRequest,
   DeleteSessionRequest,
 } from '#/types/zitadel';
-import { grantPatientRole } from './zitadel-actions/grant-patient-role';
 import type {
   ChangePassword,
   CreateCallback,
@@ -53,14 +52,7 @@ type Flow = {
   action: Action;
 };
 
-export const flows: Flow[] = [
-  {
-    orgId:'',
-    flowType: FlowType.internalAuthentication,
-    trigger: Trigger.postCreation,
-    action: grantPatientRole,
-  },
-];
+export const flows: Flow[] = [];
 
 export const shouldTriggerAction = (params: {
   flow: Flow;

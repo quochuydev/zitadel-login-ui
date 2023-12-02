@@ -6,6 +6,7 @@ import React, { Fragment } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Session } from '#/types/zitadel';
 import ApiService from '#/services/frontend/api.service';
+import { APILogout } from '#/types/api';
 
 export default function ProfileImage(props: {
   appUrl: string;
@@ -110,7 +111,13 @@ export default function ProfileImage(props: {
                 <button
                   onClick={async () => {
                     try {
-                      await apiService.logout({ sessionId: session.id });
+                      await apiService.request<APILogout>({
+                        url:'/api/logout',
+                        method:'post',
+                        data:{
+                          sessionId: session.id
+                        }
+                      });
                     } catch (error) {
                       console.log('error', error);
                     }

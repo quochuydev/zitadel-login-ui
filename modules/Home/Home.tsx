@@ -16,7 +16,7 @@ export default (props: {
 
   return (
     <div className="flex h-screen w-screen flex-col bg-white">
-      <div className="relative hidden bg-white">
+      <div className="relative bg-white">
         <nav aria-label="Top" className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center">
             <div className="ml-auto flex items-center">
