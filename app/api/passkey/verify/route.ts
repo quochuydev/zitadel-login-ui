@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
           },
           data:{
             publicKeyCredential: credential,
-            passkeyName: 'passkeyName' + new Date().toISOString()
+            passkeyName: 'passkeyName ' + new Date().toISOString()
           }
         })
 

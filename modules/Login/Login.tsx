@@ -87,6 +87,36 @@ const LoginPage = (props: {
             handleSignIn={handleSignIn}
           />
         </div>
+
+        <a className="mb-[18px] text-[12px] font-normal text-[#4F6679]"
+          onClick={async()=>{
+            await apiService.request<any>({
+              url:'/api/users/request-code',
+              method:'post',
+              data:{
+                userId: '243843133748594225',
+              }
+            })
+          }}
+        >
+          Forgot password?
+        </a>
+
+        <a className="mb-[18px] text-[12px] font-normal text-[#4F6679]"
+          onClick={async()=>{
+            await apiService.request<any>({
+              url:'/api/users/verify-code',
+              method:'post',
+              data:{
+                userId: '243843133748594225',
+                verificationCode: 'XBVEWT',
+                password: 'Qwerty@123'
+              }
+            })
+          }}
+        >
+          Set password
+        </a>
       </div>
 
       {application?.name && (

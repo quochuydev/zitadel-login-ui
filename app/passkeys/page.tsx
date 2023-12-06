@@ -45,7 +45,7 @@ export default async ({ searchParams }: any) => {
         "code": passkeyRegistrationLinkResult.code.code
       },
       "authenticator": "PASSKEY_AUTHENTICATOR_UNSPECIFIED",
-      "domain": 'localhost'
+      "domain": new URL(configuration.appUrl).hostname
     },
   })
 
