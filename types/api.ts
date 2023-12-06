@@ -5,6 +5,7 @@ export type APILogin = {
     username: string;
     password: string;
     authRequestId?: string;
+    challenges: any
   };
   result: {
     changeRequired: boolean;

@@ -27,6 +27,8 @@ export default async ({ searchParams }: any) => {
     },
   })
 
+  console.log('configuration', configuration);
+
   const registerPasskeyResult = await  zitadelService.request<RegisterPasskey>({
     url: '/v2beta/users/{userId}/passkeys',
     method: 'post',
@@ -43,7 +45,7 @@ export default async ({ searchParams }: any) => {
         "code": passkeyRegistrationLinkResult.code.code
       },
       "authenticator": "PASSKEY_AUTHENTICATOR_UNSPECIFIED",
-      "domain": 'https://zitadel-login-ui-v2.vercel.app'
+      "domain": 'localhost'
     },
   })
 

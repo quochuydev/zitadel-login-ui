@@ -14,6 +14,7 @@ import type {
   ListEventsRequest,
   ListEventsResponse,
   ListAppsResponse,
+  SetSessionResponse,
 } from '#/types/zitadel';
 import {
   Default,
@@ -21,6 +22,7 @@ import {
   sendRequest,
   getClientCredentialsToken,
 } from '#/helpers/api-caller';
+import { SetSessionRequest } from '#/proto/zitadel/session/v2beta/session_service';
 
 //*** User service ***
 
@@ -163,6 +165,19 @@ type CreateSession = {
   method: 'post';
   data: DeepPartial<CreateSessionRequest>;
   result: CreateSessionResponse;
+};
+
+/**
+ * https://zitadel.com/docs/apis/resources/session_service/session-service-set-session
+ */
+export type UpdateSession = {
+  url: '/v2beta/sessions/{sessionId}';
+  method: 'patch';
+  params:{
+    sessionId: string
+  },
+  data: DeepPartial<Omit<SetSessionRequest, 'sessionId'>>;
+  result: SetSessionResponse;
 };
 
 type GetSession = {

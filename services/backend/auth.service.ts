@@ -15,6 +15,7 @@ import type {
   SearchApplications,
   SearchEvents,
   SearchSessions,
+  UpdateSession,
 } from './zitadel.service';
 import ZitadelService from './zitadel.service';
 
@@ -157,6 +158,17 @@ async function createSessionService(accessToken: string) {
       return zitadelService.request<CreateSession>({
         url: '/v2beta/sessions',
         method: 'post',
+        headers,
+        data,
+      });
+    },
+    updateSession: async (sessionId:string, data: UpdateSession['data']) => {
+      return zitadelService.request<UpdateSession>({
+        url: '/v2beta/sessions/{sessionId}',
+        method: 'patch',
+        params:{
+          sessionId
+        },
         headers,
         data,
       });

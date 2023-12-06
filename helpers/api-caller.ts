@@ -1,6 +1,6 @@
 export type Default = {
   url: string;
-  method: 'get' | 'post' | 'put' | 'delete';
+  method: 'get' | 'post' | 'put' | 'delete' | 'patch';
   params?: object;
   query?: object;
   data?: unknown;

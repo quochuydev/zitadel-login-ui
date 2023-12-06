@@ -7,11 +7,11 @@ import * as z from 'zod';
 
 const schema = z.object({
   username: z.string().trim(),
-  password: z.string().trim(),
+  // password: z.string().trim(),
   authRequestId: z.string().trim().optional(),
 });
 
-export async function POST(request: NextRequest) {
+export async function PUT(request: NextRequest) {
   return defaultHandler<APILogin>(
     {
       request,
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         schema,
       });
 
-      const { username: loginName, password, authRequestId } = body;
+      const { username: loginName, webAuthN } = body;
 
       const accessToken = await AuthService.getAdminAccessToken();
 
@@ -33,16 +33,18 @@ export async function POST(request: NextRequest) {
         accessToken,
       );
 
-      const newSession = await sessionService.createSession({
-        checks: {
-          user: {
-            loginName,
-          },
-          password: {
-            password,
-          },
+      const dataChecks = {
+        user: {
+          loginName,
         },
-      });
+      }
+
+      const sessionData = {
+        checks: dataChecks,
+        webAuthN
+      }
+
+      const newSession = await sessionService.createSession(sessionData);
 
       const session = await sessionService.getSession({
         sessionId: newSession.sessionId,
@@ -59,6 +61,88 @@ export async function POST(request: NextRequest) {
         sessionToken: newSession.sessionToken,
         userId,
       });
+
+      const result: APILogin['result'] = {
+        changeRequired: false,
+        userId,
+      };
+
+      return result;
+    },
+  );
+}
+
+export async function POST(request: NextRequest) {
+  return defaultHandler<APILogin>(
+    {
+      request,
+      tracingName: 'login',
+    },
+    async (body) => {
+      isValidRequest({
+        data: {
+          ...body,
+        },
+        schema,
+      });
+
+      const { username: loginName, password, authRequestId, challenges } = body;
+
+      const accessToken = await AuthService.getAdminAccessToken();
+
+      const sessionService = await AuthService.createSessionService(
+        accessToken,
+      );
+
+      const dataChecks = {
+        user: {
+          loginName,
+        },
+      }
+
+      if(password){
+        dataChecks.password = {
+          password
+        }
+      }
+
+      const sessionData = {
+        checks: dataChecks
+      }
+
+      if(challenges){
+        sessionData.challenges = challenges
+      }
+
+      const newSession = await sessionService.createSession(sessionData);
+
+      console.log('newSession', newSession);
+
+      const session = await sessionService.getSession({
+        sessionId: newSession.sessionId,
+      });
+
+      console.log('session', session);
+
+      if (!session?.factors?.user) {
+        throw new Error('Invalid session');
+      }
+
+      const userId = session.factors.user.id;
+
+      CookieService.addSessionToCookie({
+        sessionId: newSession.sessionId,
+        sessionToken: newSession.sessionToken,
+        userId,
+      });
+
+      if(challenges){
+        return {
+          changeRequired: false,
+          userId,
+          challenges: newSession.challenges
+        };
+      }
 
       const changeRequired = await checkUserRequireChangePassword({
         accessToken,
