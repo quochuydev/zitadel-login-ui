@@ -66,6 +66,69 @@ export type CreateHumanUser = {
   };
 };
 
+
+/**
+ * https://zitadel.com/docs/apis/resources/user_service/user-service-register-passkey
+ */
+export type RegisterPasskey = {
+  url: '/v2beta/users/{userId}/passkeys';
+  method: 'post';
+  params: {
+    userId:string
+  },
+  data: {
+    "code": {
+      "id": string
+      "code": string
+    },
+    "authenticator": "PASSKEY_AUTHENTICATOR_UNSPECIFIED" | 'PASSKEY_AUTHENTICATOR_PLATFORM' | 'PASSKEY_AUTHENTICATOR_CROSS_PLATFORM',
+    "domain": string
+  },
+  result: {
+    passkeyId: string;
+    publicKeyCredentialCreationOptions: object;
+  };
+};
+
+
+/**
+ * https://zitadel.com/docs/apis/resources/user_service/user-service-create-passkey-registration-link
+ */
+export type CreatePasskeyRegistrationLink = {
+  url: '/v2beta/users/{userId}/passkeys/registration_link';
+  method: 'post';
+  params: {
+    userId: string
+  },
+  data: {
+    returnCode: object
+  },
+  result: {
+    code: {
+      id: string;
+      code: string
+    }
+  };
+};
+
+
+/**
+ * https://zitadel.com/docs/apis/resources/user_service/user-service-verify-passkey-registration
+ */
+export type VerifyPasskeyRegistration = {
+  url: '/v2beta/users/{userId}/passkeys/{passkeyId}';
+  method: 'post';
+  params: {
+    passkeyId: object
+    userId: string
+  },
+  data: {
+    publicKeyCredential: object
+    passkeyName: string
+  },
+  result: void
+};
+
 /**
  * https://zitadel.com/docs/apis/resources/admin/admin-service-get-login-policy
  */

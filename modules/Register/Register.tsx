@@ -69,13 +69,6 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
     }
   };
 
-  if (!orgId) {
-    return (
-      <div>
-        <p>Registration not allowed</p>
-      </div>
-    );
-  }
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">
