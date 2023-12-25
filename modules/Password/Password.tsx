@@ -29,7 +29,12 @@ const Page = (props: {
     setIsLoading(true);
 
     try {
-      if (!currentPassword || !newPassword || !confirmPassword) {
+      if (
+        !currentPassword ||
+        !newPassword ||
+        !confirmPassword ||
+        !activeSession?.factors?.user
+      ) {
         toastRef.current?.show({
           message: 'Missing required fields',
           intent: 'error',
@@ -40,10 +45,8 @@ const Page = (props: {
       await apiService.request<APIChangePassword>({
         url: '/api/users/password',
         method: 'post',
-        headers: {
-          'x-portal-session-id': activeSession.id,
-        },
         data: {
+          userId: activeSession.factors.user.id,
           currentPassword,
           newPassword,
         },
@@ -51,12 +54,12 @@ const Page = (props: {
 
       if (authRequestId) {
         const result = await apiService.request<APIFinalizeAuthRequest>({
-          url:'/api/auth_request/finalize',
-          method:'post',
-          data:{
+          url: '/api/auth_request/finalize',
+          method: 'post',
+          data: {
             authRequestId,
             userId: activeSession.factors.user.id,
-          }
+          },
         });
 
         if (result.callbackUrl) {
@@ -71,7 +74,6 @@ const Page = (props: {
 
       window.location.replace(ROUTING.HOME);
     } catch (error) {
-
       toastRef.current?.show({
         message: 'Update password fail',
         intent: 'error',

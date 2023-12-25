@@ -109,17 +109,13 @@ export async function POST(request: NextRequest) {
               userId,
               orgId,
             },
-            project: {
-              projectId,
-            },
             accessToken,
           });
         }
       }
 
-      const sessionService = await AuthService.createSessionService(
-        accessToken,
-      );
+      const sessionService =
+        await AuthService.createSessionService(accessToken);
 
       const session = await sessionService.createSession({
         checks: {

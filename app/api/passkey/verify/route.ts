@@ -1,17 +1,10 @@
 import configuration from '#/configuration';
 import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
 import AuthService from '#/services/backend/auth.service';
-import CookieService from '#/services/backend/cookie.service';
 import ZitadelService, {
-  GetLoginSettings, VerifyPasskeyRegistration,
+  VerifyPasskeyRegistration
 } from '#/services/backend/zitadel.service';
-import {
-  FlowType,
-  Trigger,
-  flows,
-  shouldTriggerAction,
-} from '#/services/backend/auth.service';
-import type {  } from '#/types/api';
+import type { } from '#/types/api';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';
 

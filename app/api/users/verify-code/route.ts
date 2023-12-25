@@ -2,7 +2,7 @@ import configuration from '#/configuration';
 import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
 import AuthService from '#/services/backend/auth.service';
 import ZitadelService from '#/services/backend/zitadel.service';
-import type { APIRegister } from '#/types/api';
+import type { APIVerifyCode } from '#/types/api';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';
 
@@ -11,17 +11,19 @@ const zitadelService = ZitadelService({
 });
 
 const schema = z.object({
-  // username: z.string().trim(),
+  userId: z.string().trim(),
+  orgId: z.string().trim(),
+  verificationCode: z.string().trim(),
+  password: z.string().trim(),
 });
 
 export async function POST(request: NextRequest) {
-  return defaultHandler<APIRegister>(
+  return defaultHandler<APIVerifyCode>(
     {
       request,
       tracingName: 'register',
     },
     async (body) => {
-
       isValidRequest({
         data: {
           ...body,
@@ -29,35 +31,28 @@ export async function POST(request: NextRequest) {
         schema,
       });
 
-      const { userId, verificationCode, password } = body;
+      const { userId, orgId, verificationCode, password } = body;
 
       const accessToken = await AuthService.getAdminAccessToken();
 
-      await zitadelService
-        .request<any>({
-          url: '/v2beta/users/{userId}/password',
-          params: {
-            userId
+      await zitadelService.request<any>({
+        url: '/v2beta/users/{userId}/password',
+        params: {
+          userId,
+        },
+        method: 'post',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'x-zitadel-orgid': orgId,
+        },
+        data: {
+          newPassword: {
+            password,
+            changeRequired: false,
           },
-          method: 'post',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'x-zitadel-orgid': '243843074894125785'
-          },
-          data: {
-            "newPassword": {
-              password,
-              "changeRequired": false
-            },
-            verificationCode
-          }
-        })
-
-      const result: APIRegister['result'] = {
-        userId,
-      };
-
-      return result;
+          verificationCode,
+        },
+      });
     },
   );
 }

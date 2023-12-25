@@ -3,14 +3,27 @@ export type APILogin = {
   method: 'post';
   data: {
     username: string;
-    password: string;
+    password?: string;
     authRequestId?: string;
-    challenges: any
+    challenges?: any;
   };
   result: {
     changeRequired: boolean;
     userId: string;
     callbackUrl?: string;
+    challenges: any;
+  };
+};
+
+export type APILoginWebAuthN = {
+  url: '/api/login-web-auth-n';
+  method: 'post';
+  data: {
+    username: string;
+    webAuthN: any;
+  };
+  result: {
+    userId: string;
   };
 };
 
@@ -39,6 +52,7 @@ export type APIChangePassword = {
   url: '/api/users/password';
   method: 'post';
   data: {
+    userId: string;
     currentPassword: string;
     newPassword: string;
   };
@@ -61,4 +75,28 @@ export type APIRegister = {
     userId: string;
     callbackUrl?: string;
   };
+};
+
+export type APIRequestCode = {
+  url: '/api/users/request-code';
+  method: 'post';
+  data: {
+    userId: string;
+    orgId: string;
+  };
+  result: {
+    code: string;
+  };
+};
+
+export type APIVerifyCode = {
+  url: '/api/users/verify-code';
+  method: 'post';
+  data: {
+    userId: string;
+    orgId: string;
+    verificationCode: string;
+    password: string;
+  };
+  result: void;
 };

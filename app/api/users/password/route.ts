@@ -8,7 +8,7 @@ import * as z from 'zod';
 const schema = z.object({
   currentPassword: z.string().trim(),
   newPassword: z.string().trim(),
-  sessionId: z.string().trim(),
+  userId: z.string().trim(),
 });
 
 export async function POST(request: NextRequest) {
@@ -18,23 +18,17 @@ export async function POST(request: NextRequest) {
       tracingName: 'update password',
     },
     async (body) => {
-      const sessionId = request.headers.get('x-portal-session-id') as string;
-
       isValidRequest({
         data: {
           ...body,
-          sessionId,
         },
         schema,
       });
 
-      const { currentPassword, newPassword } = body;
+      const { currentPassword, newPassword, userId } = body;
 
-      const session = CookieService.getSessionCookieById(sessionId);
-
-      if (!session) {
-        throw new Error('Session not found');
-      }
+      const session = CookieService.getSessionCookieByUserId(userId);
+      if (!session) throw new Error('Session not found');
 
       const authService = await AuthService.createAuthService(
         session.sessionToken,

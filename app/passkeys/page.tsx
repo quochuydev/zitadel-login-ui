@@ -1,11 +1,9 @@
 import configuration from '#/configuration';
 import Passkeys from '#/modules/Passkeys/Passkeys';
 import AuthService from '#/services/backend/auth.service';
-import { ROUTING } from '#/types/router';
-import { redirect } from 'next/navigation';
-import ZitadelService, { CreatePasskeyRegistrationLink,RegisterPasskey } from '#/services/backend/zitadel.service';
+import ZitadelService, { CreatePasskeyRegistrationLink, RegisterPasskey } from '#/services/backend/zitadel.service';
 
-export default async ({ searchParams }: any) => {
+export default async () => {
   const accessToken = await AuthService.getAdminAccessToken();
 
   const zitadelService = ZitadelService({

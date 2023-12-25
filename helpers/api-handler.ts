@@ -127,11 +127,11 @@ export function transformError(error: Error | ZodError | ZitadelError) {
 export const defaultHandler = async <T extends Default>(
   params: {
     request: NextRequest;
-    tracingName: string;
+    tracingName?: string;
   },
   handle: (body: T['data']) => Promise<T['result']>,
 ) => {
-  const { request, tracingName } = params;
+  const { request } = params;
 
   const userAgent = request.headers.get('user-agent');
 

@@ -40,9 +40,6 @@ export type Action = (context: {
     userId: string;
     orgId: string;
   };
-  project: {
-    projectId?: string;
-  };
   accessToken: string;
 }) => Promise<void>;
 
@@ -72,7 +69,7 @@ export const shouldTriggerAction = (params: {
 };
 
 const createAdminAccessTokenFactory = () => {
-  let token;
+  let token: string;
   let expiryDate = new Date(0);
 
   const getAdminAccessToken = async () => {
@@ -146,7 +143,7 @@ async function createSessionService(accessToken: string) {
   };
 
   return {
-    listSessions: async (data) => {
+    listSessions: async (data: SearchSessions['data']) => {
       return zitadelService.request<SearchSessions>({
         url: '/v2beta/sessions/search',
         method: 'post',
@@ -162,12 +159,12 @@ async function createSessionService(accessToken: string) {
         data,
       });
     },
-    updateSession: async (sessionId:string, data: UpdateSession['data']) => {
+    updateSession: async (sessionId: string, data: UpdateSession['data']) => {
       return zitadelService.request<UpdateSession>({
         url: '/v2beta/sessions/{sessionId}',
         method: 'patch',
-        params:{
-          sessionId
+        params: {
+          sessionId,
         },
         headers,
         data,
