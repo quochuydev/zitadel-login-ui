@@ -24,8 +24,7 @@ import {
 } from '#/helpers/api-caller';
 import { SetSessionRequest } from '#/proto/zitadel/session/v2beta/session_service';
 
-//*** User service ***
-
+//#region User service
 /**
  * https://zitadel.com/docs/apis/resources/user_service/user-service-add-human-user
  */
@@ -68,7 +67,6 @@ export type CreateHumanUser = {
   };
 };
 
-
 /**
  * https://zitadel.com/docs/apis/resources/user_service/user-service-register-passkey
  */
@@ -76,22 +74,24 @@ export type RegisterPasskey = {
   url: '/v2beta/users/{userId}/passkeys';
   method: 'post';
   params: {
-    userId:string
-  },
+    userId: string;
+  };
   data: {
-    "code": {
-      "id": string
-      "code": string
-    },
-    "authenticator": "PASSKEY_AUTHENTICATOR_UNSPECIFIED" | 'PASSKEY_AUTHENTICATOR_PLATFORM' | 'PASSKEY_AUTHENTICATOR_CROSS_PLATFORM',
-    "domain": string
-  },
+    code: {
+      id: string;
+      code: string;
+    };
+    authenticator:
+      | 'PASSKEY_AUTHENTICATOR_UNSPECIFIED'
+      | 'PASSKEY_AUTHENTICATOR_PLATFORM'
+      | 'PASSKEY_AUTHENTICATOR_CROSS_PLATFORM';
+    domain: string;
+  };
   result: {
     passkeyId: string;
     publicKeyCredentialCreationOptions: object;
   };
 };
-
 
 /**
  * https://zitadel.com/docs/apis/resources/user_service/user-service-create-passkey-registration-link
@@ -100,19 +100,18 @@ export type CreatePasskeyRegistrationLink = {
   url: '/v2beta/users/{userId}/passkeys/registration_link';
   method: 'post';
   params: {
-    userId: string
-  },
+    userId: string;
+  };
   data: {
-    returnCode: object
-  },
+    returnCode: object;
+  };
   result: {
     code: {
       id: string;
-      code: string
-    }
+      code: string;
+    };
   };
 };
-
 
 /**
  * https://zitadel.com/docs/apis/resources/user_service/user-service-verify-passkey-registration
@@ -121,14 +120,14 @@ export type VerifyPasskeyRegistration = {
   url: '/v2beta/users/{userId}/passkeys/{passkeyId}';
   method: 'post';
   params: {
-    passkeyId: object
-    userId: string
-  },
+    passkeyId: object;
+    userId: string;
+  };
   data: {
-    publicKeyCredential: object
-    passkeyName: string
-  },
-  result: void
+    publicKeyCredential: object;
+    passkeyName: string;
+  };
+  result: void;
 };
 
 /**
@@ -173,9 +172,9 @@ type CreateSession = {
 export type UpdateSession = {
   url: '/v2beta/sessions/{sessionId}';
   method: 'patch';
-  params:{
-    sessionId: string
-  },
+  params: {
+    sessionId: string;
+  };
   data: DeepPartial<Omit<SetSessionRequest, 'sessionId'>>;
   result: SetSessionResponse;
 };
@@ -216,7 +215,9 @@ type CreateCallback = {
   data: Pick<CreateCallbackRequest, 'session'>;
   result: CreateCallbackResponse;
 };
+//#endregion
 
+//#region Auth service
 export type ChangePassword = {
   url: '/auth/v1/users/me/password';
   method: 'put';
@@ -239,9 +240,9 @@ export type GetMyUserHistory = {
     }>;
   };
 };
+//#endregion
 
-// Admin APIs
-
+//#region Admin service
 /**
  * https://zitadel.com/docs/apis/resources/admin/admin-service-list-events
  */
@@ -251,8 +252,31 @@ export type SearchEvents = {
   params: DeepPartial<ListEventsRequest>;
   result: ListEventsResponse;
 };
+//#endregion
 
-// Management APIs
+//#region Management service
+/**
+ * https://zitadel.com/docs/apis/resources/mgmt/management-service-list-apps
+ */
+export type GetUserByLoginName = {
+  url: '/management/v1/global/users/_by_login_name';
+  method: 'get';
+  query: {
+    loginName: string;
+  };
+  result: {
+    user: {
+      id: string;
+      details: {
+        resourceOwner: string;
+      };
+      userName: string;
+      loginNames: string[];
+      preferredLoginName: string;
+      state: 'USER_STATE_ACTIVE';
+    };
+  };
+};
 
 /**
  * https://zitadel.com/docs/apis/resources/mgmt/management-service-list-apps
@@ -316,6 +340,7 @@ export type AddUserGrant = {
     userGrantId: string;
   };
 };
+//#endregion
 
 export type { CreateSession, GetSession, GetAuthRequest, CreateCallback };
 

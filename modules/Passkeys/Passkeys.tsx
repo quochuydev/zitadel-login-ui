@@ -201,7 +201,8 @@ const PasskeysPage = (props: {
                     username,
                     challenges: {
                       webAuthN: {
-                        domain: 'localhost',
+                        // domain: 'localhost',
+                        domain: new URL(appUrl).hostname,
                         userVerificationRequirement:
                           'USER_VERIFICATION_REQUIREMENT_REQUIRED',
                       },

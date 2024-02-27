@@ -1,7 +1,9 @@
 import configuration from '#/configuration';
 import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
 import AuthService from '#/services/backend/auth.service';
-import ZitadelService from '#/services/backend/zitadel.service';
+import ZitadelService, {
+  GetUserByLoginName,
+} from '#/services/backend/zitadel.service';
 import type { APIRequestCode } from '#/types/api';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';
@@ -11,8 +13,7 @@ const zitadelService = ZitadelService({
 });
 
 const schema = z.object({
-  userId: z.string().trim(),
-  orgId: z.string().trim(),
+  username: z.string().trim(),
 });
 
 export async function POST(request: NextRequest) {
@@ -29,19 +30,32 @@ export async function POST(request: NextRequest) {
         schema,
       });
 
-      const { userId, orgId } = body;
+      const { username } = body;
 
       const accessToken = await AuthService.getAdminAccessToken();
+
+      const user = await zitadelService
+        .request<GetUserByLoginName>({
+          url: '/management/v1/global/users/_by_login_name',
+          query: {
+            loginName: username,
+          },
+          method: 'get',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((e) => e.user);
 
       const result = await zitadelService.request<any>({
         url: '/v2beta/users/{userId}/password_reset',
         params: {
-          userId,
+          userId: user.id,
         },
         method: 'post',
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'x-zitadel-orgid': orgId,
+          'x-zitadel-orgid': user.details.resourceOwner,
         },
         data: {
           returnCode: {},
@@ -52,6 +66,8 @@ export async function POST(request: NextRequest) {
 
       return {
         code: result.verificationCode,
+        orgId: user.details.resourceOwner,
+        userId: user.id,
       };
     },
   );

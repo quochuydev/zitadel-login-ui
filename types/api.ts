@@ -81,11 +81,12 @@ export type APIRequestCode = {
   url: '/api/users/request-code';
   method: 'post';
   data: {
-    userId: string;
-    orgId: string;
+    username: string;
   };
   result: {
     code: string;
+    userId: string;
+    orgId: string;
   };
 };
 
