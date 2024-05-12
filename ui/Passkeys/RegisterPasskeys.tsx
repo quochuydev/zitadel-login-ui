@@ -3,6 +3,7 @@ import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import { coerceToArrayBuffer, coerceToBase64Url } from '#/helpers/bytes';
 import ApiService from '#/services/frontend/api.service';
+import { APIVerifyPasskey } from '#/types/api';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 
@@ -77,7 +78,7 @@ const RegisterPasskeysPage = (props: {
           },
         };
 
-        const result = await apiService.request<any>({
+        await apiService.request<APIVerifyPasskey>({
           url: '/api/passkey/verify',
           method: 'post',
           data: {
@@ -87,8 +88,6 @@ const RegisterPasskeysPage = (props: {
             credential: data,
           },
         });
-
-        console.log('result', result);
       } catch (error) {
         console.log('debug', error);
       }

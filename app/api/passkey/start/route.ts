@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import AuthService from '#/services/backend/auth.service';
 import CookieService from '#/services/backend/cookie.service';
-import type { APIWebAuthNStart } from '#/types/api';
+import type { APIStartPasskey } from '#/types/api';
 import { isValidRequest, defaultHandler } from '#/helpers/api-handler';
 import * as z from 'zod';
 
@@ -11,7 +11,7 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  return defaultHandler<APIWebAuthNStart>(
+  return defaultHandler<APIStartPasskey>(
     {
       request,
       tracingName: 'login',

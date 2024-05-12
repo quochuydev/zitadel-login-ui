@@ -115,7 +115,7 @@ export type VerifyPasskeyRegistration = {
   url: '/v2beta/users/{userId}/passkeys/{passkeyId}';
   method: 'post';
   params: {
-    passkeyId: object;
+    passkeyId: string;
     userId: string;
   };
   data: {

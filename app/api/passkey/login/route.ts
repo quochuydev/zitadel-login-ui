@@ -1,7 +1,7 @@
 import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
 import AuthService from '#/services/backend/auth.service';
 import CookieService from '#/services/backend/cookie.service';
-import type { APIWebAuthNLogin } from '#/types/api';
+import type { APILoginPasskey } from '#/types/api';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';
 
@@ -10,7 +10,7 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  return defaultHandler<APIWebAuthNLogin>({ request }, async (body) => {
+  return defaultHandler<APILoginPasskey>({ request }, async (body) => {
     isValidRequest({
       data: {
         ...body,
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       userId,
     });
 
-    const result: APIWebAuthNLogin['result'] = {
+    const result: APILoginPasskey['result'] = {
       userId,
     };
 

@@ -3,7 +3,7 @@ import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import { coerceToArrayBuffer, coerceToBase64Url } from '#/helpers/bytes';
 import ApiService from '#/services/frontend/api.service';
-import { APIWebAuthNLogin, APIWebAuthNStart } from '#/types/api';
+import { APILoginPasskey, APIStartPasskey } from '#/types/api';
 import { ROUTING } from '#/types/router';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -45,8 +45,8 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
               onClick={async (e) => {
                 e.preventDefault();
 
-                const session = await apiService.request<APIWebAuthNStart>({
-                  url: '/api/webAuthN/start',
+                const session = await apiService.request<APIStartPasskey>({
+                  url: '/api/passkey/start',
                   method: 'post',
                   data: {
                     username,
@@ -121,8 +121,8 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
                   },
                 };
 
-                const result = await apiService.request<APIWebAuthNLogin>({
-                  url: '/api/webAuthN/login',
+                const result = await apiService.request<APILoginPasskey>({
+                  url: '/api/passkey/login',
                   method: 'post',
                   data: {
                     username,

@@ -13,8 +13,20 @@ export type APILogin = {
   };
 };
 
-export type APIWebAuthNStart = {
-  url: '/api/webAuthN/start';
+export type APIVerifyPasskey = {
+  url: '/api/passkey/verify';
+  method: 'post';
+  data: {
+    orgId: string;
+    userId: string;
+    passkeyId: string;
+    credential: any;
+  };
+  result: void;
+};
+
+export type APIStartPasskey = {
+  url: '/api/passkey/start';
   method: 'post';
   data: {
     username: string;
@@ -28,8 +40,8 @@ export type APIWebAuthNStart = {
   };
 };
 
-export type APIWebAuthNLogin = {
-  url: '/api/webAuthN/login';
+export type APILoginPasskey = {
+  url: '/api/passkey/login';
   method: 'post';
   data: {
     username: string;

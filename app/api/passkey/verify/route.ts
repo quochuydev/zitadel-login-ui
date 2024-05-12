@@ -4,9 +4,9 @@ import AuthService from '#/services/backend/auth.service';
 import ZitadelService, {
   VerifyPasskeyRegistration,
 } from '#/services/backend/zitadel.service';
+import { APIVerifyPasskey } from '#/types/api';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';
-import CookieService from '#/services/backend/cookie.service';
 
 const zitadelService = ZitadelService({
   host: configuration.zitadel.url,
@@ -19,7 +19,7 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  return defaultHandler<any>(
+  return defaultHandler<APIVerifyPasskey>(
     {
       request,
       tracingName: 'verifyPasskey',
@@ -33,11 +33,9 @@ export async function POST(request: NextRequest) {
       });
 
       const { orgId, userId, passkeyId, credential } = body;
-
       const accessToken = await AuthService.getAdminAccessToken();
-      const sessionCookie = CookieService.getSessionCookieByUserId(userId);
 
-      const result = await zitadelService.request<VerifyPasskeyRegistration>({
+      await zitadelService.request<VerifyPasskeyRegistration>({
         url: '/v2beta/users/{userId}/passkeys/{passkeyId}',
         params: {
           userId,
@@ -53,10 +51,6 @@ export async function POST(request: NextRequest) {
           passkeyName: 'passkeyName ' + new Date().toISOString(),
         },
       });
-
-      return {
-        result,
-      };
     },
   );
 }
