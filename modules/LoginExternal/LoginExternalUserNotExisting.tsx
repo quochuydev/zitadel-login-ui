@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import Button from '#/modules/Components/Button';
+import Button from '#/modules/Components/Button/Button';
 import { ROUTING } from '#/types/router';
 import useTranslations from 'next-translate/useTranslation';
 import { useRouter } from 'next/navigation';

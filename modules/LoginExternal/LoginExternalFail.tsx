@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import type { ToastType } from '#/modules/Components/Toast';
 import Toast from '#/modules/Components/Toast';
 import useTranslations from 'next-translate/useTranslation';
-import Button from '#/modules/Components/Button';
+import Button from '#/modules/Components/Button/Button';
 import { useRouter } from 'next/navigation';
 import { ROUTING } from '#/types/router';
 
