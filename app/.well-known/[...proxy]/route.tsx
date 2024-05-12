@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 
 export async function handler(request: NextRequest) {
   if (
-    ['oauth', 'oidc', 'idps/callback'].some((e) =>
+    ['.well-known', 'oauth', 'oidc', 'idps/callback'].some((e) =>
       request.nextUrl.href.includes(e),
     )
   ) {
