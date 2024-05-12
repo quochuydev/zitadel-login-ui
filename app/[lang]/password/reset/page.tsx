@@ -1,5 +1,5 @@
 import configuration from '#/configuration';
-import PasswordInit from '#/modules/Password/Init';
+import PasswordReset from '#/modules/Password/Reset';
 import AuthService from '#/services/backend/auth.service';
 import { ROUTING } from '#/types/router';
 import type { Application, AuthRequest } from '#/types/zitadel';
@@ -8,12 +8,7 @@ import { redirect } from 'next/navigation';
 type Prompt = 'PROMPT_CREATE' | 'PROMPT_UNSPECIFIED';
 
 export default async ({ searchParams }: any) => {
-  const {
-    authRequest: authRequestId,
-    userID: userId,
-    code: verificationCode,
-    orgID: orgId,
-  } = searchParams;
+  const { authRequest: authRequestId } = searchParams;
 
   const result = await getAuthRequestInfo(authRequestId);
 
@@ -22,12 +17,9 @@ export default async ({ searchParams }: any) => {
   }
 
   return (
-    <PasswordInit
+    <PasswordReset
       appUrl={configuration.appUrl}
       authRequest={result?.authRequest}
-      userId={userId}
-      orgId={orgId}
-      verificationCode={verificationCode}
     />
   );
 };
@@ -45,7 +37,7 @@ async function getAuthRequestInfo(authRequestId: string): Promise<{
   }
 
   const accessToken = await AuthService.getAdminAccessToken();
-  const oidcService = await AuthService.createOIDCService(accessToken);
+  const oidcService = AuthService.createOIDCService(accessToken);
 
   const authRequest = await oidcService
     .getAuthRequest({ authRequestId })

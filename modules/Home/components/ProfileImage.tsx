@@ -29,8 +29,8 @@ export default function ProfileImage(props: {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         {user.loginName}
-        <Menu.Button className="ml-4  h-8 w-8 items-center justify-center rounded-full shadow-lg ring-2 ring-opacity-50 transition-all">
-          <span className="text-sm">
+        <Menu.Button className="ml-4 h-8 w-8 rounded-full shadow-lg ring-2 ring-opacity-50 transition-all">
+          <span>
             {user && user.loginName ? user.loginName.substring(0, 1) : 'A'}
           </span>
         </Menu.Button>
@@ -112,11 +112,11 @@ export default function ProfileImage(props: {
                   onClick={async () => {
                     try {
                       await apiService.request<APILogout>({
-                        url:'/api/logout',
-                        method:'post',
-                        data:{
-                          sessionId: session.id
-                        }
+                        url: '/api/logout',
+                        method: 'post',
+                        data: {
+                          sessionId: session.id,
+                        },
                       });
                     } catch (error) {
                       console.log('error', error);

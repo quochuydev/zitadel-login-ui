@@ -24,8 +24,7 @@ async function getAuthRequestInfo(authRequestId: string): Promise<{
   }
 
   const accessToken = await AuthService.getAdminAccessToken();
-
-  const oidcService = await AuthService.createOIDCService(accessToken);
+  const oidcService = AuthService.createOIDCService(accessToken);
 
   const authRequest = await oidcService
     .getAuthRequest({ authRequestId })

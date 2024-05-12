@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
       };
 
       if (authRequestId) {
-        const oidcService = await AuthService.createOIDCService(accessToken);
+        const oidcService = AuthService.createOIDCService(accessToken);
 
         const callbackResult = await oidcService.createCallback({
           authRequestId,

@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
       // If user need to change password (changeRequired === true)
       // => go to /password first
       if (!changeRequired && authRequestId) {
-        const oidcService = await AuthService.createOIDCService(accessToken);
+        const oidcService = AuthService.createOIDCService(accessToken);
 
         const callbackResult = await oidcService.createCallback({
           authRequestId,

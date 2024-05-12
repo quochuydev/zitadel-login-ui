@@ -3,5 +3,5 @@ export const ROUTING = {
   LOGIN: '/login',
   REGISTER: '/register',
   PASSWORD: '/password',
-  ACCOUNT: '/u',
+  ACCOUNT: '/account',
 };

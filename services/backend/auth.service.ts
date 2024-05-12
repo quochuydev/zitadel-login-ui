@@ -1,5 +1,6 @@
 import configuration from '#/configuration';
 import type {
+  AuthRequest,
   CreateCallbackRequest,
   DeleteSessionRequest,
 } from '#/types/zitadel';
@@ -107,7 +108,7 @@ const createAdminAccessTokenFactory = () => {
   return getAdminAccessToken;
 };
 
-async function createAuthService(accessToken: string) {
+function createAuthService(accessToken: string) {
   return {
     changePassword: async (params: ChangePassword['data']) => {
       const { oldPassword, newPassword } = params;
@@ -137,7 +138,7 @@ async function createAuthService(accessToken: string) {
   };
 }
 
-async function createUserService(accessToken: string) {
+function createUserService(accessToken: string) {
   const headers: RequestInit['headers'] = {
     Authorization: `Bearer ${accessToken}`,
   };
@@ -213,7 +214,7 @@ function createSessionService(accessToken: string) {
   };
 }
 
-async function createOIDCService(accessToken: string) {
+function createOIDCService(accessToken: string) {
   const headers: RequestInit['headers'] = {
     Authorization: `Bearer ${accessToken}`,
   };
@@ -245,7 +246,7 @@ async function createOIDCService(accessToken: string) {
   };
 }
 
-async function createAdminService(accessToken: string) {
+function createAdminService(accessToken: string) {
   const headers: RequestInit['headers'] = {
     Authorization: `Bearer ${accessToken}`,
   };
@@ -264,7 +265,7 @@ async function createAdminService(accessToken: string) {
   };
 }
 
-async function createManagementService(accessToken: string) {
+function createManagementService(accessToken: string) {
   const headers: RequestInit['headers'] = {
     Authorization: `Bearer ${accessToken}`,
   };
