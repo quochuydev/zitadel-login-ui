@@ -24,7 +24,7 @@ const Page = (props: {
   const [isShowConfirmPwd, setShowConfirmPwd] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleUpdatePwd = async (e) => {
+  const handleUpdatePwd = async (e: any) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -134,11 +134,11 @@ const Page = (props: {
             <Image
               width={33}
               height={33}
-              src="/images/doctor.png"
+              src="/images/user.png"
               alt="avatar"
               className="mr-3 rounded-full"
             />
-            <p className="mr-5">{activeSession.factors.user.displayName}</p>
+            <p className="mr-5">{activeSession?.factors?.user?.displayName}</p>
           </div>
           <form onSubmit={handleUpdatePwd}>
             <div className="w-[320px] space-y-px rounded-md shadow-sm">

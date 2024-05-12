@@ -48,7 +48,7 @@ export default (props: {
           <Image
             width={100}
             height={100}
-            src="/images/doctor.png"
+            src="/images/user.png"
             alt="avatar"
             className="mb-[16px] mt-[40px] rounded-full"
           />

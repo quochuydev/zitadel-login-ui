@@ -3,9 +3,8 @@ import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import ApiService from '#/services/frontend/api.service';
 import { APIRequestCode } from '#/types/api';
-import type { Application, AuthRequest } from '#/types/zitadel';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 const PasswordResetPage = (props: { appUrl: string }) => {
   const { appUrl } = props;

@@ -90,8 +90,9 @@ function compile<T extends Pick<Default, 'url' | 'params'>>(
  * @param query { "username": "alice", "status": "active" }
  * @returns /users?username=alive&status=active
  */
-function objectToQueryString(url: string, query: object): string {
+export function objectToQueryString(url: string, query: any): string {
   const queryString = Object.keys(query)
+    .filter((key) => !!query[key])
     .map(
       (key) => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`,
     )

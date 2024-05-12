@@ -2,7 +2,7 @@
 import React from 'react';
 
 const LoadingState = ({ loading }: { loading?: boolean }) => {
-  if (!loading) return;
+  if (!loading) return <></>;
 
   return (
     <div className="w-full h-full opacity-60 bg-white fixed z-50 top-0 left-0">

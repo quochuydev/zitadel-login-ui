@@ -2,13 +2,13 @@ import React, { useImperativeHandle, useRef, useState } from 'react';
 
 type Intent = 'success' | 'error' | 'warning';
 type Params = {
-  message: string,
-  timeout?: number,
-  intent: Intent,
+  message: string;
+  timeout?: number;
+  intent: Intent;
 };
 
 export type ToastType = {
-  show: (params: Params) => void,
+  show: (params: Params) => void;
 };
 
 const intentMap: { [key in Intent]: string } = {
@@ -17,10 +17,10 @@ const intentMap: { [key in Intent]: string } = {
   warning: 'bg-yellow-500',
 };
 
-const Toast = React.forwardRef((props, ref) => {
+const Toast = React.forwardRef((_, ref) => {
   const [state, setState] = useState<{
-    message: string,
-    intent: Intent,
+    message?: string;
+    intent: Intent;
   }>({ message: undefined, intent: 'success' });
 
   const { message, intent } = state;
@@ -35,7 +35,7 @@ const Toast = React.forwardRef((props, ref) => {
         () =>
           setState({
             ...state,
-            message: null,
+            message: undefined,
           }),
         timeout,
       );
@@ -54,7 +54,7 @@ const Toast = React.forwardRef((props, ref) => {
     show,
   }));
 
-  if (!message) return;
+  if (!message) return <></>;
 
   return (
     <div
@@ -78,7 +78,7 @@ const Toast = React.forwardRef((props, ref) => {
         aria-label="Close"
         onClick={() => {
           timer.current = undefined;
-          setState({ ...state, message: null });
+          setState({ ...state, message: undefined });
         }}
       >
         <span className="sr-only">Close</span>

@@ -12,6 +12,7 @@ import { useRef, useState } from 'react';
 import Link from 'next/link';
 import useTranslations from 'next-translate/useTranslation';
 import LoadingState from '#/components/Loading';
+import { objectToQueryString } from '#/helpers/api-caller';
 
 const LoginPage = (props: {
   appUrl: string;
@@ -92,8 +93,12 @@ const LoginPage = (props: {
           <div className="flex justify-between items-center">
             <a
               className="text-[12px] font-normal text-[#4F6679]"
-              onClick={async () => {
-                router.replace(`/users/reset?authRequest=${authRequest?.id}`);
+              onClick={() => {
+                router.replace(
+                  objectToQueryString(`/password/reset`, {
+                    authRequest: authRequest?.id,
+                  }),
+                );
               }}
             >
               Forgot password?
@@ -103,9 +108,11 @@ const LoginPage = (props: {
             <p className="text-center text-black font-normal">
               <Link
                 className="text-info text-[15px] font-normal"
-                href={`${ROUTING.REGISTER}?authRequest=${authRequest?.id}`}
-                onClick={() => setIsLoading(true)}
                 data-testid={'registerSwitch'}
+                onClick={() => setIsLoading(true)}
+                href={objectToQueryString(ROUTING.REGISTER, {
+                  authRequest: authRequest?.id,
+                })}
               >
                 {t('REGISTER_NOW')}
               </Link>
