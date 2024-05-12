@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
       name: 'zitadel',
       type: 'oauth',
       version: '2',
-      wellKnown: `https://system-v1-fpms4l.zitadel.cloud/.well-known/openid-configuration`,
+      wellKnown: `https://zitadel-login-ui-v2.vercel.app/.well-known/openid-configuration`,
       authorization: {
         params: {
           scope: [
@@ -86,8 +86,6 @@ export const authOptions: NextAuthOptions = {
           email: profile.email,
           loginName: profile.preferred_username,
           image: profile.picture,
-          roleMap:
-            profile[`urn:zitadel:iam:org:project:243317727832324237:roles`],
           orgId: profile['urn:zitadel:iam:user:resourceowner:id'],
         };
       },

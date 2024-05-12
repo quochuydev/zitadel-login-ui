@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
       name: 'zitadel',
       type: 'oauth',
       version: '2',
-      wellKnown: `http://localhost:3333/.well-known/openid-configuration`,
+      wellKnown: `https://zitadel-login-ui-v2.vercel.app/.well-known/openid-configuration`,
       authorization: {
         params: {
           scope: [

@@ -43,15 +43,8 @@ export async function POST(request: NextRequest) {
         schema,
       });
 
-      const {
-        orgId,
-        email,
-        password,
-        familyName,
-        givenName,
-        authRequestId,
-        projectId,
-      } = body;
+      const { orgId, email, password, familyName, givenName, authRequestId } =
+        body;
 
       const accessToken = await AuthService.getAdminAccessToken();
 
