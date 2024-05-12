@@ -38,8 +38,8 @@ const configuration: Configuration = {
   appUrl: process.env.APP_URL,
   zitadel: {
     url: process.env.ZITADEL_URL,
-    userId: process.env.ZITADEL_USER_ID,
-    userToken: process.env.ZITADEL_USER_TOKEN,
+    userId: process.env.ZITADEL_SERVICE_USER_ID,
+    userToken: process.env.ZITADEL_SERVICE_USER_TOKEN,
   },
 };
 
