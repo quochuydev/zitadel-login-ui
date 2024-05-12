@@ -70,44 +70,6 @@ export const shouldTriggerAction = (params: {
   );
 };
 
-const createAdminAccessTokenFactory = () => {
-  let token: string;
-  let expiryDate = new Date(0);
-
-  const getAdminAccessToken = async () => {
-    const { clientId, clientSecret } = configuration.zitadel;
-
-    if (!token || expiryDate < new Date()) {
-      const scope = 'openid urn:zitadel:iam:org:project:id:zitadel:aud';
-
-      const searchParams = new URLSearchParams();
-      searchParams.append('grant_type', 'client_credentials');
-      searchParams.append('client_id', clientId);
-      searchParams.append('client_secret', clientSecret);
-      searchParams.append('scope', scope);
-
-      const result = await zitadelService.request<GetClientCredentialsToken>({
-        url: '/oauth/v2/token',
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        data: searchParams,
-      });
-
-      const accessToken = result.access_token;
-      const expiresIn = result.expires_in; //seconds
-
-      token = accessToken;
-      expiryDate.setTime(new Date().getTime() + (expiresIn - 10) * 1000);
-    }
-
-    return token;
-  };
-
-  return getAdminAccessToken;
-};
-
 function createAuthService(accessToken: string) {
   return {
     changePassword: async (params: ChangePassword['data']) => {
@@ -297,5 +259,5 @@ export default {
   createAuthService,
   createAdminService,
   createManagementService,
-  getAdminAccessToken: createAdminAccessTokenFactory(),
+  getAdminAccessToken: async () => configuration.zitadel.userToken,
 };

@@ -44,7 +44,7 @@ export async function handler(request: NextRequest) {
       const redirect = findFirstMatch([
         {
           match: request.url.includes('/oidc/v1/end_session'),
-          value: postLogoutRedirectUrl(request),
+          value: getPostLogoutRedirectUrl(request),
         },
         {
           match: url.includes('/oauth/v2/authorize') && response.redirected,
@@ -80,7 +80,7 @@ export async function handler(request: NextRequest) {
       const redirect = findFirstMatch([
         {
           match: request.url.includes('/oidc/v1/end_session'),
-          value: postLogoutRedirectUrl(request),
+          value: getPostLogoutRedirectUrl(request),
         },
       ]);
 
@@ -104,7 +104,7 @@ export const dynamic = 'force-dynamic';
 
 export { handler as GET, handler as POST };
 
-function postLogoutRedirectUrl(request: NextRequest) {
+function getPostLogoutRedirectUrl(request: NextRequest) {
   return (
     request.nextUrl.searchParams.get('post_logout_redirect_uri') || '/logout'
   );

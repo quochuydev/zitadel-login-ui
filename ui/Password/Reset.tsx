@@ -3,10 +3,14 @@ import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import ApiService from '#/services/frontend/api.service';
 import { APIRequestCode } from '#/types/api';
+import { AuthRequest } from '#/types/zitadel';
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
 
-const PasswordResetPage = (props: { appUrl: string }) => {
+const PasswordResetPage = (props: {
+  appUrl: string;
+  authRequest?: AuthRequest;
+}) => {
   const { appUrl } = props;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();

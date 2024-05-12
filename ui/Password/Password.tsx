@@ -7,6 +7,7 @@ import { ROUTING } from '#/types/router';
 import type { Session } from '#/types/zitadel';
 import Image from 'next/image';
 import React, { useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const Page = (props: {
   appUrl: string;
@@ -23,6 +24,7 @@ const Page = (props: {
   const [isShowPwd, setShowPwd] = useState<boolean>(false);
   const [isShowConfirmPwd, setShowConfirmPwd] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleUpdatePwd = async (e: any) => {
     e.preventDefault();
@@ -63,7 +65,7 @@ const Page = (props: {
         });
 
         if (result.callbackUrl) {
-          window.location.replace(result.callbackUrl);
+          router.replace(result.callbackUrl);
           return;
         }
       }
@@ -72,7 +74,7 @@ const Page = (props: {
         intent: 'success',
       });
 
-      window.location.replace(ROUTING.HOME);
+      router.replace(ROUTING.HOME);
     } catch (error) {
       toastRef.current?.show({
         message: 'Update password fail',
@@ -140,6 +142,7 @@ const Page = (props: {
             />
             <p className="mr-5">{activeSession?.factors?.user?.displayName}</p>
           </div>
+
           <form onSubmit={handleUpdatePwd}>
             <div className="w-[320px] space-y-px rounded-md shadow-sm">
               <div className="relative">
