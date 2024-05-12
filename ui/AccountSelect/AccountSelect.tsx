@@ -7,6 +7,7 @@ import type { AuthRequest, Session } from '#/types/zitadel';
 import useTranslations from 'next-translate/useTranslation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { objectToQueryString } from '#/helpers/api-caller';
 
 export default (props: {
   appUrl: string;
@@ -43,7 +44,7 @@ export default (props: {
 
           <div>
             {[...sessions]
-              .filter((e) => !!e.factors?.user)
+              .filter((e) => !!e.factors?.user?.id)
               .map((session) => (
                 <div
                   key={session.id}
@@ -96,9 +97,9 @@ export default (props: {
               className="flex items-center p-4 hover:bg-gray-100 hover:cursor-pointer"
               onClick={() => {
                 router.push(
-                  authRequest
-                    ? `${ROUTING.LOGIN}?authRequest=${authRequest.id}&flow=add`
-                    : `${ROUTING.LOGIN}`,
+                  objectToQueryString(ROUTING.LOGIN, {
+                    authRequest: authRequest?.id,
+                  }),
                 );
               }}
             >

@@ -12,7 +12,7 @@ export default (props: {
   activeSession: Session;
   index: number;
 }) => {
-  const { appUrl, sessions, activeSession } = props;
+  const { appUrl, sessions, activeSession, index } = props;
   const router = useRouter();
 
   return (
@@ -61,7 +61,7 @@ export default (props: {
           <div className="flex justify-between items-center">
             <a
               className="text-[12px] font-normal text-[#4F6679]"
-              onClick={() => router.replace(`/${index}?passkeys`)}
+              onClick={() => router.replace(`/account/${index}/passkeys`)}
             >
               Register passkeys
             </a>

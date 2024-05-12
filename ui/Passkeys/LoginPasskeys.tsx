@@ -7,12 +7,12 @@ import { APIWebAuthNLogin, APIWebAuthNStart } from '#/types/api';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 
-const PasskeysPage = (props: { appUrl: string; loginName: string }) => {
-  const { appUrl, loginName } = props;
+const PasskeysPage = (props: { appUrl: string }) => {
+  const { appUrl } = props;
   const apiService = ApiService({ appUrl });
   const toastRef = useRef<ToastType>();
 
-  const [username, setUsername] = useState<string>(loginName);
+  const [username, setUsername] = useState<string>('');
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">

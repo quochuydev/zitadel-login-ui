@@ -90,6 +90,17 @@ export type APIRegister = {
   };
 };
 
+export type APILoginExternal = {
+  url: '/api/login/external';
+  method: 'post';
+  data: {
+    idpIntentId: string;
+    idpIntentToken: string;
+    userId: string;
+  };
+  result: void;
+};
+
 export type APIRequestCode = {
   url: '/api/users/request-code';
   method: 'post';
