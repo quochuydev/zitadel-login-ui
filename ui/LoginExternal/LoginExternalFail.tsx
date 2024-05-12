@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 'use client';
 import React, { useRef } from 'react';
-import type { ToastType } from '#/modules/Components/Toast';
-import Toast from '#/modules/Components/Toast';
+import type { ToastType } from '#/components/Toast';
+import Toast from '#/components/Toast';
 import useTranslations from 'next-translate/useTranslation';
-import Button from '#/modules/Components/Button/Button';
+import Button from '#/components/Button/Button';
 import { useRouter } from 'next/navigation';
 import { ROUTING } from '#/types/router';
 

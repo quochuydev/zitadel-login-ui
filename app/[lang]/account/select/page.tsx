@@ -1,7 +1,7 @@
 import React from 'react';
 import configuration from '#/configuration';
 import { getCurrentSessions } from '#/services/backend/zitadel-session';
-import AccountSelect from '#/modules/AccountSelect/AccountSelect';
+import AccountSelect from '#/ui/AccountSelect/AccountSelect';
 import { ROUTING } from '#/types/router';
 import type { AuthRequest } from '#/types/zitadel';
 import { redirect } from 'next/navigation';

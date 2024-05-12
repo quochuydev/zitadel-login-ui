@@ -1,4 +1,4 @@
 import React from 'react';
-import LoginExternalFail from '#/modules/LoginExternal/LoginExternalFail';
+import LoginExternalFail from '#/ui/LoginExternal/LoginExternalFail';
 
 export default async () => <LoginExternalFail />;

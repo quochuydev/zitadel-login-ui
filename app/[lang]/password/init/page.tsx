@@ -1,5 +1,5 @@
 import configuration from '#/configuration';
-import PasswordInit from '#/modules/Password/Init';
+import PasswordInit from '#/ui/Password/Init';
 import AuthService from '#/services/backend/auth.service';
 import { ROUTING } from '#/types/router';
 import type { Application, AuthRequest } from '#/types/zitadel';

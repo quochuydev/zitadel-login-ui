@@ -1,6 +1,6 @@
 import configuration from '#/configuration';
 import { getProjectIdFromAuthRequest } from '#/helpers/zitadel';
-import Login from '#/modules/Login/Login';
+import Login from '#/ui/Login/Login';
 import AuthService from '#/services/backend/auth.service';
 import { ROUTING } from '#/types/router';
 import type { Application, AuthRequest } from '#/types/zitadel';

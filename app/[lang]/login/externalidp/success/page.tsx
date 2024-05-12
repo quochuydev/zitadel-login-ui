@@ -1,8 +1,8 @@
 'use-client';
 import React from 'react';
 import configuration from '#/configuration';
-import LoginExternalSuccess from '#/modules/LoginExternal/LoginExternalSuccess';
-import LoginExternalUserNotExisting from '#/modules/LoginExternal/LoginExternalUserNotExisting';
+import LoginExternalSuccess from '#/ui/LoginExternal/LoginExternalSuccess';
+import LoginExternalUserNotExisting from '#/ui/LoginExternal/LoginExternalUserNotExisting';
 
 type SearchParams = {
   authRequest: string;

@@ -1,5 +1,5 @@
 import React from 'react';
-import Password from '#/modules/Password/Password';
+import Password from '#/ui/Password/Password';
 import configuration from '#/configuration';
 import { redirect } from 'next/navigation';
 import { ROUTING } from '#/types/router';

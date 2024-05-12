@@ -1,14 +1,17 @@
 'use client';
-import type { ToastType } from '#/modules/Components/Toast';
-import Toast from '#/modules/Components/Toast';
-import SignInForm from '#/modules/Login/components/SignInForm';
+import type { ToastType } from '#/components/Toast';
+import Toast from '#/components/Toast';
+import SignInForm from '#/ui/Login/components/SignInForm';
 import ApiService from '#/services/frontend/api.service';
-import { APILogin, APIRequestCode, APIVerifyCode } from '#/types/api';
+import { APILogin } from '#/types/api';
 import { ROUTING } from '#/types/router';
 import type { Application, AuthRequest } from '#/types/zitadel';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
+import Link from 'next/link';
+import useTranslations from 'next-translate/useTranslation';
+import LoadingState from '#/components/Loading';
 
 const LoginPage = (props: {
   appUrl: string;
@@ -20,6 +23,7 @@ const LoginPage = (props: {
   const router = useRouter();
   const apiService = ApiService({ appUrl });
   const toastRef = useRef<ToastType>();
+  const { t } = useTranslations('common');
 
   const handleSignIn = async (params: {
     username: string;
@@ -67,6 +71,8 @@ const LoginPage = (props: {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
+      <LoadingState loading={isLoading} />
+
       <div className="mb-[8px] ml-[30px] mr-[30px] flex w-full flex-col justify-center rounded-md border-gray-300 lg:w-[480px] lg:border lg:p-[40px] p-3">
         <div className="flex flex-col items-center justify-center">
           <Image src="/images/company.png" alt="logo" width="125" height="47" />
@@ -82,16 +88,31 @@ const LoginPage = (props: {
             defaultUsername={authRequest?.loginHint}
             handleSignIn={handleSignIn}
           />
-        </div>
 
-        <a
-          className="mb-[18px] text-[12px] font-normal text-[#4F6679]"
-          onClick={async () => {
-            router.replace(`/users/reset?authRequest=${authRequest?.id}`);
-          }}
-        >
-          Forgot password?
-        </a>
+          <div className="flex justify-between items-center">
+            <a
+              className="text-[12px] font-normal text-[#4F6679]"
+              onClick={async () => {
+                router.replace(`/users/reset?authRequest=${authRequest?.id}`);
+              }}
+            >
+              Forgot password?
+            </a>
+
+            {/* {loginSettings?.allowRegister && authRequest?.id && ( */}
+            <p className="text-center text-black font-normal">
+              <Link
+                className="text-info text-[15px] font-normal"
+                href={`${ROUTING.REGISTER}?authRequest=${authRequest?.id}`}
+                onClick={() => setIsLoading(true)}
+                data-testid={'registerSwitch'}
+              >
+                {t('REGISTER_NOW')}
+              </Link>
+            </p>
+            {/* )} */}
+          </div>
+        </div>
       </div>
 
       {application?.name && (

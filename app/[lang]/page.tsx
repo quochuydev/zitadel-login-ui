@@ -1,6 +1,6 @@
 import React from 'react';
 import configuration from '#/configuration';
-import Home from '#/modules/Home/Home';
+import Home from '#/ui/Home/Home';
 import { getCurrentSessions } from '#/services/backend/zitadel-session';
 import { redirect } from 'next/navigation';
 import { ROUTING } from '#/types/router';

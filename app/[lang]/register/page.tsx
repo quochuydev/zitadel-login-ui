@@ -1,5 +1,5 @@
 import React from 'react';
-import Register from '#/modules/Register/Register';
+import Register from '#/ui/Register/Register';
 import configuration from '#/configuration';
 import AuthService from '#/services/backend/auth.service';
 import type { AuthRequest } from '#/types/zitadel';

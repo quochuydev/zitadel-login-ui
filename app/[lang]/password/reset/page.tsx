@@ -1,5 +1,5 @@
 import configuration from '#/configuration';
-import PasswordReset from '#/modules/Password/Reset';
+import PasswordReset from '#/ui/Password/Reset';
 import AuthService from '#/services/backend/auth.service';
 import { ROUTING } from '#/types/router';
 import type { Application, AuthRequest } from '#/types/zitadel';

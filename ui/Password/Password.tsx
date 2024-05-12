@@ -1,6 +1,6 @@
 'use client';
-import type { ToastType } from '#/modules/Components/Toast';
-import Toast from '#/modules/Components/Toast';
+import type { ToastType } from '#/components/Toast';
+import Toast from '#/components/Toast';
 import ApiService from '#/services/frontend/api.service';
 import type { APIChangePassword, APIFinalizeAuthRequest } from '#/types/api';
 import { ROUTING } from '#/types/router';
