@@ -6,7 +6,7 @@ import ApiService from '#/services/frontend/api.service';
 import { APIWebAuthNLogin, APIWebAuthNStart } from '#/types/api';
 import { ROUTING } from '#/types/router';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 const LoginPasskeysPage = (props: { appUrl: string }) => {
@@ -134,7 +134,7 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
 
                 console.log(`debug:result`, result);
 
-                router.replace(ROUTING.LOGIN);
+                router.replace(ROUTING.HOME);
               }}
               type="button"
               className="disabled:bg-gray-300 group relative w-full flex justify-center py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
