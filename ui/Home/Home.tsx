@@ -43,7 +43,7 @@ export default (props: {
       </div>
 
       <div className="flex flex-grow items-center justify-center">
-        <div className="my-4 flex h-[392px] w-[416px] flex-col items-center justify-center rounded-[8px] border-gray-300 md:border">
+        <div className="flex w-[480px] lg:p-[40px] flex-col items-center justify-center rounded-[8px] border-gray-300 md:border">
           <h1 className="text-[42px]">👋 Welcome!</h1>
 
           <Image
@@ -58,14 +58,12 @@ export default (props: {
             {activeSession?.factors?.user?.displayName}
           </h3>
 
-          <div className="flex justify-between items-center">
-            <a
-              className="text-[12px] font-normal text-[#4F6679]"
-              onClick={() => router.replace(`/account/${index}/passkeys`)}
-            >
-              Register passkeys
-            </a>
-          </div>
+          <a
+            className="text-[12px] font-normal text-[#4F6679] cursor-pointer mt-[20px]"
+            onClick={() => router.replace(`/account/${index}/passkeys`)}
+          >
+            Register passkeys
+          </a>
         </div>
       </div>
     </div>

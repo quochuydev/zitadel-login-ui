@@ -48,8 +48,6 @@ export default (props: {
               .map((session) => (
                 <div
                   key={session.id}
-                  data-testid-org-id={session.factors?.user?.organisationId}
-                  data-testid-user-id={session.factors?.user?.id}
                   className="flex items-center p-2 mb-4 hover:bg-gray-100 hover:cursor-pointer"
                   onClick={async () => {
                     try {
