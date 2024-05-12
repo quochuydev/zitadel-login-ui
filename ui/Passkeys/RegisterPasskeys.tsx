@@ -6,13 +6,13 @@ import ApiService from '#/services/frontend/api.service';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 
-const PasskeysPage = (props: {
+const RegisterPasskeysPage = (props: {
   appUrl: string;
   passkeyId: string;
   orgId: string;
   userId: string;
   loginName: string;
-  publicKeyCredentialCreationOptions: globalThis.PublicKeyCredentialCreationOptions;
+  publicKeyCredentialCreationOptions: any;
 }) => {
   const {
     appUrl,
@@ -26,13 +26,6 @@ const PasskeysPage = (props: {
   const toastRef = useRef<ToastType>();
 
   const verifyPasskey = async () => {
-    console.log('passkeyId', passkeyId);
-
-    console.log(
-      `debug:publicKeyCredentialCreationOptions`,
-      publicKeyCredentialCreationOptions,
-    );
-
     if (passkeyId && publicKeyCredentialCreationOptions) {
       try {
         publicKeyCredentialCreationOptions.publicKey.challenge =
@@ -147,4 +140,4 @@ const PasskeysPage = (props: {
   );
 };
 
-export default PasskeysPage;
+export default RegisterPasskeysPage;
