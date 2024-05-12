@@ -7,6 +7,7 @@ import { ROUTING } from '#/types/router';
 
 export default async function Page() {
   const index = 0;
+
   const sessions = await getCurrentSessions();
   if (!sessions[index]) return redirect(ROUTING.LOGIN);
 
@@ -15,6 +16,7 @@ export default async function Page() {
       appUrl={configuration.appUrl}
       activeSession={sessions[index]}
       sessions={sessions}
+      index={index}
     />
   );
 }

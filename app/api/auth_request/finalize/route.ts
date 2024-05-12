@@ -27,13 +27,9 @@ export async function POST(request: NextRequest) {
       const { authRequestId, userId } = body;
 
       const sessionCookie = CookieService.getSessionCookieByUserId(userId);
-
-      if (!sessionCookie) {
-        throw new Error('Session not found');
-      }
+      if (!sessionCookie) throw new Error('Session not found');
 
       const accessToken = await AuthService.getAdminAccessToken();
-
       const oidcService = AuthService.createOIDCService(accessToken);
 
       const result = await oidcService.createCallback({

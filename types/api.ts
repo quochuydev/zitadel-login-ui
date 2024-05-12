@@ -3,21 +3,33 @@ export type APILogin = {
   method: 'post';
   data: {
     username: string;
-    password?: string;
+    password: string;
     authRequestId?: string;
-    challenges?: any;
-    webAuthN: any;
   };
   result: {
     changeRequired: boolean;
     userId: string;
     callbackUrl?: string;
+  };
+};
+
+export type APIWebAuthNStart = {
+  url: '/api/webAuthN/start';
+  method: 'post';
+  data: {
+    username: string;
+    authRequestId?: string;
+    challenges?: any;
+    webAuthN?: any;
+  };
+  result: {
+    userId: string;
     challenges: any;
   };
 };
 
-export type APILoginWebAuthN = {
-  url: '/api/login-web-auth-n';
+export type APIWebAuthNLogin = {
+  url: '/api/webAuthN/login';
   method: 'post';
   data: {
     username: string;

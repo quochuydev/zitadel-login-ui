@@ -10,6 +10,7 @@ export default (props: {
   appUrl: string;
   sessions: Session[];
   activeSession: Session;
+  index: number;
 }) => {
   const { appUrl, sessions, activeSession } = props;
   const router = useRouter();
@@ -56,6 +57,15 @@ export default (props: {
           <h3 className="text-[18px]">
             {activeSession?.factors?.user?.displayName}
           </h3>
+
+          <div className="flex justify-between items-center">
+            <a
+              className="text-[12px] font-normal text-[#4F6679]"
+              onClick={() => router.replace(`/${index}?passkeys`)}
+            >
+              Register passkeys
+            </a>
+          </div>
         </div>
       </div>
     </div>

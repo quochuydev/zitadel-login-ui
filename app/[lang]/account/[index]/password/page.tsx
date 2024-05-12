@@ -7,11 +7,9 @@ import { getCurrentSessions } from '#/services/backend/zitadel-session';
 
 export default async ({ searchParams, params: { index } }) => {
   const { authRequest: authRequestId } = searchParams;
-  const sessions = await getCurrentSessions();
 
-  if (!sessions[index]) {
-    redirect(ROUTING.LOGIN);
-  }
+  const sessions = await getCurrentSessions();
+  if (!sessions[index]) redirect(ROUTING.LOGIN);
 
   return (
     <Password

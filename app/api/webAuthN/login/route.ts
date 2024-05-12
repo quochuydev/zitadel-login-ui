@@ -1,18 +1,16 @@
-import type { NextRequest } from 'next/server';
+import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
 import AuthService from '#/services/backend/auth.service';
 import CookieService from '#/services/backend/cookie.service';
-import type { APILogin } from '#/types/api';
-import { isValidRequest, defaultHandler } from '#/helpers/api-handler';
+import type { APIWebAuthNLogin } from '#/types/api';
+import type { NextRequest } from 'next/server';
 import * as z from 'zod';
 
 const schema = z.object({
   username: z.string().trim(),
-  // password: z.string().trim(),
-  authRequestId: z.string().trim().optional(),
 });
 
 export async function POST(request: NextRequest) {
-  return defaultHandler<APILogin>({ request }, async (body) => {
+  return defaultHandler<APIWebAuthNLogin>({ request }, async (body) => {
     isValidRequest({
       data: {
         ...body,
@@ -25,18 +23,14 @@ export async function POST(request: NextRequest) {
     const accessToken = await AuthService.getAdminAccessToken();
     const sessionService = AuthService.createSessionService(accessToken);
 
-    const dataChecks = {
-      user: {
-        loginName,
+    const newSession = await sessionService.createSession({
+      checks: {
+        user: {
+          loginName,
+        },
       },
-    };
-
-    const sessionData = {
-      checks: dataChecks,
       webAuthN,
-    };
-
-    const newSession = await sessionService.createSession(sessionData);
+    });
 
     const session = await sessionService.getSession({
       sessionId: newSession.sessionId,
@@ -52,10 +46,8 @@ export async function POST(request: NextRequest) {
       userId,
     });
 
-    const result: APILogin['result'] = {
-      changeRequired: false,
+    const result: APIWebAuthNLogin['result'] = {
       userId,
-      challenges: undefined,
     };
 
     return result;

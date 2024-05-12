@@ -5,7 +5,11 @@ import { ROUTING } from '#/types/router';
 import { redirect } from 'next/navigation';
 import { getCurrentSessions } from '#/services/backend/zitadel-session';
 
-export default async function Page({ params: { index } }: any) {
+export default async function Page({
+  params: { index },
+}: {
+  params: { index: number };
+}) {
   const sessions = await getCurrentSessions();
   if (!sessions[index]) redirect(ROUTING.LOGIN);
 
@@ -14,6 +18,7 @@ export default async function Page({ params: { index } }: any) {
       appUrl={configuration.appUrl}
       activeSession={sessions[index]}
       sessions={sessions}
+      index={index}
     />
   );
 }

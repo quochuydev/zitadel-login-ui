@@ -3,22 +3,35 @@ import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import { coerceToArrayBuffer, coerceToBase64Url } from '#/helpers/bytes';
 import ApiService from '#/services/frontend/api.service';
-import { APILogin, APILoginWebAuthN } from '#/types/api';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 
 const PasskeysPage = (props: {
   appUrl: string;
   passkeyId: string;
+  orgId: string;
+  userId: string;
+  loginName: string;
   publicKeyCredentialCreationOptions: globalThis.PublicKeyCredentialCreationOptions;
 }) => {
-  const { appUrl, passkeyId, publicKeyCredentialCreationOptions } = props;
+  const {
+    appUrl,
+    passkeyId,
+    publicKeyCredentialCreationOptions,
+    orgId,
+    userId,
+    loginName,
+  } = props;
   const apiService = ApiService({ appUrl });
   const toastRef = useRef<ToastType>();
 
-  const processPasskey = async () => {
+  const verifyPasskey = async () => {
     console.log('passkeyId', passkeyId);
-    console.log('navigator.credentials', navigator.credentials);
+
+    console.log(
+      `debug:publicKeyCredentialCreationOptions`,
+      publicKeyCredentialCreationOptions,
+    );
 
     if (passkeyId && publicKeyCredentialCreationOptions) {
       try {
@@ -75,8 +88,8 @@ const PasskeysPage = (props: {
           url: '/api/passkey/verify',
           method: 'post',
           data: {
-            orgId: '243843074894125785',
-            userId: '243843133748594225',
+            orgId,
+            userId,
             passkeyId,
             credential: data,
           },
@@ -89,7 +102,7 @@ const PasskeysPage = (props: {
     }
   };
 
-  const [username, setUsername] = useState<string>('testapiv1@yopmail.com');
+  const [username, setUsername] = useState<string>(loginName);
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">
@@ -118,106 +131,12 @@ const PasskeysPage = (props: {
             <button
               onClick={async (e) => {
                 e.preventDefault();
-                processPasskey();
+                verifyPasskey();
               }}
               type="button"
               className="disabled:bg-gray-300 group relative w-full flex justify-center py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Register
-            </button>
-
-            <button
-              onClick={async (e) => {
-                e.preventDefault();
-
-                const session = await apiService.request<APILogin>({
-                  url: '/api/login',
-                  method: 'post',
-                  data: {
-                    username,
-                    challenges: {
-                      webAuthN: {
-                        domain: new URL(appUrl).hostname, //localhost
-                        userVerificationRequirement:
-                          'USER_VERIFICATION_REQUIREMENT_REQUIRED',
-                      },
-                    },
-                  },
-                });
-
-                const publicKeyCredentialRequestOptions =
-                  session.challenges.webAuthN.publicKeyCredentialRequestOptions;
-
-                console.log(
-                  'publicKeyCredentialRequestOptions',
-                  publicKeyCredentialRequestOptions,
-                );
-
-                publicKeyCredentialRequestOptions.publicKey.challenge =
-                  coerceToArrayBuffer(
-                    publicKeyCredentialRequestOptions.publicKey.challenge,
-                    'challenge',
-                  );
-
-                publicKeyCredentialRequestOptions.publicKey.allowCredentials.map(
-                  (listItem: any) => {
-                    listItem.id = coerceToArrayBuffer(
-                      listItem.id,
-                      'publicKey.allowCredentials.id',
-                    );
-                  },
-                );
-
-                const assertedCredential = await navigator.credentials.get({
-                  publicKey: publicKeyCredentialRequestOptions.publicKey,
-                });
-                if (!assertedCredential) throw new Error('invalid credential');
-                console.log('assertedCredential', assertedCredential);
-
-                const authData = new Uint8Array(
-                  assertedCredential.response.authenticatorData,
-                );
-                const clientDataJSON = new Uint8Array(
-                  assertedCredential.response.clientDataJSON,
-                );
-                const rawId = new Uint8Array(assertedCredential.rawId);
-                const sig = new Uint8Array(
-                  assertedCredential.response.signature,
-                );
-                const userHandle = new Uint8Array(
-                  assertedCredential.response.userHandle,
-                );
-
-                const data = {
-                  id: assertedCredential.id,
-                  rawId: coerceToBase64Url(rawId, 'rawId'),
-                  type: assertedCredential.type,
-                  response: {
-                    authenticatorData: coerceToBase64Url(authData, 'authData'),
-                    clientDataJSON: coerceToBase64Url(
-                      clientDataJSON,
-                      'clientDataJSON',
-                    ),
-                    signature: coerceToBase64Url(sig, 'sig'),
-                    userHandle: coerceToBase64Url(userHandle, 'userHandle'),
-                  },
-                };
-
-                const result = await apiService.request<APILoginWebAuthN>({
-                  url: '/api/login-web-auth-n',
-                  method: 'post',
-                  data: {
-                    username,
-                    webAuthN: {
-                      credentialAssertionData: data,
-                    },
-                  },
-                });
-              }}
-              type="button"
-              className="disabled:bg-gray-300 group relative w-full flex justify-center py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Log in
             </button>
           </div>
         </div>

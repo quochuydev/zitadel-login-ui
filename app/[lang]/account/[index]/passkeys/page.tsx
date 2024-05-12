@@ -1,12 +1,24 @@
 import configuration from '#/configuration';
-import LoginPasskeys from '#/ui/Passkeys/LoginPasskeys';
+import Passkeys from '#/ui/Passkeys/Passkeys';
 import AuthService from '#/services/backend/auth.service';
 import ZitadelService, {
   CreatePasskeyRegistrationLink,
   RegisterPasskey,
 } from '#/services/backend/zitadel.service';
+import { getCurrentSessions } from '#/services/backend/zitadel-session';
+import { redirect } from 'next/navigation';
+import { ROUTING } from '#/types/router';
 
-export default async () => {
+export default async ({ params: { index } }: { params: { index: number } }) => {
+  const sessions = await getCurrentSessions();
+  const session = sessions[index];
+  console.log(`debug:session.factors?.user`, session.factors?.user);
+  if (!session.factors?.user) redirect(ROUTING.LOGIN);
+
+  const userId = session.factors?.user?.id;
+  const orgId = session.factors?.user?.organizationId;
+  const loginName = session.factors?.user?.loginName;
+
   const accessToken = await AuthService.getAdminAccessToken();
 
   const zitadelService = ZitadelService({
@@ -18,11 +30,11 @@ export default async () => {
       url: '/v2beta/users/{userId}/passkeys/registration_link',
       method: 'post',
       params: {
-        userId: '243843133748594225',
+        userId,
       },
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        'x-zitadel-orgid': '243843074894125785',
+        'x-zitadel-orgid': orgId,
       },
       data: {
         returnCode: {},
@@ -35,11 +47,11 @@ export default async () => {
     url: '/v2beta/users/{userId}/passkeys',
     method: 'post',
     params: {
-      userId: '243843133748594225',
+      userId,
     },
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'x-zitadel-orgid': '243843074894125785',
+      'x-zitadel-orgid': orgId,
     },
     data: {
       code: {
@@ -52,7 +64,10 @@ export default async () => {
   });
 
   return (
-    <LoginPasskeys
+    <Passkeys
+      orgId={orgId}
+      userId={userId}
+      loginName={loginName}
       passkeyId={registerPasskeyResult.passkeyId}
       publicKeyCredentialCreationOptions={
         registerPasskeyResult.publicKeyCredentialCreationOptions
