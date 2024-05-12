@@ -5,7 +5,7 @@ import './globals.css';
 
 const workSans = Work_Sans({
   subsets: ['latin'],
-  weight: '600',
+  weight: '400',
 });
 
 export const metadata: Metadata = {
