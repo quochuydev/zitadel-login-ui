@@ -38,8 +38,6 @@ https://zitadel-login-ui-v2.vercel.app
 
 [ ] External registration
 
-[ ] Forget password password
+[X] Forget password - Request code and change password
 
-    [X] Request code and change password
-
-    [ ] Send code via mail
+[ ] Forget password - Send code via mail
