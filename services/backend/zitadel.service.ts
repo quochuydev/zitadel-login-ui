@@ -16,12 +16,7 @@ import type {
   ListAppsResponse,
   SetSessionResponse,
 } from '#/types/zitadel';
-import {
-  Default,
-  TRequest,
-  sendRequest,
-  getClientCredentialsToken,
-} from '#/helpers/api-caller';
+import { Default, TRequest, sendRequest } from '#/helpers/api-caller';
 import { SetSessionRequest } from '#/proto/zitadel/session/v2beta/session_service';
 
 //#region User service
@@ -342,6 +337,16 @@ export type AddUserGrant = {
 };
 //#endregion
 
+export type GetClientCredentialsToken = {
+  url: '/oauth/v2/token';
+  method: 'post';
+  data: BodyInit;
+  result: {
+    access_token: string;
+    expires_in: number; //seconds
+  };
+};
+
 export type { CreateSession, GetSession, GetAuthRequest, CreateCallback };
 
 export default (params: { host: string }) => {
@@ -350,7 +355,5 @@ export default (params: { host: string }) => {
   return {
     request: <T extends Default>(request: TRequest<T>) =>
       sendRequest(host, request),
-    getClientCredentialsToken: (clientId: string, clientSecret: string) =>
-      getClientCredentialsToken({ host, clientId, clientSecret }),
   };
 };

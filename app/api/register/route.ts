@@ -114,8 +114,7 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      const sessionService =
-        await AuthService.createSessionService(accessToken);
+      const sessionService = AuthService.createSessionService(accessToken);
 
       const session = await sessionService.createSession({
         checks: {

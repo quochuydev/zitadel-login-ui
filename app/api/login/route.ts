@@ -28,21 +28,18 @@ export async function PUT(request: NextRequest) {
       const { username: loginName, webAuthN } = body;
 
       const accessToken = await AuthService.getAdminAccessToken();
-
-      const sessionService = await AuthService.createSessionService(
-        accessToken,
-      );
+      const sessionService = AuthService.createSessionService(accessToken);
 
       const dataChecks = {
         user: {
           loginName,
         },
-      }
+      };
 
       const sessionData = {
         checks: dataChecks,
-        webAuthN
-      }
+        webAuthN,
+      };
 
       const newSession = await sessionService.createSession(sessionData);
 
@@ -89,29 +86,26 @@ export async function POST(request: NextRequest) {
       const { username: loginName, password, authRequestId, challenges } = body;
 
       const accessToken = await AuthService.getAdminAccessToken();
-
-      const sessionService = await AuthService.createSessionService(
-        accessToken,
-      );
+      const sessionService = AuthService.createSessionService(accessToken);
 
       const dataChecks = {
         user: {
           loginName,
         },
-      }
+      };
 
-      if(password){
+      if (password) {
         dataChecks.password = {
-          password
-        }
+          password,
+        };
       }
 
       const sessionData = {
-        checks: dataChecks
-      }
+        checks: dataChecks,
+      };
 
-      if(challenges){
-        sessionData.challenges = challenges
+      if (challenges) {
+        sessionData.challenges = challenges;
       }
 
       const newSession = await sessionService.createSession(sessionData);
@@ -136,11 +130,11 @@ export async function POST(request: NextRequest) {
         userId,
       });
 
-      if(challenges){
+      if (challenges) {
         return {
           changeRequired: false,
           userId,
-          challenges: newSession.challenges
+          challenges: newSession.challenges,
         };
       }
 

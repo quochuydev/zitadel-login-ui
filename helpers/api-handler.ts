@@ -70,7 +70,7 @@ export function transformError(error: Error | ZodError | ZitadelError) {
       do: () => {
         const e = error as ZitadelError;
 
-        const errorMap = {
+        const errorMap: { [key: string]: ErrorCode } = {
           'QUERY-Dfbg2': ErrorCode.NOT_FOUND,
           'COMMAND-SAF3g': ErrorCode.INVALID_DATA,
           'AUTHZ-Kl3p0': ErrorCode.UNAUTHORIZED,

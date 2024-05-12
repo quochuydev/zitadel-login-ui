@@ -9,8 +9,7 @@ export default async ({ searchParams }: any) => {
   const sessionIds = CookieService.getAllSessions().map((e) => e.sessionId);
 
   const accessToken = await AuthService.getAdminAccessToken();
-
-  const sessionService = await AuthService.createSessionService(accessToken);
+  const sessionService = AuthService.createSessionService(accessToken);
 
   const sessions: Session[] = sessionIds.length
     ? await sessionService

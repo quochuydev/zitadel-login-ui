@@ -20,7 +20,7 @@ type TResponse<T extends Default> = T['result'];
 
 export async function sendRequest<T extends Default>(
   appUrl: string,
-  request: TRequest<T>
+  request: TRequest<T>,
 ): Promise<TResponse<T>> {
   const { url, params, query, method = 'post', headers = {}, data } = request;
 
@@ -73,11 +73,13 @@ export async function sendRequest<T extends Default>(
  */
 function compile<T extends Pick<Default, 'url' | 'params'>>(
   url: T['url'],
-  params: object
+  params: object,
 ) {
-  return url.toString().replace(/{.+?}/g, function (matcher) {
+  return url.toString().replace(/{.+?}/g, function (matcher: any) {
     const path = matcher.slice(1, -1).trim();
-    const value = path.split('.').reduce((obj, key) => obj[key], params);
+    const value = path
+      .split('.')
+      .reduce((obj: any, key: string) => obj[key], params);
     return value !== undefined ? value : '';
   });
 }
@@ -91,52 +93,9 @@ function compile<T extends Pick<Default, 'url' | 'params'>>(
 function objectToQueryString(url: string, query: object): string {
   const queryString = Object.keys(query)
     .map(
-      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`
+      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`,
     )
     .join('&');
 
   return url.includes('?') ? `${url}${queryString}` : `${url}?${queryString}`;
-}
-
-type GetClientCredentialsToken = {
-  url: '/oauth/v2/token';
-  method: 'post';
-  data: BodyInit;
-  result: {
-    access_token: string;
-    expires_in: number; //seconds
-  };
-};
-
-export async function getClientCredentialsToken(params: {
-  host: string;
-  clientId: string;
-  clientSecret: string;
-}): Promise<{
-  accessToken: string;
-  expiresIn: number;
-}> {
-  const { host, clientId, clientSecret } = params;
-
-  const scope = 'openid urn:zitadel:iam:org:project:id:zitadel:aud';
-
-  const searchParams = new URLSearchParams();
-  searchParams.append('grant_type', 'client_credentials');
-  searchParams.append('client_id', clientId);
-  searchParams.append('client_secret', clientSecret);
-  searchParams.append('scope', scope);
-
-  const result = await sendRequest<GetClientCredentialsToken>(host, {
-    url: '/oauth/v2/token',
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    data: searchParams,
-  });
-
-  return {
-    accessToken: result.access_token,
-    expiresIn: result.expires_in, //seconds
-  };
 }

@@ -3,7 +3,7 @@ import Password from '#/modules/Password/Password';
 import configuration from '#/configuration';
 import { redirect } from 'next/navigation';
 import { ROUTING } from '#/types/router';
-import { getCurrentSessions } from '#/helpers/session';
+import { getCurrentSessions } from '#/services/backend/zitadel-session';
 
 export default async ({ searchParams, params: { index } }) => {
   const { authRequest: authRequestId } = searchParams;

@@ -23,8 +23,7 @@ export async function POST(request: NextRequest) {
     const { username: loginName, webAuthN } = body;
 
     const accessToken = await AuthService.getAdminAccessToken();
-
-    const sessionService = await AuthService.createSessionService(accessToken);
+    const sessionService = AuthService.createSessionService(accessToken);
 
     const dataChecks = {
       user: {

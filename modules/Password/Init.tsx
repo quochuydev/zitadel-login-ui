@@ -3,6 +3,7 @@ import type { ToastType } from '#/modules/Components/Toast';
 import Toast from '#/modules/Components/Toast';
 import ApiService from '#/services/frontend/api.service';
 import { APIVerifyCode } from '#/types/api';
+import { ROUTING } from '#/types/router';
 import type { Application, AuthRequest } from '#/types/zitadel';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
@@ -13,10 +14,8 @@ const PasswordInitPage = (props: {
   orgId: string;
   verificationCode: string;
   authRequest?: AuthRequest;
-  application?: Application;
 }) => {
-  const { appUrl, authRequest, application, userId, orgId, verificationCode } =
-    props;
+  const { appUrl, userId, orgId, verificationCode } = props;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const apiService = ApiService({ appUrl });
@@ -53,16 +52,23 @@ const PasswordInitPage = (props: {
                 className="disabled:bg-gray-300 group relative w-full flex justify-center py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 disabled={isLoading}
                 onClick={async () => {
-                  const result = await apiService.request<APIVerifyCode>({
-                    url: '/api/users/verify-code',
-                    method: 'post',
-                    data: {
-                      orgId,
-                      password,
-                      userId,
-                      verificationCode,
-                    },
-                  });
+                  try {
+                    const result = await apiService.request<APIVerifyCode>({
+                      url: '/api/users/verify-code',
+                      method: 'post',
+                      data: {
+                        orgId,
+                        password,
+                        userId,
+                        verificationCode,
+                      },
+                    });
+
+                    console.log(`debug:result`, result);
+                    router.replace(ROUTING.LOGIN);
+                  } catch (error) {
+                    console.log(`debug:error`, error);
+                  }
                 }}
               >
                 {isLoading ? 'Loading...' : 'Submit'}

@@ -7,12 +7,8 @@ import type { Application, AuthRequest } from '#/types/zitadel';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
-const PasswordResetPage = (props: {
-  appUrl: string;
-  authRequest?: AuthRequest;
-  application?: Application;
-}) => {
-  const { appUrl, authRequest, application } = props;
+const PasswordResetPage = (props: { appUrl: string }) => {
+  const { appUrl } = props;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const apiService = ApiService({ appUrl });
@@ -24,11 +20,7 @@ const PasswordResetPage = (props: {
       <div className="mb-[8px] ml-[30px] mr-[30px] flex h-full w-full flex-col justify-center rounded-md border-gray-300 lg:h-[484px] lg:w-[480px] lg:border lg:p-[80px]">
         <div className="m-5 flex max-w-7xl flex-col lg:m-0">
           <div className="my-4 ">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-            >
+            <form onSubmit={(e) => e.preventDefault()}>
               <div className="rounded-md shadow-sm space-y-px">
                 <div>
                   <input
@@ -57,7 +49,7 @@ const PasswordResetPage = (props: {
                     },
                   });
 
-                  window.open(
+                  router.replace(
                     `${appUrl}/password/init?userID=${result.userId}&code=${result.code}&orgID=${result.orgId}`,
                   );
                 }}
@@ -69,11 +61,6 @@ const PasswordResetPage = (props: {
         </div>
       </div>
 
-      {application?.name && (
-        <p className="mb-[18px] text-[12px] font-normal text-[#4F6679]">
-          You are logging in to {application?.name}
-        </p>
-      )}
       <Toast ref={toastRef} />
     </div>
   );

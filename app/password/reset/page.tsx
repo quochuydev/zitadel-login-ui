@@ -1,5 +1,4 @@
 import configuration from '#/configuration';
-import { getProjectIdFromAuthRequest } from '#/helpers/zitadel';
 import PasswordReset from '#/modules/Password/Reset';
 import AuthService from '#/services/backend/auth.service';
 import { ROUTING } from '#/types/router';
@@ -21,7 +20,6 @@ export default async ({ searchParams }: any) => {
     <PasswordReset
       appUrl={configuration.appUrl}
       authRequest={result?.authRequest}
-      application={result?.application}
     />
   );
 };
@@ -39,7 +37,6 @@ async function getAuthRequestInfo(authRequestId: string): Promise<{
   }
 
   const accessToken = await AuthService.getAdminAccessToken();
-
   const oidcService = await AuthService.createOIDCService(accessToken);
 
   const authRequest = await oidcService
@@ -54,27 +51,6 @@ async function getAuthRequestInfo(authRequestId: string): Promise<{
       return {
         authRequest,
         redirect: 'registration',
-      };
-    }
-
-    const projectId = getProjectIdFromAuthRequest(authRequest);
-
-    if (projectId) {
-      const managementService =
-        await AuthService.createManagementService(accessToken);
-
-      const applications = await managementService.searchApplications(
-        projectId,
-        { queries: [] },
-      );
-
-      const application = applications.find(
-        (e) => e.oidcConfig?.clientId === authRequest.clientId,
-      );
-
-      return {
-        authRequest,
-        application,
       };
     }
   }

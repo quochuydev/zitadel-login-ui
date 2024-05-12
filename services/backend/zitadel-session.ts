@@ -1,17 +1,13 @@
-import AuthService from '#/services/backend/auth.service';
 import CookieService from '#/services/backend/cookie.service';
+import AuthService from '#/services/backend/auth.service';
 import type { Session } from '#/types/zitadel';
 
 export async function getCurrentSessions() {
   const sessionIds = CookieService.getAllSessions().map((e) => e.sessionId);
-
-  if (!sessionIds.length) {
-    return [];
-  }
+  if (!sessionIds.length) return [];
 
   const accessToken = await AuthService.getAdminAccessToken();
-
-  const sessionService = await AuthService.createSessionService(accessToken);
+  const sessionService = AuthService.createSessionService(accessToken);
 
   const sessions: Session[] = await sessionService
     .listSessions({
@@ -25,9 +21,9 @@ export async function getCurrentSessions() {
     })
     .then((res) => res.sessions || []);
 
-  return sessions.sort((a, b) =>
-    new Date(a.creationDate).getTime() < new Date(b.creationDate).getTime()
-      ? 1
-      : -1,
-  );
+  return sessions.sort((a, b) => {
+    const _a = new Date(a.creationDate as Date).getTime();
+    const _b = new Date(b.creationDate as Date).getTime();
+    return _a < _b ? 1 : -1;
+  });
 }

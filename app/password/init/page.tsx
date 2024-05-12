@@ -1,5 +1,4 @@
 import configuration from '#/configuration';
-import { getProjectIdFromAuthRequest } from '#/helpers/zitadel';
 import PasswordInit from '#/modules/Password/Init';
 import AuthService from '#/services/backend/auth.service';
 import { ROUTING } from '#/types/router';
@@ -9,7 +8,12 @@ import { redirect } from 'next/navigation';
 type Prompt = 'PROMPT_CREATE' | 'PROMPT_UNSPECIFIED';
 
 export default async ({ searchParams }: any) => {
-  const { authRequest: authRequestId } = searchParams;
+  const {
+    authRequest: authRequestId,
+    userID: userId,
+    code: verificationCode,
+    orgID: orgId,
+  } = searchParams;
 
   const result = await getAuthRequestInfo(authRequestId);
 
@@ -21,7 +25,9 @@ export default async ({ searchParams }: any) => {
     <PasswordInit
       appUrl={configuration.appUrl}
       authRequest={result?.authRequest}
-      application={result?.application}
+      userId={userId}
+      orgId={orgId}
+      verificationCode={verificationCode}
     />
   );
 };
@@ -39,7 +45,6 @@ async function getAuthRequestInfo(authRequestId: string): Promise<{
   }
 
   const accessToken = await AuthService.getAdminAccessToken();
-
   const oidcService = await AuthService.createOIDCService(accessToken);
 
   const authRequest = await oidcService
@@ -54,27 +59,6 @@ async function getAuthRequestInfo(authRequestId: string): Promise<{
       return {
         authRequest,
         redirect: 'registration',
-      };
-    }
-
-    const projectId = getProjectIdFromAuthRequest(authRequest);
-
-    if (projectId) {
-      const managementService =
-        await AuthService.createManagementService(accessToken);
-
-      const applications = await managementService.searchApplications(
-        projectId,
-        { queries: [] },
-      );
-
-      const application = applications.find(
-        (e) => e.oidcConfig?.clientId === authRequest.clientId,
-      );
-
-      return {
-        authRequest,
-        application,
       };
     }
   }

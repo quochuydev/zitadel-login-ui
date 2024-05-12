@@ -32,10 +32,7 @@ export async function POST(request: NextRequest) {
       }
 
       const accessToken = await AuthService.getAdminAccessToken();
-
-      const sessionService = await AuthService.createSessionService(
-        accessToken,
-      );
+      const sessionService = AuthService.createSessionService(accessToken);
 
       await sessionService.deleteSession({
         sessionId: sessionCookie.sessionId,

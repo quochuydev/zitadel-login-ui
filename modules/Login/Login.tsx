@@ -66,8 +66,8 @@ const LoginPage = (props: {
   };
 
   return (
-    <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">
-      <div className="mb-[8px] ml-[30px] mr-[30px] flex h-full w-full flex-col justify-center rounded-md border-gray-300 lg:h-[484px] lg:w-[480px] lg:border lg:p-[80px]">
+    <div className="flex h-full w-full flex-col items-center justify-center">
+      <div className="mb-[8px] ml-[30px] mr-[30px] flex w-full flex-col justify-center rounded-md border-gray-300 lg:w-[480px] lg:border lg:p-[40px] p-3">
         <div className="flex flex-col items-center justify-center">
           <Image src="/images/company.png" alt="logo" width="125" height="47" />
 
@@ -76,7 +76,7 @@ const LoginPage = (props: {
           </h2>
         </div>
 
-        <div className="m-5 flex max-w-7xl flex-col lg:m-0">
+        <div className="flex max-w-7xl flex-col lg:m-0">
           <SignInForm
             loading={isLoading}
             defaultUsername={authRequest?.loginHint}
@@ -87,35 +87,10 @@ const LoginPage = (props: {
         <a
           className="mb-[18px] text-[12px] font-normal text-[#4F6679]"
           onClick={async () => {
-            await apiService.request<APIRequestCode>({
-              url: '/api/users/request-code',
-              method: 'post',
-              data: {
-                userId: '243843133748594225',
-                orgId: '243843074894125785',
-              },
-            });
+            router.replace(`/users/reset?authRequest=${authRequest?.id}`);
           }}
         >
           Forgot password?
-        </a>
-
-        <a
-          className="mb-[18px] text-[12px] font-normal text-[#4F6679]"
-          onClick={async () => {
-            await apiService.request<APIVerifyCode>({
-              url: '/api/users/verify-code',
-              method: 'post',
-              data: {
-                userId: '243843133748594225',
-                orgId: '243843074894125785',
-                verificationCode: 'XBVEWT',
-                password: 'Qwerty@123',
-              },
-            });
-          }}
-        >
-          Set password
         </a>
       </div>
 

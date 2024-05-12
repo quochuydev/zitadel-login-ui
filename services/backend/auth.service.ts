@@ -10,6 +10,7 @@ import type {
   CreateSession,
   DeleteSession,
   GetAuthRequest,
+  GetClientCredentialsToken,
   GetMyUserHistory,
   GetSession,
   SearchApplications,
@@ -76,12 +77,28 @@ const createAdminAccessTokenFactory = () => {
     const { clientId, clientSecret } = configuration.zitadel;
 
     if (!token || expiryDate < new Date()) {
-      const result = await zitadelService.getClientCredentialsToken(
-        clientId,
-        clientSecret,
-      );
-      token = result.accessToken;
-      expiryDate.setTime(new Date().getTime() + (result.expiresIn - 10) * 1000);
+      const scope = 'openid urn:zitadel:iam:org:project:id:zitadel:aud';
+
+      const searchParams = new URLSearchParams();
+      searchParams.append('grant_type', 'client_credentials');
+      searchParams.append('client_id', clientId);
+      searchParams.append('client_secret', clientSecret);
+      searchParams.append('scope', scope);
+
+      const result = await zitadelService.request<GetClientCredentialsToken>({
+        url: '/oauth/v2/token',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        data: searchParams,
+      });
+
+      const accessToken = result.access_token;
+      const expiresIn = result.expires_in; //seconds
+
+      token = accessToken;
+      expiryDate.setTime(new Date().getTime() + (expiresIn - 10) * 1000);
     }
 
     return token;
@@ -137,7 +154,7 @@ async function createUserService(accessToken: string) {
   };
 }
 
-async function createSessionService(accessToken: string) {
+function createSessionService(accessToken: string) {
   const headers: RequestInit['headers'] = {
     Authorization: `Bearer ${accessToken}`,
   };
