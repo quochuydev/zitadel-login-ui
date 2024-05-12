@@ -42,9 +42,7 @@ export async function POST(request: NextRequest) {
       sessionId: newSession.sessionId,
     });
 
-    if (!session?.factors?.user) {
-      throw new Error('Invalid session');
-    }
+    if (!session?.factors?.user) throw new Error('Invalid session');
 
     const userId = session.factors.user.id;
 
@@ -54,8 +52,12 @@ export async function POST(request: NextRequest) {
       userId,
     });
 
-    return {
+    const result: APILogin['result'] = {
+      changeRequired: false,
       userId,
+      challenges: undefined,
     };
+
+    return result;
   });
 }

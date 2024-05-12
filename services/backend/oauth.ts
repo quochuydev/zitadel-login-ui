@@ -26,7 +26,6 @@ export async function handler(request: NextRequest) {
   headers.delete('content-length');
   headers.set('x-zitadel-login-client', configuration.zitadel.userId);
   headers.set('x-zitadel-forwarded', `host="${forwarded}"`);
-  headers.set('x-forwarded-host', new URL(zitadelUrl).host);
 
   try {
     const body = await getRequestBody(request);

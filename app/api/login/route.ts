@@ -11,64 +11,6 @@ const schema = z.object({
   authRequestId: z.string().trim().optional(),
 });
 
-export async function PUT(request: NextRequest) {
-  return defaultHandler<APILogin>(
-    {
-      request,
-      tracingName: 'login',
-    },
-    async (body) => {
-      isValidRequest({
-        data: {
-          ...body,
-        },
-        schema,
-      });
-
-      const { username: loginName, webAuthN } = body;
-
-      const accessToken = await AuthService.getAdminAccessToken();
-      const sessionService = AuthService.createSessionService(accessToken);
-
-      const dataChecks = {
-        user: {
-          loginName,
-        },
-      };
-
-      const sessionData = {
-        checks: dataChecks,
-        webAuthN,
-      };
-
-      const newSession = await sessionService.createSession(sessionData);
-
-      const session = await sessionService.getSession({
-        sessionId: newSession.sessionId,
-      });
-
-      if (!session?.factors?.user) {
-        throw new Error('Invalid session');
-      }
-
-      const userId = session.factors.user.id;
-
-      CookieService.addSessionToCookie({
-        sessionId: newSession.sessionId,
-        sessionToken: newSession.sessionToken,
-        userId,
-      });
-
-      const result: APILogin['result'] = {
-        changeRequired: false,
-        userId,
-      };
-
-      return result;
-    },
-  );
-}
-
 export async function POST(request: NextRequest) {
   return defaultHandler<APILogin>(
     {
@@ -88,7 +30,7 @@ export async function POST(request: NextRequest) {
       const accessToken = await AuthService.getAdminAccessToken();
       const sessionService = AuthService.createSessionService(accessToken);
 
-      const dataChecks = {
+      const dataChecks: any = {
         user: {
           loginName,
         },
@@ -100,7 +42,7 @@ export async function POST(request: NextRequest) {
         };
       }
 
-      const sessionData = {
+      const sessionData: any = {
         checks: dataChecks,
       };
 
@@ -147,6 +89,7 @@ export async function POST(request: NextRequest) {
       const result: APILogin['result'] = {
         changeRequired,
         userId,
+        challenges: undefined,
       };
 
       // If user need to change password (changeRequired === true)

@@ -1,6 +1,7 @@
 'use client';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
+import { coerceToArrayBuffer, coerceToBase64Url } from '#/helpers/bytes';
 import ApiService from '#/services/frontend/api.service';
 import { APILogin, APILoginWebAuthN } from '#/types/api';
 import Image from 'next/image';
@@ -12,73 +13,8 @@ const PasskeysPage = (props: {
   publicKeyCredentialCreationOptions: globalThis.PublicKeyCredentialCreationOptions;
 }) => {
   const { appUrl, passkeyId, publicKeyCredentialCreationOptions } = props;
-  // const [isLoading, setIsLoading] = useState(false);
   const apiService = ApiService({ appUrl });
   const toastRef = useRef<ToastType>();
-
-  function coerceToArrayBuffer(thing: any, name: string) {
-    if (typeof thing === 'string') {
-      // base64url to base64
-      thing = thing.replace(/-/g, '+').replace(/_/g, '/');
-
-      // base64 to Uint8Array
-      var str = window.atob(thing);
-      var bytes = new Uint8Array(str.length);
-      for (var i = 0; i < str.length; i++) {
-        bytes[i] = str.charCodeAt(i);
-      }
-      thing = bytes;
-    }
-
-    // Array to Uint8Array
-    if (Array.isArray(thing)) {
-      thing = new Uint8Array(thing);
-    }
-
-    // Uint8Array to ArrayBuffer
-    if (thing instanceof Uint8Array) {
-      thing = thing.buffer;
-    }
-
-    // error if none of the above worked
-    if (!(thing instanceof ArrayBuffer)) {
-      throw new TypeError("could not coerce '" + name + "' to ArrayBuffer");
-    }
-
-    return thing;
-  }
-
-  function coerceToBase64Url(thing: any, name: string) {
-    // Array or ArrayBuffer to Uint8Array
-    if (Array.isArray(thing)) {
-      thing = Uint8Array.from(thing);
-    }
-
-    if (thing instanceof ArrayBuffer) {
-      thing = new Uint8Array(thing);
-    }
-
-    // Uint8Array to base64
-    if (thing instanceof Uint8Array) {
-      var str = '';
-      var len = thing.byteLength;
-
-      for (var i = 0; i < len; i++) {
-        str += String.fromCharCode(thing[i]);
-      }
-      thing = window.btoa(str);
-    }
-
-    if (typeof thing !== 'string') {
-      throw new Error("could not coerce '" + name + "' to string");
-    }
-
-    // base64 to base64url
-    // NOTE: "=" at the end of challenge is optional, strip it off here
-    thing = thing.replace(/\+/g, '-').replace(/\//g, '_').replace(/=*$/g, '');
-
-    return thing;
-  }
 
   const processPasskey = async () => {
     console.log('passkeyId', passkeyId);
@@ -201,8 +137,7 @@ const PasskeysPage = (props: {
                     username,
                     challenges: {
                       webAuthN: {
-                        // domain: 'localhost',
-                        domain: new URL(appUrl).hostname,
+                        domain: new URL(appUrl).hostname, //localhost
                         userVerificationRequirement:
                           'USER_VERIFICATION_REQUIREMENT_REQUIRED',
                       },

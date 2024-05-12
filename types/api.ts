@@ -6,6 +6,7 @@ export type APILogin = {
     password?: string;
     authRequestId?: string;
     challenges?: any;
+    webAuthN: any;
   };
   result: {
     changeRequired: boolean;
