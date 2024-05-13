@@ -1,4 +1,5 @@
 import configuration from '#/configuration';
+import { objectToQueryString } from '#/helpers/api-caller';
 import { ROUTING } from '#/helpers/router';
 import AuthService from '#/services/backend/auth.service';
 import { getCurrentSessions } from '#/services/backend/zitadel-session';
@@ -15,7 +16,15 @@ export default async function Page({
   searchParams: SearchParams;
 }) {
   const sessions = await getCurrentSessions();
-  if (!sessions.length) return redirect(ROUTING.LOGIN);
+
+  if (!sessions.length) {
+    return redirect(
+      objectToQueryString(ROUTING.LOGIN, {
+        authRequest: authRequestId,
+        flow: 'add',
+      }),
+    );
+  }
 
   const accessToken = await AuthService.getAdminAccessToken();
   const oidcService = AuthService.createOIDCService(accessToken);
