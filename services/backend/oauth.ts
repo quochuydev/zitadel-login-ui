@@ -20,10 +20,9 @@ export async function handler(request: NextRequest) {
   extra.contentType = request.headers.get('content-type');
   extra.contentLength = request.headers.get('content-length');
 
-  const headers = new Headers(request.headers);
-  headers.delete('host');
-  headers.delete('x-forwarded-host');
-  headers.delete('content-length');
+  const headers = new Headers();
+  const contentType = request.headers.get('content-type');
+  contentType && headers.set('content-type', contentType);
   headers.set('x-zitadel-login-client', configuration.zitadel.userId);
   headers.set('x-zitadel-forwarded', `host="${forwarded}"`);
 
@@ -97,11 +96,7 @@ function getPostLogoutRedirectUrl(request: NextRequest) {
     'post_logout_redirect_uri',
   );
 
-  if (!redirectUrl || redirectUrl === '/ui/login/logout/done') {
-    return new URL('/logout', configuration.appUrl).toString();
-  }
-
-  return redirectUrl;
+  return redirectUrl || new URL('/logout', configuration.appUrl).toString();
 }
 
 async function getRequestBody(request: NextRequest) {
