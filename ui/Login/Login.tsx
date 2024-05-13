@@ -144,6 +144,8 @@ const LoginPage = (props: {
             </p>
             {/* )} */}
           </div>
+
+          <div className="hidden">{JSON.stringify(authRequest)}</div>
         </div>
       </div>
 

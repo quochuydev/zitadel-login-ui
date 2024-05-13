@@ -105,11 +105,13 @@ export async function getAuthRequestInfo(params: {
    * from page /account/select to page /login
    * with query param 'flow=add', portal will not go to account/select page again
    */
-  if (prompt === 'select_account' && flow !== 'add') {
-    result.redirect = objectToQueryString(ROUTING.ACCOUNT_SELECT, {
-      authRequest: authRequestId,
-    });
-    return result;
+  if (prompt === 'select_account') {
+    if (flow !== 'add') {
+      result.redirect = objectToQueryString(ROUTING.ACCOUNT_SELECT, {
+        authRequest: authRequestId,
+      });
+      return result;
+    }
   }
 
   const idpId = getIdpIdFromAuthRequest(authRequest);
