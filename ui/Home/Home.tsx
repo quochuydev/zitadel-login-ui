@@ -64,6 +64,13 @@ export default (props: {
           >
             Register passkeys
           </a>
+
+          <a
+            className="text-[12px] font-normal text-[#4F6679] cursor-pointer mt-[20px]"
+            onClick={() => router.replace(`/account/${index}/password`)}
+          >
+            Change password
+          </a>
         </div>
       </div>
     </div>

@@ -89,27 +89,23 @@ const RegisterPasskeysPage = (props: {
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">
-      <div className="mb-[8px] ml-[30px] mr-[30px] flex h-full w-full flex-col justify-center rounded-md border-gray-300 lg:h-[484px] lg:w-[480px] lg:border lg:p-[80px]">
-        <div className="flex flex-col items-center justify-center">
-          <Image src="/images/company.png" alt="logo" width="125" height="47" />
+      <div className="flex w-full flex-col items-center justify-center rounded-md border-gray-300 lg:w-[480px] min-h-[480px] lg:border p-5">
+        <Image src="/images/company.png" alt="logo" width="125" height="47" />
 
-          <h2 className="mb-[24px] mt-6 text-center text-3xl font-extrabold text-gray-900">
-            👋 Welcome!
-          </h2>
-        </div>
+        <h2 className="mb-[24px] mt-6 text-center text-3xl font-extrabold text-gray-900">
+          👋 Welcome!
+        </h2>
 
-        <div className="m-5 flex max-w-7xl flex-col lg:m-0">
-          <p>{loginName}</p>
+        <p>{loginName}</p>
 
-          <div className="my-4 ">
-            <button
-              onClick={() => verifyPasskey()}
-              type="button"
-              className="disabled:bg-gray-300 group relative w-full flex justify-center py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Register passkeys
-            </button>
-          </div>
+        <div className="my-4 ">
+          <button
+            onClick={() => verifyPasskey()}
+            type="button"
+            className="disabled:bg-gray-300 group relative flex justify-center p-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Register passkeys
+          </button>
         </div>
       </div>
 

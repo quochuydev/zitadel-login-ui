@@ -99,66 +99,64 @@ const LoginPage = (props: {
     <div className="flex h-full w-full flex-col items-center justify-center">
       <LoadingState loading={isLoading} />
 
-      <div className="mb-[8px] ml-[30px] mr-[30px] flex w-full flex-col justify-center rounded-md border-gray-300 lg:w-[480px] lg:border lg:p-[40px] p-3">
-        <div className="flex flex-col items-center justify-center">
-          <Image src="/images/company.png" alt="logo" width="125" height="47" />
+      <div className="flex w-full flex-col justify-center rounded-md border-gray-300 lg:w-[480px] lg:border p-5">
+        <Image
+          src="/images/company.png"
+          alt="logo"
+          width="125"
+          height="47"
+          className="self-center"
+        />
 
-          <h2 className="mb-[24px] mt-6 text-center text-3xl font-extrabold text-gray-900">
-            👋 Welcome!
-          </h2>
-        </div>
+        <h2 className="my-6 text-center text-3xl font-extrabold text-gray-900">
+          👋 Welcome!
+        </h2>
 
-        <div className="flex max-w-7xl flex-col lg:m-0">
-          <SignInForm
-            loading={isLoading}
-            defaultUsername={authRequest?.loginHint}
-            handleSignIn={handleSignIn}
-          />
+        <SignInForm
+          loading={isLoading}
+          defaultUsername={authRequest?.loginHint}
+          handleSignIn={handleSignIn}
+        />
 
+        <a
+          className="flex self-center cursor-pointer text-[12px] font-normal text-info my-2"
+          onClick={() => {
+            router.replace(
+              objectToQueryString(`/passkeys`, {
+                authRequest: authRequest?.id,
+              }),
+            );
+          }}
+        >
+          Login with passkeys
+        </a>
+
+        <div className="flex justify-between items-center">
           <a
-            className="flex self-center cursor-pointer text-[12px] font-normal text-info my-2"
+            className="text-[12px] font-normal text-[#4F6679]"
             onClick={() => {
               router.replace(
-                objectToQueryString(`/passkeys`, {
+                objectToQueryString(`/password/reset`, {
                   authRequest: authRequest?.id,
                 }),
               );
             }}
           >
-            Login with passkeys
+            Forgot password?
           </a>
 
-          <div className="flex justify-between items-center">
-            <a
-              className="text-[12px] font-normal text-[#4F6679]"
-              onClick={() => {
-                router.replace(
-                  objectToQueryString(`/password/reset`, {
-                    authRequest: authRequest?.id,
-                  }),
-                );
-              }}
+          <p className="text-center text-black font-normal">
+            <Link
+              className="text-info text-[15px] font-normal"
+              data-testid={'registerSwitch'}
+              onClick={() => setIsLoading(true)}
+              href={objectToQueryString(ROUTING.REGISTER, {
+                authRequest: authRequest?.id,
+              })}
             >
-              Forgot password?
-            </a>
-
-            {/* {loginSettings?.allowRegister && authRequest?.id && ( */}
-            <p className="text-center text-black font-normal">
-              <Link
-                className="text-info text-[15px] font-normal"
-                data-testid={'registerSwitch'}
-                onClick={() => setIsLoading(true)}
-                href={objectToQueryString(ROUTING.REGISTER, {
-                  authRequest: authRequest?.id,
-                })}
-              >
-                {t('REGISTER_NOW')}
-              </Link>
-            </p>
-            {/* )} */}
-          </div>
-
-          <div className="hidden">{JSON.stringify(authRequest)}</div>
+              {t('REGISTER_NOW')}
+            </Link>
+          </p>
         </div>
       </div>
 
