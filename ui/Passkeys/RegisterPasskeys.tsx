@@ -61,7 +61,7 @@ const RegisterPasskeysPage = (props: {
         const data = {
           id: credential.id,
           type: credential.type,
-          rawId: coerceToBase64Url((credential as any).response.rawId),
+          rawId: coerceToBase64Url((credential as any).rawId),
           response: {
             attestationObject: coerceToBase64Url(
               (credential as any).response.attestationObject,
