@@ -115,6 +115,19 @@ const LoginPage = (props: {
             handleSignIn={handleSignIn}
           />
 
+          <a
+            className="flex self-center cursor-pointer text-[12px] font-normal text-info my-2"
+            onClick={() => {
+              router.replace(
+                objectToQueryString(`/passkeys`, {
+                  authRequest: authRequest?.id,
+                }),
+              );
+            }}
+          >
+            Login with passkeys
+          </a>
+
           <div className="flex justify-between items-center">
             <a
               className="text-[12px] font-normal text-[#4F6679]"

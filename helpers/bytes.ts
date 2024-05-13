@@ -1,4 +1,4 @@
-export function coerceToArrayBuffer(thing: any, name: string) {
+export function coerceToArrayBuffer(thing: any) {
   if (typeof thing === 'string') {
     // base64url to base64
     thing = thing.replace(/-/g, '+').replace(/_/g, '/');
@@ -24,13 +24,13 @@ export function coerceToArrayBuffer(thing: any, name: string) {
 
   // error if none of the above worked
   if (!(thing instanceof ArrayBuffer)) {
-    throw new TypeError("could not coerce '" + name + "' to ArrayBuffer");
+    throw new TypeError('could not coerce to ArrayBuffer');
   }
 
   return thing;
 }
 
-export function coerceToBase64Url(thing: any, name: string) {
+export function coerceToBase64Url(thing: any) {
   // Array or ArrayBuffer to Uint8Array
   if (Array.isArray(thing)) {
     thing = Uint8Array.from(thing);
@@ -52,7 +52,7 @@ export function coerceToBase64Url(thing: any, name: string) {
   }
 
   if (typeof thing !== 'string') {
-    throw new Error("could not coerce '" + name + "' to string");
+    throw new Error('could not coerce to string');
   }
 
   // base64 to base64url

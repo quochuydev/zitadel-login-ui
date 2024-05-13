@@ -71,15 +71,11 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
                 publicKeyCredentialRequestOptions.publicKey.challenge =
                   coerceToArrayBuffer(
                     publicKeyCredentialRequestOptions.publicKey.challenge,
-                    'challenge',
                   );
 
                 publicKeyCredentialRequestOptions.publicKey.allowCredentials.map(
                   (listItem: any) => {
-                    listItem.id = coerceToArrayBuffer(
-                      listItem.id,
-                      'publicKey.allowCredentials.id',
-                    );
+                    listItem.id = coerceToArrayBuffer(listItem.id);
                   },
                 );
 
@@ -108,16 +104,13 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
 
                 const data = {
                   id: assertedCredential.id,
-                  rawId: coerceToBase64Url(rawId, 'rawId'),
+                  rawId: coerceToBase64Url(rawId),
                   type: assertedCredential.type,
                   response: {
-                    authenticatorData: coerceToBase64Url(authData, 'authData'),
-                    clientDataJSON: coerceToBase64Url(
-                      clientDataJSON,
-                      'clientDataJSON',
-                    ),
-                    signature: coerceToBase64Url(sig, 'sig'),
-                    userHandle: coerceToBase64Url(userHandle, 'userHandle'),
+                    authenticatorData: coerceToBase64Url(authData),
+                    clientDataJSON: coerceToBase64Url(clientDataJSON),
+                    signature: coerceToBase64Url(sig),
+                    userHandle: coerceToBase64Url(userHandle),
                   },
                 };
 

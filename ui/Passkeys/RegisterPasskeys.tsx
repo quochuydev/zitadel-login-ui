@@ -2,10 +2,12 @@
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import { coerceToArrayBuffer, coerceToBase64Url } from '#/helpers/bytes';
+import { ROUTING } from '#/helpers/router';
 import ApiService from '#/services/frontend/api.service';
 import { APIVerifyPasskey } from '#/types/api';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 
 const RegisterPasskeysPage = (props: {
   appUrl: string;
@@ -25,6 +27,7 @@ const RegisterPasskeysPage = (props: {
   } = props;
   const apiService = ApiService({ appUrl });
   const toastRef = useRef<ToastType>();
+  const router = useRouter();
 
   const verifyPasskey = async () => {
     if (passkeyId && publicKeyCredentialCreationOptions) {
@@ -32,22 +35,17 @@ const RegisterPasskeysPage = (props: {
         publicKeyCredentialCreationOptions.publicKey.challenge =
           coerceToArrayBuffer(
             publicKeyCredentialCreationOptions.publicKey.challenge,
-            'challenge',
           );
 
         publicKeyCredentialCreationOptions.publicKey.user.id =
           coerceToArrayBuffer(
             publicKeyCredentialCreationOptions.publicKey.user.id,
-            'userid',
           );
 
         if (publicKeyCredentialCreationOptions.publicKey.excludeCredentials) {
           publicKeyCredentialCreationOptions.publicKey.excludeCredentials.map(
             (cred: any) => {
-              cred.id = coerceToArrayBuffer(
-                cred.id as string,
-                'excludeCredentials.id',
-              );
+              cred.id = coerceToArrayBuffer(cred.id as string);
               return cred;
             },
           );
@@ -56,27 +54,12 @@ const RegisterPasskeysPage = (props: {
         const credential = await navigator.credentials.create({
           publicKey: publicKeyCredentialCreationOptions.publicKey,
         });
-        if (!credential) throw new Error('invalid credential');
 
         console.log('credential', credential);
+        if (!credential) throw new Error('invalid credential');
 
-        const attestationObject = (credential as any).response
-          .attestationObject;
-        const clientDataJSON = (credential as any).response.clientDataJSON;
-        const rawId = (credential as any).rawId;
-
-        const data = {
-          id: credential.id,
-          rawId: coerceToBase64Url(rawId, 'rawId'),
-          type: credential.type,
-          response: {
-            attestationObject: coerceToBase64Url(
-              attestationObject,
-              'attestationObject',
-            ),
-            clientDataJSON: coerceToBase64Url(clientDataJSON, 'clientDataJSON'),
-          },
-        };
+        const { rawId, attestationObject, clientDataJSON } = (credential as any)
+          .response;
 
         await apiService.request<APIVerifyPasskey>({
           url: '/api/passkey/verify',
@@ -85,16 +68,24 @@ const RegisterPasskeysPage = (props: {
             orgId,
             userId,
             passkeyId,
-            credential: data,
+            credential: {
+              id: credential.id,
+              type: credential.type,
+              rawId: coerceToBase64Url(rawId),
+              response: {
+                attestationObject: coerceToBase64Url(attestationObject),
+                clientDataJSON: coerceToBase64Url(clientDataJSON),
+              },
+            },
           },
         });
+
+        router.replace(ROUTING.HOME);
       } catch (error) {
         console.log('debug', error);
       }
     }
   };
-
-  const [username, setUsername] = useState<string>(loginName);
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">
