@@ -17,7 +17,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!auth|oauth|.well-known|oidc|idps|logout|api|_next|.*\\..*).*)',
-  ],
+  matcher: ['/((?!oauth|.well-known|oidc|idps|logout|api|_next|.*\\..*).*)'],
 };
