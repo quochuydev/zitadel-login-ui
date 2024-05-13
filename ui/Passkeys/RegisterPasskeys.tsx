@@ -29,7 +29,7 @@ const RegisterPasskeysPage = (props: {
   const toastRef = useRef<ToastType>();
   const router = useRouter();
 
-  const verifyPasskey = async () => {
+  const registerPasskey = async () => {
     if (passkeyId && publicKeyCredentialCreationOptions) {
       try {
         publicKeyCredentialCreationOptions.publicKey.challenge =
@@ -58,9 +58,6 @@ const RegisterPasskeysPage = (props: {
         console.log('credential', credential);
         if (!credential) throw new Error('invalid credential');
 
-        const { rawId, attestationObject, clientDataJSON } = (credential as any)
-          .response;
-
         await apiService.request<APIVerifyPasskey>({
           url: '/api/passkey/verify',
           method: 'post',
@@ -71,10 +68,14 @@ const RegisterPasskeysPage = (props: {
             credential: {
               id: credential.id,
               type: credential.type,
-              rawId: coerceToBase64Url(rawId),
+              rawId: coerceToBase64Url((credential as any).response.rawId),
               response: {
-                attestationObject: coerceToBase64Url(attestationObject),
-                clientDataJSON: coerceToBase64Url(clientDataJSON),
+                attestationObject: coerceToBase64Url(
+                  (credential as any).response.attestationObject,
+                ),
+                clientDataJSON: coerceToBase64Url(
+                  (credential as any).response.clientDataJSON,
+                ),
               },
             },
           },
@@ -100,7 +101,7 @@ const RegisterPasskeysPage = (props: {
 
         <div className="my-4 ">
           <button
-            onClick={() => verifyPasskey()}
+            onClick={() => registerPasskey()}
             type="button"
             className="disabled:bg-gray-300 group relative flex justify-center p-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
