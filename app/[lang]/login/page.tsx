@@ -1,84 +1,27 @@
 import configuration from '#/configuration';
-import { getProjectIdFromAuthRequest } from '#/helpers/zitadel';
+import { getAuthRequestInfo } from '#/services/backend/zitadel-session';
 import Login from '#/ui/Login/Login';
-import AuthService from '#/services/backend/auth.service';
-import { ROUTING } from '#/types/router';
-import type { Application, AuthRequest } from '#/types/zitadel';
 import { redirect } from 'next/navigation';
 
-type Prompt = 'PROMPT_CREATE' | 'PROMPT_UNSPECIFIED';
+type SearchParams = {
+  authRequest?: string;
+  flow?: 'add';
+};
 
-export default async ({ searchParams }: any) => {
-  const { authRequest: authRequestId } = searchParams;
+export default async ({ searchParams }: { searchParams: SearchParams }) => {
+  const { authRequest, flow } = searchParams;
 
-  const result = await getAuthRequestInfo(authRequestId);
-
-  if (result.redirect === 'registration') {
-    return redirect(`${ROUTING.REGISTER}?authRequest=${authRequestId}`);
-  }
+  const result = await getAuthRequestInfo({ authRequest, flow });
+  if (result.redirect) return redirect(result.redirect);
 
   return (
     <Login
       appUrl={configuration.appUrl}
-      authRequest={result?.authRequest}
-      application={result?.application}
+      authRequest={result.authRequest}
+      application={result.application}
+      loginSettings={result.loginSettings}
+      orgDisplayName={result.orgDisplayName}
+      defaultUsername={result.authRequest?.loginHint}
     />
   );
 };
-
-async function getAuthRequestInfo(authRequestId: string): Promise<{
-  authRequest?: AuthRequest;
-  application?: Application;
-  redirect?: 'registration';
-}> {
-  if (!authRequestId) {
-    return {
-      authRequest: undefined,
-      application: undefined,
-    };
-  }
-
-  const accessToken = await AuthService.getAdminAccessToken();
-  const oidcService = AuthService.createOIDCService(accessToken);
-
-  const authRequest = await oidcService
-    .getAuthRequest({ authRequestId })
-    .then((e) => e.authRequest)
-    .catch(() => undefined);
-
-  if (authRequest) {
-    const prompts = (authRequest.prompt as unknown as Prompt[]) || [];
-
-    if (prompts.includes('PROMPT_CREATE')) {
-      return {
-        authRequest,
-        redirect: 'registration',
-      };
-    }
-
-    const projectId = getProjectIdFromAuthRequest(authRequest);
-
-    if (projectId) {
-      const managementService =
-        await AuthService.createManagementService(accessToken);
-
-      const applications = await managementService.searchApplications(
-        projectId,
-        { queries: [] },
-      );
-
-      const application = applications.find(
-        (e) => e.oidcConfig?.clientId === authRequest.clientId,
-      );
-
-      return {
-        authRequest,
-        application,
-      };
-    }
-  }
-
-  return {
-    authRequest,
-  };
-}

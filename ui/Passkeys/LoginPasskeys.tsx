@@ -4,7 +4,7 @@ import Toast from '#/components/Toast';
 import { coerceToArrayBuffer, coerceToBase64Url } from '#/helpers/bytes';
 import ApiService from '#/services/frontend/api.service';
 import { APILoginPasskey, APIStartPasskey } from '#/types/api';
-import { ROUTING } from '#/types/router';
+import { ROUTING } from '#/helpers/router';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';

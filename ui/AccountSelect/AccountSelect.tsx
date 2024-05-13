@@ -2,7 +2,7 @@
 'use client';
 import React from 'react';
 import ApiService from '#/services/frontend/api.service';
-import { ROUTING } from '#/types/router';
+import { ROUTING } from '#/helpers/router';
 import type { AuthRequest, Session } from '#/types/zitadel';
 import useTranslations from 'next-translate/useTranslation';
 import Image from 'next/image';

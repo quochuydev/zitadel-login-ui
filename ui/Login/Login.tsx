@@ -1,23 +1,26 @@
 'use client';
+import LoadingState from '#/components/Loading';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
-import SignInForm from '#/ui/Login/components/SignInForm';
+import { objectToQueryString } from '#/helpers/api-caller';
+import { ROUTING } from '#/helpers/router';
 import ApiService from '#/services/frontend/api.service';
 import { APILogin } from '#/types/api';
-import { ROUTING } from '#/types/router';
-import type { Application, AuthRequest } from '#/types/zitadel';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
-import Link from 'next/link';
+import type { Application, AuthRequest, LoginSettings } from '#/types/zitadel';
+import SignInForm from '#/ui/Login/components/SignInForm';
 import useTranslations from 'next-translate/useTranslation';
-import LoadingState from '#/components/Loading';
-import { objectToQueryString } from '#/helpers/api-caller';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 const LoginPage = (props: {
   appUrl: string;
   authRequest?: AuthRequest;
   application?: Application;
+  loginSettings?: LoginSettings;
+  orgDisplayName?: string;
+  defaultUsername?: string;
 }) => {
   const { appUrl, authRequest, application } = props;
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +28,30 @@ const LoginPage = (props: {
   const apiService = ApiService({ appUrl });
   const toastRef = useRef<ToastType>();
   const { t } = useTranslations('common');
+
+  /**
+   * @see
+   * https://zitadel.com/docs/apis/openidoauth/endpoints#additional-parameters
+   */
+  const loginSilently = async (authRequest?: AuthRequest) => {
+    try {
+      if (!authRequest?.hintUserId) return;
+
+      const result = await apiService.finalizeAuthRequest({
+        authRequestId: authRequest.id,
+        userId: authRequest.hintUserId,
+      });
+
+      if (result.callbackUrl) router.replace(result.callbackUrl);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(JSON.stringify(error));
+    }
+  };
+
+  useEffect(() => {
+    loginSilently(authRequest);
+  }, [authRequest?.id]);
 
   const handleSignIn = async (params: {
     username: string;
@@ -45,16 +72,14 @@ const LoginPage = (props: {
         },
       });
 
-      if (!session || !session.userId) {
-        throw session;
-      }
+      if (!session || !session.userId) throw session;
 
       if (session.changeRequired) {
-        if (authRequest) {
-          router.replace(`${ROUTING.PASSWORD}?authRequest=${authRequest.id}`);
-        } else {
-          router.replace(ROUTING.PASSWORD);
-        }
+        router.replace(
+          objectToQueryString(`${ROUTING.ACCOUNT}/0/password`, {
+            authRequest: authRequest?.id,
+          }),
+        );
       } else {
         router.replace(session.callbackUrl || ROUTING.HOME);
       }

@@ -1,23 +1,16 @@
-import configuration from '#/configuration';
 import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
-import AuthService from '#/services/backend/auth.service';
-import CookieService from '#/services/backend/cookie.service';
-import ZitadelService, {
-  GetLoginSettings,
-} from '#/services/backend/zitadel.service';
-import {
+import AuthService, {
   FlowType,
   Trigger,
   flows,
   shouldTriggerAction,
+  zitadelService,
 } from '#/services/backend/auth.service';
+import CookieService from '#/services/backend/cookie.service';
 import type { APIRegister } from '#/types/api';
+import type { GetLoginSettings } from '#/types/zitadel';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';
-
-const zitadelService = ZitadelService({
-  host: configuration.zitadel.url,
-});
 
 const schema = z.object({
   orgId: z.string().trim(),

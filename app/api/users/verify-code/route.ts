@@ -1,14 +1,8 @@
-import configuration from '#/configuration';
 import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
-import AuthService from '#/services/backend/auth.service';
-import ZitadelService from '#/services/backend/zitadel.service';
+import AuthService, { zitadelService } from '#/services/backend/auth.service';
 import type { APIVerifyCode } from '#/types/api';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';
-
-const zitadelService = ZitadelService({
-  host: configuration.zitadel.url,
-});
 
 const schema = z.object({
   userId: z.string().trim(),

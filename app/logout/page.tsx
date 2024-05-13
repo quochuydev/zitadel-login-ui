@@ -2,7 +2,7 @@ import AuthService from '#/services/backend/auth.service';
 import CookieService from '#/services/backend/cookie.service';
 import type { Session } from '#/types/zitadel';
 import { redirect } from 'next/navigation';
-import { ROUTING } from '#/types/router';
+import { ROUTING } from '#/helpers/router';
 
 export default async ({ searchParams }: any) => {
   const { post_logout_redirect } = searchParams;

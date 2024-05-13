@@ -1,27 +1,9 @@
-import React from 'react';
-import Register from '#/ui/Register/Register';
 import configuration from '#/configuration';
 import AuthService from '#/services/backend/auth.service';
-import type { AuthRequest } from '#/types/zitadel';
+import Register from '#/ui/Register/Register';
 
 export default async ({ searchParams }: any) => {
   const { authRequest: authRequestId } = searchParams;
-
-  const result = await getAuthRequestInfo(authRequestId);
-
-  return (
-    <Register appUrl={configuration.appUrl} authRequest={result?.authRequest} />
-  );
-};
-
-async function getAuthRequestInfo(authRequestId: string): Promise<{
-  authRequest?: AuthRequest;
-}> {
-  if (!authRequestId) {
-    return {
-      authRequest: undefined,
-    };
-  }
 
   const accessToken = await AuthService.getAdminAccessToken();
   const oidcService = AuthService.createOIDCService(accessToken);
@@ -31,7 +13,5 @@ async function getAuthRequestInfo(authRequestId: string): Promise<{
     .then((e) => e.authRequest)
     .catch(() => undefined);
 
-  return {
-    authRequest,
-  };
-}
+  return <Register appUrl={configuration.appUrl} authRequest={authRequest} />;
+};

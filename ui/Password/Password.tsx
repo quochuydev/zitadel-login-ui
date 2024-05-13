@@ -3,7 +3,7 @@ import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import ApiService from '#/services/frontend/api.service';
 import type { APIChangePassword, APIFinalizeAuthRequest } from '#/types/api';
-import { ROUTING } from '#/types/router';
+import { ROUTING } from '#/helpers/router';
 import type { Session } from '#/types/zitadel';
 import Image from 'next/image';
 import React, { useMemo, useRef, useState } from 'react';

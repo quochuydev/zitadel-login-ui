@@ -1,11 +1,11 @@
 import configuration from '#/configuration';
-import AuthService from '#/services/backend/auth.service';
+import { ROUTING } from '#/helpers/router';
+import AuthService, { zitadelService } from '#/services/backend/auth.service';
 import { getCurrentSessions } from '#/services/backend/zitadel-session';
-import ZitadelService, {
+import type {
   CreatePasskeyRegistrationLink,
   RegisterPasskey,
-} from '#/services/backend/zitadel.service';
-import { ROUTING } from '#/types/router';
+} from '#/types/zitadel';
 import RegisterPasskeys from '#/ui/Passkeys/RegisterPasskeys';
 import { redirect } from 'next/navigation';
 
@@ -19,10 +19,6 @@ export default async ({ params: { index } }: { params: { index: number } }) => {
   const loginName = session.factors?.user?.loginName;
 
   const accessToken = await AuthService.getAdminAccessToken();
-
-  const zitadelService = ZitadelService({
-    host: configuration.zitadel.url,
-  });
 
   const passkeyRegistrationLinkResult =
     await zitadelService.request<CreatePasskeyRegistrationLink>({

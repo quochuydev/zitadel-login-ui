@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useRef } from 'react';
+import Button from '#/components/Button';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
+import { ROUTING } from '#/helpers/router';
 import useTranslations from 'next-translate/useTranslation';
-import Button from '#/components/Button';
 import { useRouter } from 'next/navigation';
-import { ROUTING } from '#/types/router';
+import { useRef } from 'react';
 
 export default function LoginExternalFail() {
   const toastRef = useRef<ToastType>();

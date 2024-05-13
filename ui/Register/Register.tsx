@@ -8,7 +8,7 @@ import Toast from '#/components/Toast';
 import RegisterForm from '#/ui/Register/components/RegisterForm';
 import ApiService from '#/services/frontend/api.service';
 import type { APIRegister } from '#/types/api';
-import { ROUTING } from '#/types/router';
+import { ROUTING } from '#/helpers/router';
 import type { AuthRequest } from '#/types/zitadel';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';

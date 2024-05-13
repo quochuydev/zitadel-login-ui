@@ -1,27 +1,35 @@
 import configuration from '#/configuration';
-import type {
-  AuthRequest,
-  CreateCallbackRequest,
-  DeleteSessionRequest,
-} from '#/types/zitadel';
+import { Default, TRequest, sendRequest } from '#/helpers/api-caller';
 import type {
   ChangePassword,
   CreateCallback,
+  CreateCallbackRequest,
   CreateHumanUser,
   CreateSession,
   DeleteSession,
+  DeleteSessionRequest,
   GetAuthRequest,
-  GetClientCredentialsToken,
+  GetLoginSettings,
   GetMyUserHistory,
+  GetPasswordComplexitySettings,
   GetSession,
   SearchApplications,
   SearchEvents,
   SearchSessions,
+  StartIdentityProviderIntent,
   UpdateSession,
-} from './zitadel.service';
-import ZitadelService from './zitadel.service';
+} from '#/types/zitadel';
 
-const zitadelService = ZitadelService({
+const ZitadelService = (params: { host: string }) => {
+  const { host } = params;
+
+  return {
+    request: <T extends Default>(request: TRequest<T>) =>
+      sendRequest(host, request),
+  };
+};
+
+export const zitadelService = ZitadelService({
   host: configuration.zitadel.url,
 });
 
@@ -111,6 +119,25 @@ function createUserService(accessToken: string) {
         url: '/v2beta/users/human',
         method: 'post',
         headers,
+        data,
+      });
+    },
+    startIdentityProviderIntent: (params: {
+      orgId?: string;
+      data: StartIdentityProviderIntent['data'];
+    }) => {
+      const { orgId, data } = params;
+
+      if (orgId) {
+        headers['x-zitadel-orgid'] = orgId;
+      }
+
+      return zitadelService.request<StartIdentityProviderIntent>({
+        url: '/v2beta/idp_intents',
+        method: 'post',
+        headers: {
+          ...headers,
+        },
         data,
       });
     },
@@ -208,6 +235,48 @@ function createOIDCService(accessToken: string) {
   };
 }
 
+function createSettingService(accessToken: string) {
+  const headers: RequestInit['headers'] = {
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  return {
+    getLoginSettings: async (orgId: string) => {
+      return zitadelService
+        .request<GetLoginSettings>({
+          url: '/v2beta/settings/login',
+          query: {
+            orgId,
+          },
+          method: 'get',
+          headers: {
+            ...headers,
+            'x-zitadel-orgid': orgId,
+          },
+        })
+        .then((res) => res.settings);
+    },
+    getPasswordComplexitySettings: async (orgId?: string) => {
+      if (orgId) {
+        headers['x-zitadel-orgid'] = orgId;
+      }
+
+      return zitadelService
+        .request<GetPasswordComplexitySettings>({
+          url: '/v2beta/settings/password/complexity',
+          query: orgId
+            ? {
+                orgId,
+              }
+            : undefined,
+          method: 'get',
+          headers,
+        })
+        .then((res) => res.settings);
+    },
+  };
+}
+
 function createAdminService(accessToken: string) {
   const headers: RequestInit['headers'] = {
     Authorization: `Bearer ${accessToken}`,
@@ -256,6 +325,7 @@ export default {
   createUserService,
   createSessionService,
   createOIDCService,
+  createSettingService,
   createAuthService,
   createAdminService,
   createManagementService,

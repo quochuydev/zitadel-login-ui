@@ -1,7 +1,7 @@
 import configuration from '#/configuration';
 import PasswordInit from '#/ui/Password/Init';
 import AuthService from '#/services/backend/auth.service';
-import { ROUTING } from '#/types/router';
+import { ROUTING } from '#/helpers/router';
 import type { Application, AuthRequest } from '#/types/zitadel';
 import { redirect } from 'next/navigation';
 
@@ -15,35 +15,6 @@ export default async ({ searchParams }: any) => {
     orgID: orgId,
   } = searchParams;
 
-  const result = await getAuthRequestInfo(authRequestId);
-
-  if (result.redirect === 'registration') {
-    return redirect(`${ROUTING.REGISTER}?authRequest=${authRequestId}`);
-  }
-
-  return (
-    <PasswordInit
-      appUrl={configuration.appUrl}
-      authRequest={result?.authRequest}
-      userId={userId}
-      orgId={orgId}
-      verificationCode={verificationCode}
-    />
-  );
-};
-
-async function getAuthRequestInfo(authRequestId: string): Promise<{
-  authRequest?: AuthRequest;
-  application?: Application;
-  redirect?: 'registration';
-}> {
-  if (!authRequestId) {
-    return {
-      authRequest: undefined,
-      application: undefined,
-    };
-  }
-
   const accessToken = await AuthService.getAdminAccessToken();
   const oidcService = AuthService.createOIDCService(accessToken);
 
@@ -52,18 +23,13 @@ async function getAuthRequestInfo(authRequestId: string): Promise<{
     .then((e) => e.authRequest)
     .catch(() => undefined);
 
-  if (authRequest) {
-    const prompts = (authRequest.prompt as unknown as Prompt[]) || [];
-
-    if (prompts.includes('PROMPT_CREATE')) {
-      return {
-        authRequest,
-        redirect: 'registration',
-      };
-    }
-  }
-
-  return {
-    authRequest,
-  };
-}
+  return (
+    <PasswordInit
+      appUrl={configuration.appUrl}
+      authRequest={authRequest}
+      userId={userId}
+      orgId={orgId}
+      verificationCode={verificationCode}
+    />
+  );
+};
