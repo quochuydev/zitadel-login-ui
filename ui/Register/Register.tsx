@@ -1,15 +1,12 @@
 'use client';
-import {
-  getOrgIdFromAuthRequest,
-  getProjectIdFromAuthRequest,
-} from '#/helpers/zitadel';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
-import RegisterForm from '#/ui/Register/components/RegisterForm';
+import { ROUTING } from '#/helpers/router';
+import { getOrgIdFromAuthRequest } from '#/helpers/zitadel';
 import ApiService from '#/services/frontend/api.service';
 import type { APIRegister } from '#/types/api';
-import { ROUTING } from '#/helpers/router';
 import type { AuthRequest } from '#/types/zitadel';
+import RegisterForm from '#/ui/Register/components/RegisterForm';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
@@ -27,8 +24,6 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
   const apiService = ApiService({ appUrl });
   const toastRef = useRef<ToastType>();
   const router = useRouter();
-
-  const projectId = getProjectIdFromAuthRequest(authRequest);
   const orgId = getOrgIdFromAuthRequest(authRequest);
 
   const handleRegisterForm = async (registerParams: RegisterParams) => {
@@ -36,8 +31,6 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
     setIsLoading(true);
 
     try {
-      if (!orgId) throw new Error('Invalid orgId');
-
       const result = await apiService.request<APIRegister>({
         url: '/api/register',
         method: 'post',
@@ -47,14 +40,11 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
           givenName,
           email,
           password,
-          projectId,
           authRequestId: authRequest?.id,
         },
       });
 
-      if (!result || !result.userId) {
-        throw result;
-      }
+      if (!result || !result.userId) throw result;
 
       router.replace(result.callbackUrl || ROUTING.HOME);
     } catch (error) {

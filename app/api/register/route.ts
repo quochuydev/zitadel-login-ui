@@ -13,12 +13,11 @@ import type { NextRequest } from 'next/server';
 import * as z from 'zod';
 
 const schema = z.object({
-  orgId: z.string().trim(),
+  orgId: z.string().trim().optional(),
   givenName: z.string().trim(),
   familyName: z.string().trim(),
   email: z.string().trim(),
   password: z.string().trim(),
-  projectId: z.string().trim().optional(),
   authRequestId: z.string().trim().optional(),
 });
 
@@ -58,14 +57,11 @@ export async function POST(request: NextRequest) {
 
       const userService = await AuthService.createUserService(accessToken);
 
-      const user = await userService.createHumanUser({
+      const userData: any = {
         username: email,
         email: {
           email,
           isVerified: true,
-        },
-        organisation: {
-          orgId,
         },
         password: {
           password,
@@ -77,7 +73,20 @@ export async function POST(request: NextRequest) {
           gender: 'GENDER_UNSPECIFIED',
           givenName,
         },
+      };
+
+      if (orgId) {
+        userData.organization = {
+          orgId,
+        };
+      }
+
+      const user = await userService.createHumanUser({
+        orgId,
+        data: userData,
       });
+
+      console.log(`debug:user`, user);
 
       const userId = user.userId;
 
@@ -85,7 +94,7 @@ export async function POST(request: NextRequest) {
         if (
           shouldTriggerAction({
             flow,
-            orgId,
+            orgId: user.details.resourceOwner,
             flowType: FlowType.internalAuthentication,
             trigger: Trigger.postCreation,
           })
@@ -93,7 +102,7 @@ export async function POST(request: NextRequest) {
           await flow.action({
             user: {
               userId,
-              orgId,
+              orgId: user.details.resourceOwner,
             },
             accessToken,
           });

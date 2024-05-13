@@ -103,7 +103,7 @@ export type CreateHumanUser = {
   data: {
     userId?: string;
     username: string;
-    organisation: {
+    organization: {
       orgId: string;
     };
     profile: {
@@ -133,6 +133,11 @@ export type CreateHumanUser = {
   };
   result: {
     userId: string;
+    details: {
+      sequence: string;
+      changeDate: string;
+      resourceOwner: string;
+    };
   };
 };
 
@@ -238,7 +243,7 @@ export type GetLoginSettings = {
   url: '/v2beta/settings/login';
   method: 'get';
   query: {
-    orgId: string;
+    orgId?: string;
   };
   result: {
     settings: LoginSettings;

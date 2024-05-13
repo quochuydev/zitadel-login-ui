@@ -88,12 +88,11 @@ export type APIRegister = {
   url: '/api/register';
   method: 'post';
   data: {
-    orgId: string;
+    orgId?: string;
     givenName: string;
     familyName: string;
     email: string;
     password: string;
-    projectId?: string;
     authRequestId?: string;
   };
   result: {

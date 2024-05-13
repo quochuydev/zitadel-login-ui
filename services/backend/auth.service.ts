@@ -114,7 +114,16 @@ function createUserService(accessToken: string) {
   };
 
   return {
-    createHumanUser: async (data: CreateHumanUser['data']) => {
+    createHumanUser: async (params: {
+      orgId?: string;
+      data: CreateHumanUser['data'];
+    }) => {
+      const { data, orgId } = params;
+
+      if (orgId) {
+        headers['x-zitadel-orgid'] = orgId;
+      }
+
       return zitadelService.request<CreateHumanUser>({
         url: '/v2beta/users/human',
         method: 'post',
