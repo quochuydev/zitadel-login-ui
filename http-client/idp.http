@@ -1,0 +1,13 @@
+@host = 
+
+@client_id = 
+@client_secret = 
+
+# @name appToken
+POST {{host}}/oauth/v2/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials&client_id={{client_id}}&client_secret={{client_secret}}&scope=openid profile email urn:zitadel:iam:org:project:id:zitadel:aud
+
+###
+@TOKEN = {{appToken.response.body.$.access_token}}

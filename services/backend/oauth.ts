@@ -93,9 +93,15 @@ export async function handler(request: NextRequest) {
 }
 
 function getPostLogoutRedirectUrl(request: NextRequest) {
-  return (
-    request.nextUrl.searchParams.get('post_logout_redirect_uri') || '/logout'
+  const redirectUrl = request.nextUrl.searchParams.get(
+    'post_logout_redirect_uri',
   );
+
+  if (!redirectUrl || redirectUrl === '/ui/login/logout/done') {
+    return new URL('/logout', configuration.appUrl).toString();
+  }
+
+  return redirectUrl;
 }
 
 async function getRequestBody(request: NextRequest) {
