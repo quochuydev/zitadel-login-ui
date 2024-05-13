@@ -58,6 +58,20 @@ const RegisterPasskeysPage = (props: {
         console.log('credential', credential);
         if (!credential) throw new Error('invalid credential');
 
+        const data = {
+          id: credential.id,
+          type: credential.type,
+          rawId: coerceToBase64Url((credential as any).response.rawId),
+          response: {
+            attestationObject: coerceToBase64Url(
+              (credential as any).response.attestationObject,
+            ),
+            clientDataJSON: coerceToBase64Url(
+              (credential as any).response.clientDataJSON,
+            ),
+          },
+        };
+
         await apiService.request<APIVerifyPasskey>({
           url: '/api/passkey/verify',
           method: 'post',
@@ -65,19 +79,7 @@ const RegisterPasskeysPage = (props: {
             orgId,
             userId,
             passkeyId,
-            credential: {
-              id: credential.id,
-              type: credential.type,
-              rawId: coerceToBase64Url((credential as any).response.rawId),
-              response: {
-                attestationObject: coerceToBase64Url(
-                  (credential as any).response.attestationObject,
-                ),
-                clientDataJSON: coerceToBase64Url(
-                  (credential as any).response.clientDataJSON,
-                ),
-              },
-            },
+            credential: data,
           },
         });
 
