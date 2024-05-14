@@ -15,7 +15,8 @@ const RegisterFormForm: React.FC<RegisterFormForm> = (props) => {
   const [email, setEmail] = useState<string>(`test.${Date.now()}@yopmail.com`);
   const [password, setPassword] = useState<string>('Qwerty@123');
   const [confirmPassword, setConfirmPassword] = useState<string>('Qwerty@123');
-  const [hidePwd, setHidePwd] = useState<boolean>(false); //true
+  const [hidePwd, setHidePwd] = useState<boolean>(false);
+  const [hideConfirmPwd, setHideConfirmPwd] = useState<boolean>(false);
 
   return (
     <div className="my-4 ">
@@ -101,15 +102,15 @@ const RegisterFormForm: React.FC<RegisterFormForm> = (props) => {
               id="confirmPassword"
               name="confirmPassword"
               placeholder="Password confirmation"
-              // type={hidePwd ? 'password' : 'text'}
+              type={hideConfirmPwd ? 'password' : 'text'}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               disabled={loading}
             />
 
             <Image
-              src={`/images/${hidePwd ? 'eye' : 'eye-off'}.png`} //TODO Update
-              onClick={() => setHidePwd(!hidePwd)} //TODO Update
+              src={`/images/${hideConfirmPwd ? 'eye' : 'eye-off'}.png`}
+              onClick={() => setHideConfirmPwd(!hideConfirmPwd)}
               alt="logo"
               width={20}
               height={20}
