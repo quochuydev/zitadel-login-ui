@@ -18,6 +18,7 @@ import type {
   SearchSessions,
   StartIdentityProviderIntent,
   UpdateSession,
+  UserByID,
 } from '#/types/zitadel';
 
 const ZitadelService = (params: { host: string }) => {
@@ -129,6 +130,16 @@ function createUserService(accessToken: string) {
         method: 'post',
         headers,
         data,
+      });
+    },
+    getUserById: async (userId: string) => {
+      return zitadelService.request<UserByID>({
+        url: 'v2beta/users/{userId}',
+        method: 'get',
+        headers,
+        params: {
+          userId,
+        },
       });
     },
     startIdentityProviderIntent: (params: {

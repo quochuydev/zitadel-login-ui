@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
 
       const accessToken = await AuthService.getAdminAccessToken();
       const sessionService = AuthService.createSessionService(accessToken);
+      const userService = AuthService.createUserService(accessToken);
 
       const newSession = await sessionService.createSession({
         checks: {
@@ -57,7 +58,10 @@ export async function POST(request: NextRequest) {
         userId,
       });
 
-      const changeRequired = false;
+      const user = await userService.getUserById(userId);
+      if (!user) throw new Error('user not found');
+
+      const changeRequired = user.user?.human?.passwordChangeRequired;
 
       const result: APILogin['result'] = {
         changeRequired,

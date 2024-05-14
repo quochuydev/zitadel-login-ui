@@ -94,6 +94,55 @@ import {
 import { LoginSettings } from '#/proto/zitadel/settings/v2beta/login_settings';
 
 //#region User service
+// https://zitadel.com/docs/apis/resources/user_service/user-service-get-user-by-id
+export type UserByID = {
+  url: 'v2beta/users/{userId}';
+  method: 'get';
+  params: {
+    userId: string;
+  };
+  result: {
+    user: {
+      userId: string;
+      state: 'USER_STATE_UNSPECIFIED';
+      username: string;
+      loginNames: string[];
+      preferredLoginName: string;
+      human: {
+        userId: string;
+        state: 'USER_STATE_UNSPECIFIED';
+        username: string;
+        loginNames: string[];
+        preferredLoginName: string;
+        profile: {
+          givenName: string;
+          familyName: string;
+          nickName: string;
+          displayName: string;
+          preferredLanguage: 'en';
+          gender: 'GENDER_FEMALE';
+          avatarUrl: string;
+        };
+        email: {
+          email: string;
+          isVerified: boolean;
+        };
+        phone: {
+          phone: string;
+          isVerified: boolean;
+        };
+        passwordChangeRequired: boolean;
+      };
+      machine: {
+        name: string;
+        description: string;
+        hasSecret: 'true' | 'false';
+        accessTokenType: 'ACCESS_TOKEN_TYPE_BEARER';
+      };
+    };
+  };
+};
+
 /**
  * https://zitadel.com/docs/apis/resources/user_service/user-service-add-human-user
  */
