@@ -77,6 +77,7 @@ export type APIChangePassword = {
   url: '/api/users/password';
   method: 'post';
   data: {
+    orgId: string;
     userId: string;
     currentPassword: string;
     newPassword: string;

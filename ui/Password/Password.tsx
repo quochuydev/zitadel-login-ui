@@ -48,6 +48,7 @@ const Page = (props: {
         url: '/api/users/password',
         method: 'post',
         data: {
+          orgId: activeSession.factors.user.organizationId,
           userId: activeSession.factors.user.id,
           currentPassword,
           newPassword,

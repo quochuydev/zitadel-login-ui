@@ -30,6 +30,14 @@ export async function POST(request: NextRequest) {
       const accessToken = await AuthService.getAdminAccessToken();
       const sessionService = AuthService.createSessionService(accessToken);
       const userService = AuthService.createUserService(accessToken);
+      const managementService =
+        AuthService.createManagementService(accessToken);
+
+      const userByLoginName =
+        await managementService.getUserByLoginName(loginName);
+      if (!userByLoginName) throw new Error('user not found');
+
+      const userId = userByLoginName.id;
 
       const newSession = await sessionService.createSession({
         checks: {
@@ -41,16 +49,6 @@ export async function POST(request: NextRequest) {
           },
         },
       });
-      console.log('newSession', newSession);
-
-      const session = await sessionService.getSession({
-        sessionId: newSession.sessionId,
-      });
-
-      console.log('session', session);
-      if (!session?.factors?.user) throw new Error('Invalid session');
-
-      const userId = session.factors.user.id;
 
       CookieService.addSessionToCookie({
         sessionId: newSession.sessionId,

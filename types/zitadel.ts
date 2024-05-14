@@ -285,6 +285,25 @@ export type VerifyPasskeyRegistration = {
   result: void;
 };
 
+/** @see https://zitadel.com/docs/apis/resources/user_service/user-service-set-password#change-password
+ */
+export type ChangePassword = {
+  url: '/v2beta/users/{userId}/password';
+  method: 'post';
+  data: {
+    newPassword: {
+      password: string;
+      changeRequired: boolean;
+    };
+    currentPassword?: string;
+    verificationCode?: string;
+  };
+  params: {
+    userId: string;
+  };
+  result: void;
+};
+
 /**
  * https://zitadel.com/docs/apis/resources/admin/admin-service-get-login-policy
  */
@@ -385,15 +404,6 @@ export type CreateCallback = {
 //#endregion
 
 //#region Auth service
-export type ChangePassword = {
-  url: '/auth/v1/users/me/password';
-  method: 'put';
-  data: {
-    oldPassword: string;
-    newPassword: string;
-  };
-  result: void;
-};
 
 export type GetMyUserHistory = {
   url: '/auth/v1/users/me/changes/_search';
@@ -422,28 +432,6 @@ export type SearchEvents = {
 //#endregion
 
 //#region Management service
-/**
- * https://zitadel.com/docs/apis/resources/mgmt/management-service-list-apps
- */
-export type GetUserByLoginName = {
-  url: '/management/v1/global/users/_by_login_name';
-  method: 'get';
-  query: {
-    loginName: string;
-  };
-  result: {
-    user: {
-      id: string;
-      details: {
-        resourceOwner: string;
-      };
-      userName: string;
-      loginNames: string[];
-      preferredLoginName: string;
-      state: 'USER_STATE_ACTIVE';
-    };
-  };
-};
 
 /**
  * https://zitadel.com/docs/apis/resources/mgmt/management-service-list-apps
@@ -463,6 +451,67 @@ export type SearchApplications = {
     }>;
   };
   result: ListAppsResponse;
+};
+
+/** https://zitadel.com/docs/apis/resources/mgmt/management-service-get-user-by-login-name-global
+ */
+export type GetUserByLoginName = {
+  url: '/management/v1/global/users/_by_login_name';
+  method: 'get';
+  query: {
+    loginName: string;
+  };
+  result: {
+    user: {
+      id: string;
+      details: {
+        sequence: string;
+        creationDate: string;
+        changeDate: string;
+        resourceOwner: string;
+      };
+      state:
+        | 'USER_STATE_UNSPECIFIED'
+        | 'USER_STATE_ACTIVE'
+        | 'USER_STATE_INACTIVE'
+        | 'USER_STATE_DELETED'
+        | 'USER_STATE_LOCKED'
+        | 'USER_STATE_SUSPEND'
+        | 'USER_STATE_INITIAL';
+      userName: string;
+      loginNames: string[];
+      preferredLoginName: string;
+      human: {
+        profile: {
+          firstName: string;
+          lastName: string;
+          nickName: string;
+          displayName: string;
+          preferredLanguage: 'en';
+          gender:
+            | 'GENDER_UNSPECIFIED'
+            | 'GENDER_FEMALE'
+            | 'GENDER_MALE'
+            | 'GENDER_DIVERSE';
+          avatarUrl: string;
+        };
+        email: {
+          email: string;
+          isEmailVerified: boolean;
+        };
+        phone: {
+          phone: string;
+          isPhoneVerified: boolean;
+        };
+      };
+      machine: {
+        name: string;
+        description: string;
+        hasSecret: string;
+        accessTokenType: 'ACCESS_TOKEN_TYPE_BEARER' | 'ACCESS_TOKEN_TYPE_JWT';
+      };
+    };
+  };
 };
 
 /**

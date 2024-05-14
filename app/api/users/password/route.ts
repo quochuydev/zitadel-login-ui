@@ -9,6 +9,7 @@ const schema = z.object({
   currentPassword: z.string().trim(),
   newPassword: z.string().trim(),
   userId: z.string().trim(),
+  orgId: z.string().trim(),
 });
 
 export async function POST(request: NextRequest) {
@@ -25,17 +26,15 @@ export async function POST(request: NextRequest) {
         schema,
       });
 
-      const { currentPassword, newPassword, userId } = body;
+      const { userId, orgId, currentPassword, newPassword } = body;
 
-      const session = CookieService.getSessionCookieByUserId(userId);
-      if (!session) throw new Error('Session not found');
+      const accessToken = await AuthService.getAdminAccessToken();
+      const userService = AuthService.createUserService(accessToken);
 
-      const authService = await AuthService.createAuthService(
-        session.sessionToken,
-      );
-
-      await authService.changePassword({
-        oldPassword: currentPassword,
+      await userService.changePassword({
+        userId,
+        orgId,
+        currentPassword,
         newPassword,
       });
     },

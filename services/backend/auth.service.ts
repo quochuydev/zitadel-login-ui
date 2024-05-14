@@ -13,6 +13,7 @@ import type {
   GetMyUserHistory,
   GetPasswordComplexitySettings,
   GetSession,
+  GetUserByLoginName,
   SearchApplications,
   SearchEvents,
   SearchSessions,
@@ -159,6 +160,36 @@ function createUserService(accessToken: string) {
           ...headers,
         },
         data,
+      });
+    },
+    changePassword: (params: {
+      userId: string;
+      orgId: string;
+      currentPassword?: string;
+      verificationCode?: string;
+      newPassword: string;
+    }) => {
+      const { userId, orgId, currentPassword, verificationCode, newPassword } =
+        params;
+
+      return zitadelService.request<ChangePassword>({
+        url: '/v2beta/users/{userId}/password',
+        params: {
+          userId,
+        },
+        method: 'post',
+        headers: {
+          ...headers,
+          'x-zitadel-orgid': orgId,
+        },
+        data: {
+          currentPassword,
+          verificationCode,
+          newPassword: {
+            changeRequired: false,
+            password: newPassword,
+          },
+        },
       });
     },
   };
@@ -337,6 +368,18 @@ function createManagementService(accessToken: string) {
       });
 
       return result.result || [];
+    },
+    getUserByLoginName: async (loginName: string) => {
+      const result = await zitadelService.request<GetUserByLoginName>({
+        url: '/management/v1/global/users/_by_login_name',
+        method: 'get',
+        headers,
+        query: {
+          loginName,
+        },
+      });
+
+      return result.user;
     },
   };
 }
