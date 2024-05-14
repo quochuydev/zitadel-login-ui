@@ -12,14 +12,6 @@ export async function handler(request: NextRequest) {
     zitadelUrl,
   ).toString();
 
-  const extra: any = {};
-  extra.date = new Date();
-  extra.url = url;
-  extra.forwarded = forwarded;
-  extra.method = request.method;
-  extra.contentType = request.headers.get('content-type');
-  extra.contentLength = request.headers.get('content-length');
-
   const headers = new Headers();
   headers.set('x-zitadel-login-client', configuration.zitadel.userId);
   headers.set('x-zitadel-forwarded', `host="${forwarded}"`);
@@ -41,7 +33,7 @@ export async function handler(request: NextRequest) {
 
     const redirect = findFirstMatch([
       {
-        match: request.url.includes('/oidc/v1/end_session'),
+        match: url.includes('/oidc/v1/end_session') && response.redirected,
         value: getPostLogoutRedirectUrl(request),
       },
       {
@@ -54,27 +46,14 @@ export async function handler(request: NextRequest) {
       },
     ]);
 
-    extra.status = response.status;
-    extra.statusText = response.statusText;
-    extra.responseUrl = response.url;
-    extra.redirected = response.redirected;
-    extra.redirect = redirect;
-    console.log(`debug:extra`, extra);
-
     if (redirect) return NextResponse.redirect(redirect);
 
-    const data = await response.json().catch((error) => {
-      console.log(`debug:json`, error);
-      return { error: response.statusText };
-    });
+    const data = await response
+      .json()
+      .catch(() => ({ error: response.statusText }));
 
     return NextResponse.json(data, { status: response.status });
   } catch (error: any) {
-    extra.error = error.message;
-
-    console.log(`debug:extra`, extra);
-    console.log(`debug:error`, error);
-
     return NextResponse.json(
       {
         message: 'Internal server error',
