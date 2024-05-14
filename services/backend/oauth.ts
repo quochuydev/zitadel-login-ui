@@ -21,10 +21,14 @@ export async function handler(request: NextRequest) {
   extra.contentLength = request.headers.get('content-length');
 
   const headers = new Headers();
-  const contentType = request.headers.get('content-type');
-  contentType && headers.set('content-type', contentType);
   headers.set('x-zitadel-login-client', configuration.zitadel.userId);
   headers.set('x-zitadel-forwarded', `host="${forwarded}"`);
+
+  const contentType = request.headers.get('content-type');
+  contentType && headers.set('content-type', contentType);
+
+  const authorization = request.headers.get('authorization');
+  authorization && headers.set('authorization', authorization);
 
   try {
     const body = await getRequestBody(request);
