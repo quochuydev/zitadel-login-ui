@@ -61,7 +61,7 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">
-      <div className="mb-[8px] ml-[30px] mr-[30px] flex h-full w-full flex-col justify-center rounded-md border-gray-300 lg:h-[600px] lg:w-[480px] lg:border lg:p-[80px]">
+      <div className="flex h-full w-full flex-col justify-center rounded-md border-gray-300 lg:h-[600px] lg:w-[480px] lg:border p-5">
         <div className="flex flex-col items-center justify-center">
           <Image src="/images/company.png" alt="logo" width="125" height="47" />
           <h2 className="mb-[24px] mt-6 text-center text-3xl font-extrabold text-gray-900">
