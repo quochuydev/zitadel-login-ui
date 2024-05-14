@@ -1,7 +1,7 @@
 import configuration from '#/configuration';
 import { ROUTING } from '#/helpers/router';
 import AuthService, { zitadelService } from '#/services/backend/auth.service';
-import { getCurrentSessions } from '#/services/backend/zitadel-session';
+import { getCurrentSessions } from '#/services/backend/zitadel.service';
 import type {
   CreatePasskeyRegistrationLink,
   RegisterPasskey,

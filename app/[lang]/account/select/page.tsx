@@ -2,7 +2,7 @@ import configuration from '#/configuration';
 import { objectToQueryString } from '#/helpers/api-caller';
 import { ROUTING } from '#/helpers/router';
 import AuthService from '#/services/backend/auth.service';
-import { getCurrentSessions } from '#/services/backend/zitadel-session';
+import { getCurrentSessions } from '#/services/backend/zitadel.service';
 import AccountSelect from '#/ui/AccountSelect/AccountSelect';
 import { redirect } from 'next/navigation';
 

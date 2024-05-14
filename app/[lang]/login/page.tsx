@@ -1,5 +1,5 @@
 import configuration from '#/configuration';
-import { getAuthRequestInfo } from '#/services/backend/zitadel-session';
+import { getAuthRequestInfo } from '#/services/backend/zitadel.service';
 import Login from '#/ui/Login/Login';
 import { redirect } from 'next/navigation';
 

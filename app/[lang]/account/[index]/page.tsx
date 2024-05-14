@@ -3,7 +3,7 @@ import configuration from '#/configuration';
 import Home from '#/ui/Home/Home';
 import { ROUTING } from '#/helpers/router';
 import { redirect } from 'next/navigation';
-import { getCurrentSessions } from '#/services/backend/zitadel-session';
+import { getCurrentSessions } from '#/services/backend/zitadel.service';
 
 export default async function Page({
   params: { index },

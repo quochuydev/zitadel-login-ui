@@ -75,15 +75,6 @@ export async function handler(request: NextRequest) {
     console.log(`debug:extra`, extra);
     console.log(`debug:error`, error);
 
-    const redirect = findFirstMatch([
-      {
-        match: request.url.includes('/oidc/v1/end_session'),
-        value: getPostLogoutRedirectUrl(request),
-      },
-    ]);
-
-    if (redirect) return NextResponse.redirect(redirect);
-
     return NextResponse.json(
       {
         message: 'Internal server error',
