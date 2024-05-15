@@ -1,5 +1,4 @@
 import configuration from '#/configuration';
-import { findFirstMatch } from '#/helpers/job-executor';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
@@ -12,14 +11,13 @@ export async function handler(request: NextRequest) {
     zitadelUrl,
   ).toString();
 
+  const contentType = request.headers.get('content-type');
+  const authorization = request.headers.get('authorization');
+
   const headers = new Headers();
   headers.set('x-zitadel-login-client', configuration.zitadel.userId);
   headers.set('x-zitadel-forwarded', `host="${forwarded}"`);
-
-  const contentType = request.headers.get('content-type');
   contentType && headers.set('content-type', contentType);
-
-  const authorization = request.headers.get('authorization');
   authorization && headers.set('authorization', authorization);
 
   try {
@@ -31,22 +29,13 @@ export async function handler(request: NextRequest) {
       body,
     });
 
-    const redirect = findFirstMatch([
-      {
-        match: url.includes('/oidc/v1/end_session') && response.redirected,
-        value: getPostLogoutRedirectUrl(request),
-      },
-      {
-        match: url.includes('/oauth/v2/authorize') && response.redirected,
-        value: response.url.replace(zitadelUrl, configuration.appUrl),
-      },
-      {
-        match: url.includes('/idps/callback') && response.redirected,
-        value: response.url.replace(zitadelUrl, configuration.appUrl),
-      },
-    ]);
+    if (response.redirected) {
+      const redirect = url.includes('/oidc/v1/end_session')
+        ? getPostLogoutRedirectUrl(request)
+        : response.url.replace(zitadelUrl, configuration.appUrl);
 
-    if (redirect) return NextResponse.redirect(redirect);
+      return NextResponse.redirect(redirect);
+    }
 
     const data = await response
       .json()
