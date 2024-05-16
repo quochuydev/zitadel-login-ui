@@ -10,11 +10,11 @@ type RegisterFormForm = {
 
 const RegisterFormForm: React.FC<RegisterFormForm> = (props) => {
   const { handleRegisterForm, loading } = props;
-  const [givenName, setGivenName] = useState<string>('givenName');
-  const [familyName, setFamilyName] = useState<string>('familyName');
-  const [email, setEmail] = useState<string>(`test.${Date.now()}@yopmail.com`);
-  const [password, setPassword] = useState<string>('Qwerty@123');
-  const [confirmPassword, setConfirmPassword] = useState<string>('Qwerty@123');
+  const [givenName, setGivenName] = useState<string>('');
+  const [familyName, setFamilyName] = useState<string>('');
+  const [email, setEmail] = useState<string>(``);
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [hidePwd, setHidePwd] = useState<boolean>(false);
   const [hideConfirmPwd, setHideConfirmPwd] = useState<boolean>(false);
 
