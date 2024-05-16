@@ -15,8 +15,8 @@ const RegisterFormForm: React.FC<RegisterFormForm> = (props) => {
   const [email, setEmail] = useState<string>(``);
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [hidePwd, setHidePwd] = useState<boolean>(false);
-  const [hideConfirmPwd, setHideConfirmPwd] = useState<boolean>(false);
+  const [hidePwd, setHidePwd] = useState<boolean>(true);
+  const [hideConfirmPwd, setHideConfirmPwd] = useState<boolean>(true);
 
   return (
     <div className="my-4 ">
