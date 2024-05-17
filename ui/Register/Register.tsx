@@ -12,9 +12,10 @@ import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 export type RegisterParams = {
+  username: string;
+  email: string;
   familyName: string;
   givenName: string;
-  email: string;
   password: string;
 };
 
@@ -26,9 +27,9 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
   const router = useRouter();
   const orgId = getOrgIdFromAuthRequest(authRequest);
 
-  const handleRegisterForm = async (registerParams: RegisterParams) => {
-    const { email, familyName, givenName, password } = registerParams;
+  const handleRegisterForm = async (params: RegisterParams) => {
     setIsLoading(true);
+    const { username, email, familyName, givenName, password } = params;
 
     try {
       const result = await apiService.request<APIRegister>({
@@ -36,9 +37,10 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
         method: 'post',
         data: {
           orgId,
+          username,
+          email,
           familyName,
           givenName,
-          email,
           password,
           authRequestId: authRequest?.id,
         },
@@ -69,7 +71,7 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
           </h2>
         </div>
 
-        <div className="m-5 flex max-w-7xl flex-col lg:m-0">
+        <div className="m-5 flex max-w-7xl flex-col lg:m-0 py-4">
           <RegisterForm
             loading={isLoading}
             handleRegisterForm={handleRegisterForm}

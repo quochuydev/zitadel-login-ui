@@ -90,9 +90,10 @@ export type APIRegister = {
   method: 'post';
   data: {
     orgId?: string;
+    username: string;
+    email: string;
     givenName: string;
     familyName: string;
-    email: string;
     password: string;
     authRequestId?: string;
   };

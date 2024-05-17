@@ -8,15 +8,16 @@ import AuthService, {
 } from '#/services/backend/auth.service';
 import CookieService from '#/services/backend/cookie.service';
 import type { APIRegister } from '#/types/api';
-import type { GetLoginSettings } from '#/types/zitadel';
+import type { CreateHumanUser, GetLoginSettings } from '#/types/zitadel';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';
 
 const schema = z.object({
   orgId: z.string().trim().optional(),
+  username: z.string().trim(),
+  email: z.string().trim(),
   givenName: z.string().trim(),
   familyName: z.string().trim(),
-  email: z.string().trim(),
   password: z.string().trim(),
   authRequestId: z.string().trim().optional(),
 });
@@ -35,8 +36,15 @@ export async function POST(request: NextRequest) {
         schema,
       });
 
-      const { orgId, email, password, familyName, givenName, authRequestId } =
-        body;
+      const {
+        orgId,
+        username,
+        email,
+        password,
+        familyName,
+        givenName,
+        authRequestId,
+      } = body;
 
       const accessToken = await AuthService.getAdminAccessToken();
 
@@ -57,18 +65,18 @@ export async function POST(request: NextRequest) {
 
       const userService = await AuthService.createUserService(accessToken);
 
-      const userData: any = {
-        username: email,
+      const userData: CreateHumanUser['data'] = {
+        username,
         email: {
           email,
-          isVerified: true,
+          isVerified: false,
         },
         password: {
           password,
           changeRequired: false,
         },
         profile: {
-          displayName: `${givenName} ${familyName}`,
+          displayName: [givenName, familyName].join(' '),
           familyName,
           gender: 'GENDER_UNSPECIFIED',
           givenName,
@@ -85,8 +93,6 @@ export async function POST(request: NextRequest) {
         orgId,
         data: userData,
       });
-
-      console.log(`debug:user`, user);
 
       const userId = user.userId;
 

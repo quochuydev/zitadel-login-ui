@@ -28,11 +28,11 @@ type SignInForm = {
 };
 
 const SignInForm: React.FC<SignInForm> = (props) => {
-  const { defaultUsername = 'defaultUsername', handleSignIn, loading } = props;
+  const { defaultUsername, handleSignIn, loading } = props;
   const [hidePwd, setHidePwd] = useState<boolean>(true);
   const { t } = useTranslation('common');
 
-  const signInFormSchema = object({
+  const schema = object({
     username: string()
       .trim()
       .min(1, {
@@ -70,13 +70,13 @@ const SignInForm: React.FC<SignInForm> = (props) => {
     register,
     handleSubmit,
     formState: { isSubmitting, isValid },
-  } = useForm<z.infer<typeof signInFormSchema>>({
+  } = useForm<z.infer<typeof schema>>({
     defaultValues: defaultUsername
       ? {
           username: defaultUsername,
         }
       : undefined,
-    resolver: zodResolver(signInFormSchema),
+    resolver: zodResolver(schema),
   });
 
   return (

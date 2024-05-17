@@ -152,7 +152,7 @@ export type CreateHumanUser = {
   data: {
     userId?: string;
     username: string;
-    organization: {
+    organization?: {
       orgId: string;
     };
     profile: {
