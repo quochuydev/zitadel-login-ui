@@ -1,4 +1,5 @@
 'use client';
+import LoadingState from '#/components/Loading';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import ApiService from '#/services/frontend/api.service';
@@ -20,6 +21,8 @@ const PasswordResetPage = (props: {
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">
+      <LoadingState loading={isLoading} />
+
       <div className="mb-[8px] ml-[30px] mr-[30px] flex h-full w-full flex-col justify-center rounded-md border-gray-300 lg:h-[484px] lg:w-[480px] lg:border lg:p-[80px]">
         <div className="m-5 flex max-w-7xl flex-col lg:m-0">
           <div className="my-4 ">
@@ -44,17 +47,25 @@ const PasswordResetPage = (props: {
                 className="disabled:bg-gray-300 group relative w-full flex justify-center py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 disabled={!username.trim() || isLoading}
                 onClick={async () => {
-                  const result = await apiService.request<APIRequestCode>({
-                    url: '/api/users/request-code',
-                    method: 'post',
-                    data: {
-                      username,
-                    },
-                  });
+                  setIsLoading(true);
 
-                  router.replace(
-                    `${appUrl}/password/init?userID=${result.userId}&code=${result.code}&orgID=${result.orgId}`,
-                  );
+                  try {
+                    const result = await apiService.request<APIRequestCode>({
+                      url: '/api/users/request-code',
+                      method: 'post',
+                      data: {
+                        username,
+                      },
+                    });
+
+                    router.replace(
+                      `${appUrl}/password/init?userID=${result.userId}&code=${result.code}&orgID=${result.orgId}`,
+                    );
+                  } catch (error) {
+                    console.log(`debug:error`, error);
+
+                    setIsLoading(false);
+                  }
                 }}
               >
                 {isLoading ? 'Loading...' : 'Submit'}

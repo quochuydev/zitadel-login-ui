@@ -39,10 +39,12 @@ export async function handler(request: NextRequest) {
 
     const data = await response
       .json()
-      .catch(() => ({ error: response.statusText }));
+      .catch(() => ({ message: response.statusText }));
 
     return NextResponse.json(data, { status: response.status });
-  } catch (error: any) {
+  } catch (error) {
+    console.log(error);
+
     return NextResponse.json(
       {
         message: 'Internal server error',

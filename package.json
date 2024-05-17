@@ -16,6 +16,7 @@
   "dependencies": {
     "@headlessui/react": "1.7.17",
     "@heroicons/react": "1.0.6",
+    "@hookform/resolvers": "3.4.0",
     "date-fns": "2.29.3",
     "dotenv": "16.3.1",
     "next": "14.0.3-canary.7",
@@ -23,6 +24,7 @@
     "next-translate-plugin": "2.6.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "7.51.4",
     "styled-components": "6.0.0-beta.2",
     "vercel": "32.6.1",
     "yarn": "1.22.21",

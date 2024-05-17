@@ -119,7 +119,7 @@ const LoginPage = (props: {
         />
 
         <a
-          className="flex self-center cursor-pointer text-[12px] font-normal text-info my-2"
+          className="flex self-center cursor-pointer text-[12px] font-normal text-info mb-2 mt-6"
           onClick={() => {
             router.replace(
               objectToQueryString(`/passkeys`, {
@@ -133,8 +133,10 @@ const LoginPage = (props: {
 
         <div className="flex justify-between items-center">
           <a
-            className="text-[12px] font-normal text-[#4F6679]"
+            className="text-[12px] font-normal text-[#4F6679] cursor-pointer"
             onClick={() => {
+              setIsLoading(true);
+
               router.replace(
                 objectToQueryString(`/password/reset`, {
                   authRequest: authRequest?.id,

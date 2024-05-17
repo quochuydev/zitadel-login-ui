@@ -1,13 +1,14 @@
 'use client';
+import LoadingState from '#/components/Loading';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
+import { ROUTING } from '#/helpers/router';
 import ApiService from '#/services/frontend/api.service';
 import type { APIChangePassword, APIFinalizeAuthRequest } from '#/types/api';
-import { ROUTING } from '#/helpers/router';
 import type { Session } from '#/types/zitadel';
 import Image from 'next/image';
-import React, { useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import React, { useMemo, useRef, useState } from 'react';
 
 const Page = (props: {
   appUrl: string;
@@ -121,6 +122,8 @@ const Page = (props: {
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center">
+      <LoadingState loading={isLoading} />
+
       <div className="flex flex-col w-full max-w-lg justify-center rounded-md border-gray-300 lg:border p-5">
         <Image
           src="/images/company.png"

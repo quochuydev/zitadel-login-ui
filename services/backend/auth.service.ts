@@ -312,14 +312,12 @@ function createSettingService(accessToken: string) {
         headers['x-zitadel-orgid'] = orgId;
       }
 
+      const query = orgId ? { orgId } : undefined;
+
       return zitadelService
         .request<GetPasswordComplexitySettings>({
           url: '/v2beta/settings/password/complexity',
-          query: orgId
-            ? {
-                orgId,
-              }
-            : undefined,
+          query,
           method: 'get',
           headers,
         })
