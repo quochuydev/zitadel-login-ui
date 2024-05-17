@@ -80,9 +80,10 @@ const LoginPage = (props: {
             authRequest: authRequest?.id,
           }),
         );
-      } else {
-        router.replace(session.callbackUrl || ROUTING.HOME);
+        return;
       }
+
+      router.replace(session.callbackUrl || ROUTING.HOME);
     } catch (error) {
       console.error(error);
 
@@ -121,6 +122,8 @@ const LoginPage = (props: {
         <a
           className="flex self-center cursor-pointer text-[12px] font-normal text-info mb-2 mt-6"
           onClick={() => {
+            setIsLoading(true);
+
             router.replace(
               objectToQueryString(`/passkeys`, {
                 authRequest: authRequest?.id,
