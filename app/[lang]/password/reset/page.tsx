@@ -2,7 +2,11 @@ import configuration from '#/configuration';
 import AuthService from '#/services/backend/auth.service';
 import PasswordReset from '#/ui/Password/Reset';
 
-export default async ({ searchParams }: any) => {
+export default async ({
+  searchParams,
+}: {
+  searchParams: { authRequest?: string };
+}) => {
   const { authRequest: authRequestId } = searchParams;
 
   const accessToken = await AuthService.getAdminAccessToken();

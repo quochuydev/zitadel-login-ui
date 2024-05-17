@@ -6,14 +6,12 @@ import { getCurrentSessions } from '#/services/backend/zitadel.service';
 import AccountSelect from '#/ui/AccountSelect/AccountSelect';
 import { redirect } from 'next/navigation';
 
-type SearchParams = {
-  authRequest: string;
-};
-
 export default async function Page({
   searchParams: { authRequest: authRequestId },
 }: {
-  searchParams: SearchParams;
+  searchParams: {
+    authRequest?: string;
+  };
 }) {
   const sessions = await getCurrentSessions();
 

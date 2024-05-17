@@ -2,9 +2,16 @@ import configuration from '#/configuration';
 import AuthService from '#/services/backend/auth.service';
 import PasswordInit from '#/ui/Password/Init';
 
-type Prompt = 'PROMPT_CREATE' | 'PROMPT_UNSPECIFIED';
-
-export default async ({ searchParams }: any) => {
+export default async ({
+  searchParams,
+}: {
+  searchParams: {
+    authRequest?: string;
+    userID: string;
+    code: string;
+    orgID: string;
+  };
+}) => {
   const {
     authRequest: authRequestId,
     userID: userId,
