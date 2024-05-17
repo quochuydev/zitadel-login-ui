@@ -1,9 +1,6 @@
 import configuration from '#/configuration';
-import PasswordInit from '#/ui/Password/Init';
 import AuthService from '#/services/backend/auth.service';
-import { ROUTING } from '#/helpers/router';
-import type { Application, AuthRequest } from '#/types/zitadel';
-import { redirect } from 'next/navigation';
+import PasswordInit from '#/ui/Password/Init';
 
 type Prompt = 'PROMPT_CREATE' | 'PROMPT_UNSPECIFIED';
 
@@ -18,10 +15,12 @@ export default async ({ searchParams }: any) => {
   const accessToken = await AuthService.getAdminAccessToken();
   const oidcService = AuthService.createOIDCService(accessToken);
 
-  const authRequest = await oidcService
-    .getAuthRequest({ authRequestId })
-    .then((e) => e.authRequest)
-    .catch(() => undefined);
+  const authRequest = authRequestId
+    ? await oidcService
+        .getAuthRequest({ authRequestId })
+        .then((e) => e.authRequest)
+        .catch(() => undefined)
+    : undefined;
 
   return (
     <PasswordInit

@@ -29,10 +29,12 @@ export default async function Page({
   const accessToken = await AuthService.getAdminAccessToken();
   const oidcService = AuthService.createOIDCService(accessToken);
 
-  const authRequest = await oidcService
-    .getAuthRequest({ authRequestId })
-    .then((e) => e.authRequest)
-    .catch(() => undefined);
+  const authRequest = authRequestId
+    ? await oidcService
+        .getAuthRequest({ authRequestId })
+        .then((e) => e.authRequest)
+        .catch(() => undefined)
+    : undefined;
 
   return (
     <AccountSelect

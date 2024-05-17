@@ -73,16 +73,12 @@ export async function getAuthRequestInfo(params: {
   const settingService = AuthService.createSettingService(accessToken);
   const userService = AuthService.createUserService(accessToken);
 
-  if (!authRequestId) {
-    const setting = await settingService.getPasswordComplexitySettings();
-    result.passwordSettings = setting;
-    return result;
-  }
-
-  const authRequest = await oidcService
-    .getAuthRequest({ authRequestId })
-    .then((e) => e.authRequest)
-    .catch(() => undefined);
+  const authRequest = authRequestId
+    ? await oidcService
+        .getAuthRequest({ authRequestId })
+        .then((e) => e.authRequest)
+        .catch(() => undefined)
+    : undefined;
 
   if (!authRequest) {
     const setting = await settingService.getPasswordComplexitySettings();
