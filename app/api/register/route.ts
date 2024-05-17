@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         username,
         email: {
           email,
-          isVerified: false,
+          isVerified: true,
         },
         password: {
           password,

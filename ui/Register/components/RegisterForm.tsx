@@ -28,7 +28,6 @@ const RegisterFormForm: React.FC<RegisterFormForm> = (props) => {
   const { handleRegisterForm, loading } = props;
   const [hidePwd, setHidePwd] = useState<boolean>(true);
   const [hideConfirmPwd, setHideConfirmPwd] = useState<boolean>(true);
-
   const { t } = useTranslation('common');
 
   const schema = object({
@@ -77,6 +76,7 @@ const RegisterFormForm: React.FC<RegisterFormForm> = (props) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { isSubmitting, isValid },
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -90,6 +90,9 @@ const RegisterFormForm: React.FC<RegisterFormForm> = (props) => {
         placeholder="Username"
         disabled={loading}
         {...register('username')}
+        onChange={(e) => {
+          setValue('username', e.target.value?.replace(/\s/g, ''));
+        }}
       />
 
       <input
