@@ -122,7 +122,8 @@ const LoginPage = (props: {
           handleSignIn={handleSignIn}
         />
 
-        {loginSettings?.passkeysType === PasskeysType.PASSKEYS_TYPE_ALLOWED && (
+        {(loginSettings?.passkeysType as unknown as string) ===
+          'PASSKEYS_TYPE_ALLOWED' && (
           <a
             className="flex self-center cursor-pointer text-[12px] font-normal text-info mb-2 mt-6"
             onClick={() => {
