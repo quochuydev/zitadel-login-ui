@@ -20,6 +20,7 @@ export default async ({ searchParams }: { searchParams: SearchParams }) => {
       authRequest={result.authRequest}
       application={result.application}
       loginSettings={result.loginSettings}
+      passwordSettings={result.passwordSettings}
       orgDisplayName={result.orgDisplayName}
       defaultUsername={result.authRequest?.loginHint}
     />

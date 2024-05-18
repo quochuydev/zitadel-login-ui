@@ -4,6 +4,8 @@ import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import { objectToQueryString } from '#/helpers/api-caller';
 import { ROUTING } from '#/helpers/router';
+import { PasswordComplexityPolicy } from '#/proto/zitadel/policy';
+import { PasskeysType } from '#/proto/zitadel/settings/v2beta/login_settings';
 import ApiService from '#/services/frontend/api.service';
 import { APILogin } from '#/types/api';
 import type { Application, AuthRequest, LoginSettings } from '#/types/zitadel';
@@ -19,10 +21,11 @@ const LoginPage = (props: {
   authRequest?: AuthRequest;
   application?: Application;
   loginSettings?: LoginSettings;
+  passwordSettings?: PasswordComplexityPolicy;
   orgDisplayName?: string;
   defaultUsername?: string;
 }) => {
-  const { appUrl, authRequest, application } = props;
+  const { appUrl, authRequest, application, loginSettings } = props;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const apiService = ApiService({ appUrl });
@@ -119,49 +122,57 @@ const LoginPage = (props: {
           handleSignIn={handleSignIn}
         />
 
-        <a
-          className="flex self-center cursor-pointer text-[12px] font-normal text-info mb-2 mt-6"
-          onClick={() => {
-            setIsLoading(true);
-
-            router.replace(
-              objectToQueryString(`/passkeys`, {
-                authRequest: authRequest?.id,
-              }),
-            );
-          }}
-        >
-          Login with passkeys
-        </a>
-
-        <div className="flex justify-between items-center">
+        {loginSettings?.passkeysType === PasskeysType.PASSKEYS_TYPE_ALLOWED && (
           <a
-            className="text-[12px] font-normal text-[#4F6679] cursor-pointer"
+            className="flex self-center cursor-pointer text-[12px] font-normal text-info mb-2 mt-6"
             onClick={() => {
               setIsLoading(true);
 
               router.replace(
-                objectToQueryString(`/password/reset`, {
+                objectToQueryString(`/passkeys`, {
                   authRequest: authRequest?.id,
                 }),
               );
             }}
           >
-            Forgot password?
+            Login with passkeys
           </a>
+        )}
 
-          <p className="text-center text-black font-normal">
-            <Link
-              className="text-info text-[15px] font-normal"
-              data-testid={'registerSwitch'}
-              onClick={() => setIsLoading(true)}
-              href={objectToQueryString(ROUTING.REGISTER, {
-                authRequest: authRequest?.id,
-              })}
-            >
-              {t('REGISTER_NOW')}
-            </Link>
-          </p>
+        <div className="flex justify-between items-center">
+          <div>
+            {!loginSettings?.hidePasswordReset && (
+              <a
+                className="text-[12px] font-normal text-[#4F6679] cursor-pointer"
+                onClick={() => {
+                  setIsLoading(true);
+
+                  router.replace(
+                    objectToQueryString(`/password/reset`, {
+                      authRequest: authRequest?.id,
+                    }),
+                  );
+                }}
+              >
+                Forgot password?
+              </a>
+            )}
+          </div>
+
+          {loginSettings?.allowRegister && (
+            <p className="text-center text-black font-normal">
+              <Link
+                className="text-info text-[15px] font-normal"
+                data-testid={'registerSwitch'}
+                onClick={() => setIsLoading(true)}
+                href={objectToQueryString(ROUTING.REGISTER, {
+                  authRequest: authRequest?.id,
+                })}
+              >
+                {t('REGISTER_NOW')}
+              </Link>
+            </p>
+          )}
         </div>
       </div>
 

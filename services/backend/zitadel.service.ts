@@ -83,6 +83,7 @@ export async function getAuthRequestInfo(params: {
   if (!authRequest) {
     const setting = await settingService.getPasswordComplexitySettings();
     result.passwordSettings = setting;
+    result.loginSettings = await settingService.getLoginSettings();
     return result;
   }
 

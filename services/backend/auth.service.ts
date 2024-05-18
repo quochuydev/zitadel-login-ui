@@ -292,18 +292,20 @@ function createSettingService(accessToken: string) {
   };
 
   return {
-    getLoginSettings: async (orgId: string) => {
+    getLoginSettings: async (orgId?: string) => {
+      const query: { orgId?: string } = {};
+
+      if (orgId) {
+        headers['x-zitadel-orgid'] = orgId;
+        query.orgId = orgId;
+      }
+
       return zitadelService
         .request<GetLoginSettings>({
           url: '/v2beta/settings/login',
-          query: {
-            orgId,
-          },
+          query,
           method: 'get',
-          headers: {
-            ...headers,
-            'x-zitadel-orgid': orgId,
-          },
+          headers,
         })
         .then((res) => res.settings);
     },

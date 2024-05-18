@@ -304,9 +304,8 @@ export type ChangePassword = {
   result: void;
 };
 
-/**
- * https://zitadel.com/docs/apis/resources/admin/admin-service-get-login-policy
- */
+//#region Setting Service
+///https://zitadel.com/docs/apis/resources/admin/admin-service-get-login-policy
 export type GetLoginSettings = {
   url: '/v2beta/settings/login';
   method: 'get';
@@ -318,8 +317,7 @@ export type GetLoginSettings = {
   };
 };
 
-/** https://zitadel.com/docs/apis/resources/settings_service/settings-service-get-login-settings
- */
+//https://zitadel.com/docs/apis/resources/settings_service/settings-service-get-login-settings
 export type GetPasswordComplexitySettings = {
   url: '/v2beta/settings/password/complexity';
   method: 'get';
@@ -331,7 +329,9 @@ export type GetPasswordComplexitySettings = {
     settings: PasswordComplexityPolicy;
   };
 };
+//#endregion
 
+//#region Session Service
 /**
  * https://zitadel.com/docs/apis/resources/session_service/session-service-list-sessions
  */
