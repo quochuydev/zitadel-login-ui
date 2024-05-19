@@ -10,6 +10,9 @@ type Configuration = {
     userId: string;
     userToken: string;
   };
+  resend: {
+    apiKey?: string;
+  };
 };
 
 const DOT_ENV_PATH = process.env.DOT_ENV_PATH;
@@ -32,6 +35,9 @@ const configurationSchema = z.object({
     userId: z.string(),
     userToken: z.string(),
   }),
+  resend: z.object({
+    apiKey: z.string().optional(),
+  }),
 });
 
 const configuration: Configuration = {
@@ -40,6 +46,9 @@ const configuration: Configuration = {
     url: process.env.ZITADEL_URL,
     userId: process.env.ZITADEL_SERVICE_USER_ID,
     userToken: process.env.ZITADEL_SERVICE_USER_TOKEN,
+  },
+  resend: {
+    apiKey: process.env.RESEND_API_KEY,
   },
 };
 

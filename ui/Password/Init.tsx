@@ -27,11 +27,7 @@ const PasswordInitPage = (props: {
       <div className="mb-[8px] ml-[30px] mr-[30px] flex h-full w-full flex-col justify-center rounded-md border-gray-300 lg:h-[484px] lg:w-[480px] lg:border lg:p-[80px]">
         <div className="m-5 flex max-w-7xl flex-col lg:m-0">
           <div className="my-4 ">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-            >
+            <form onSubmit={(e) => e.preventDefault()}>
               <div className="rounded-md shadow-sm space-y-px">
                 <div>
                   <input

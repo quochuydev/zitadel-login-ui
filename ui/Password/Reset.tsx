@@ -50,7 +50,7 @@ const PasswordResetPage = (props: {
                   setIsLoading(true);
 
                   try {
-                    const result = await apiService.request<APIRequestCode>({
+                    await apiService.request<APIRequestCode>({
                       url: '/api/users/request-code',
                       method: 'post',
                       data: {
@@ -58,13 +58,19 @@ const PasswordResetPage = (props: {
                       },
                     });
 
-                    router.replace(
-                      `${appUrl}/password/init?userID=${result.userId}&code=${result.code}&orgID=${result.orgId}`,
-                    );
+                    toastRef.current?.show({
+                      message: 'Mail has been sent!',
+                      intent: 'success',
+                    });
                   } catch (error) {
                     console.log(`debug:error`, error);
 
                     setIsLoading(false);
+
+                    toastRef.current?.show({
+                      message: 'Something wrong',
+                      intent: 'error',
+                    });
                   }
                 }}
               >

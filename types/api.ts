@@ -120,11 +120,7 @@ export type APIRequestCode = {
   data: {
     username: string;
   };
-  result: {
-    code: string;
-    userId: string;
-    orgId: string;
-  };
+  result: void;
 };
 
 export type APIVerifyCode = {

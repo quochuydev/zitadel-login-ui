@@ -4,6 +4,8 @@ import type { APIRequestCode } from '#/types/api';
 import type { GetUserByLoginName } from '#/types/zitadel';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';
+import { Resend } from 'resend';
+import configuration from '#/configuration';
 
 const schema = z.object({
   username: z.string().trim(),
@@ -40,6 +42,10 @@ export async function POST(request: NextRequest) {
         })
         .then((e) => e.user);
 
+      if (!user.human.email.isEmailVerified) {
+        throw new Error('user mail is not verified');
+      }
+
       const result = await zitadelService.request<any>({
         url: '/v2beta/users/{userId}/password_reset',
         params: {
@@ -57,11 +63,19 @@ export async function POST(request: NextRequest) {
 
       console.log('debug', result);
 
-      return {
-        code: result.verificationCode,
-        orgId: user.details.resourceOwner,
-        userId: user.id,
-      };
+      if (configuration.resend.apiKey) {
+        const resend = new Resend(configuration.resend.apiKey);
+
+        resend.emails.send({
+          from: 'onboarding@resend.dev',
+          to: 'quochuydev1@gmail.com',
+          subject: '[zitadel] change password',
+          html: `<p>
+  <strong>change password url:</strong>
+  ${`${configuration.appUrl}/password/init?userID=${result.userId}&code=${result.code}&orgID=${result.orgId}`}
+</p>`,
+        });
+      }
     },
   );
 }
