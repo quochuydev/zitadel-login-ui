@@ -9,8 +9,10 @@ test.beforeEach(async ({ page }: { page: Page }) => {
   await page.goto('https://zitadel-login-ui-v2.vercel.app/en/login');
 });
 
-test.describe('New Todo', () => {
-  test('should allow me to add todo items', async ({ page }) => {
+test.describe('Login', () => {
+  test('should authenticate me successfully and go to home page', async ({
+    page,
+  }) => {
     const username = page.getByPlaceholder('Username');
     await username.fill('e2e');
 
