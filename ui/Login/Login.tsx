@@ -5,7 +5,6 @@ import Toast from '#/components/Toast';
 import { objectToQueryString } from '#/helpers/api-caller';
 import { ROUTING } from '#/helpers/router';
 import { PasswordComplexityPolicy } from '#/proto/zitadel/policy';
-import { PasskeysType } from '#/proto/zitadel/settings/v2beta/login_settings';
 import ApiService from '#/services/frontend/api.service';
 import { APILogin } from '#/types/api';
 import type { Application, AuthRequest, LoginSettings } from '#/types/zitadel';

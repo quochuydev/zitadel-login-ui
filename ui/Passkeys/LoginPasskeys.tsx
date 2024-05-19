@@ -8,90 +8,107 @@ import { APILoginPasskey, APIStartPasskey } from '#/types/api';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
+import LoadingState from '#/components/Loading';
 
 const LoginPasskeysPage = (props: { appUrl: string }) => {
   const { appUrl } = props;
   const apiService = ApiService({ appUrl });
   const toastRef = useRef<ToastType>();
   const router = useRouter();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState<string>('');
 
   async function loginWithPasskey() {
-    const session = await apiService.request<APIStartPasskey>({
-      url: '/api/passkey/start',
-      method: 'post',
-      data: {
-        username,
-        challenges: {
-          webAuthN: {
-            domain: new URL(appUrl).hostname, //localhost
-            userVerificationRequirement:
-              'USER_VERIFICATION_REQUIREMENT_REQUIRED',
+    setIsLoading(true);
+
+    try {
+      const session = await apiService.request<APIStartPasskey>({
+        url: '/api/passkey/start',
+        method: 'post',
+        data: {
+          username,
+          challenges: {
+            webAuthN: {
+              domain: new URL(appUrl).hostname, //localhost
+              userVerificationRequirement:
+                'USER_VERIFICATION_REQUIREMENT_REQUIRED',
+            },
           },
         },
-      },
-    });
+      });
 
-    const publicKeyCredentialRequestOptions =
-      session.challenges.webAuthN.publicKeyCredentialRequestOptions;
+      const publicKeyCredentialRequestOptions =
+        session.challenges.webAuthN.publicKeyCredentialRequestOptions;
 
-    publicKeyCredentialRequestOptions.publicKey.challenge = coerceToArrayBuffer(
-      publicKeyCredentialRequestOptions.publicKey.challenge,
-    );
+      publicKeyCredentialRequestOptions.publicKey.challenge =
+        coerceToArrayBuffer(
+          publicKeyCredentialRequestOptions.publicKey.challenge,
+        );
 
-    publicKeyCredentialRequestOptions.publicKey.allowCredentials.map(
-      (listItem: any) => {
-        listItem.id = coerceToArrayBuffer(listItem.id);
-      },
-    );
-
-    const assertedCredential: any = await navigator.credentials.get({
-      publicKey: publicKeyCredentialRequestOptions.publicKey,
-    });
-
-    if (!assertedCredential) throw new Error('invalid credential');
-
-    const authData = new Uint8Array(
-      assertedCredential.response.authenticatorData,
-    );
-    const clientDataJSON = new Uint8Array(
-      assertedCredential.response.clientDataJSON,
-    );
-    const rawId = new Uint8Array(assertedCredential.rawId);
-    const sig = new Uint8Array(assertedCredential.response.signature);
-    const userHandle = new Uint8Array(assertedCredential.response.userHandle);
-
-    const data = {
-      id: assertedCredential.id,
-      rawId: coerceToBase64Url(rawId),
-      type: assertedCredential.type,
-      response: {
-        authenticatorData: coerceToBase64Url(authData),
-        clientDataJSON: coerceToBase64Url(clientDataJSON),
-        signature: coerceToBase64Url(sig),
-        userHandle: coerceToBase64Url(userHandle),
-      },
-    };
-
-    const result = await apiService.request<APILoginPasskey>({
-      url: '/api/passkey/login',
-      method: 'post',
-      data: {
-        username,
-        webAuthN: {
-          credentialAssertionData: data,
+      publicKeyCredentialRequestOptions.publicKey.allowCredentials.map(
+        (listItem: any) => {
+          listItem.id = coerceToArrayBuffer(listItem.id);
         },
-      },
-    });
+      );
 
-    console.log(`debug:result`, result);
+      const assertedCredential: any = await navigator.credentials.get({
+        publicKey: publicKeyCredentialRequestOptions.publicKey,
+      });
 
-    router.replace(ROUTING.HOME);
+      if (!assertedCredential) throw new Error('invalid credential');
+
+      const authData = new Uint8Array(
+        assertedCredential.response.authenticatorData,
+      );
+      const clientDataJSON = new Uint8Array(
+        assertedCredential.response.clientDataJSON,
+      );
+      const rawId = new Uint8Array(assertedCredential.rawId);
+      const sig = new Uint8Array(assertedCredential.response.signature);
+      const userHandle = new Uint8Array(assertedCredential.response.userHandle);
+
+      const data = {
+        id: assertedCredential.id,
+        rawId: coerceToBase64Url(rawId),
+        type: assertedCredential.type,
+        response: {
+          authenticatorData: coerceToBase64Url(authData),
+          clientDataJSON: coerceToBase64Url(clientDataJSON),
+          signature: coerceToBase64Url(sig),
+          userHandle: coerceToBase64Url(userHandle),
+        },
+      };
+
+      const result = await apiService.request<APILoginPasskey>({
+        url: '/api/passkey/login',
+        method: 'post',
+        data: {
+          username,
+          webAuthN: {
+            credentialAssertionData: data,
+          },
+        },
+      });
+
+      console.log(`debug:result`, result);
+
+      router.replace(ROUTING.HOME);
+    } catch (error) {
+      console.error(error);
+
+      toastRef.current?.show({
+        message: 'Something wrong',
+        intent: 'error',
+      });
+
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">
+      <LoadingState />
+
       <div className="flex w-full flex-col justify-center rounded-md border-gray-300 lg:w-[480px] min-h-[480px] lg:border p-5">
         <Image
           src="/images/company.png"
