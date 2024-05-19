@@ -1,7 +1,7 @@
 'use client';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
-import { coerceToArrayBuffer, coerceToBase64Url } from '#/helpers/bytes';
+import { arrayBufferToString, coerceToArrayBuffer } from '#/helpers/bytes';
 import { ROUTING } from '#/helpers/router';
 import ApiService from '#/services/frontend/api.service';
 import { APILoginPasskey, APIStartPasskey } from '#/types/api';
@@ -57,25 +57,29 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
 
       if (!assertedCredential) throw new Error('invalid credential');
 
-      const authData = new Uint8Array(
+      const rawId = arrayBufferToString(assertedCredential.rawId);
+      const signature = arrayBufferToString(
+        assertedCredential.response.signature,
+      );
+      const userHandle = arrayBufferToString(
+        assertedCredential.response.userHandle,
+      );
+      const authenticatorData = arrayBufferToString(
         assertedCredential.response.authenticatorData,
       );
-      const clientDataJSON = new Uint8Array(
+      const clientDataJSON = arrayBufferToString(
         assertedCredential.response.clientDataJSON,
       );
-      const rawId = new Uint8Array(assertedCredential.rawId);
-      const sig = new Uint8Array(assertedCredential.response.signature);
-      const userHandle = new Uint8Array(assertedCredential.response.userHandle);
 
       const data = {
         id: assertedCredential.id,
-        rawId: coerceToBase64Url(rawId),
         type: assertedCredential.type,
+        rawId,
         response: {
-          authenticatorData: coerceToBase64Url(authData),
-          clientDataJSON: coerceToBase64Url(clientDataJSON),
-          signature: coerceToBase64Url(sig),
-          userHandle: coerceToBase64Url(userHandle),
+          authenticatorData,
+          clientDataJSON,
+          signature,
+          userHandle,
         },
       };
 

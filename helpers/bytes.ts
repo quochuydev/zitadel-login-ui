@@ -1,3 +1,21 @@
+export function calculateByteSize(text: string) {
+  const utf8Bytes = new TextEncoder().encode(text);
+  return utf8Bytes.length;
+}
+
+export function atob(base64: string) {
+  return Buffer.from(base64, 'base64').toString('binary');
+}
+
+export function btoa(binary: string) {
+  return Buffer.from(binary, 'binary').toString('base64');
+}
+
+export function arrayBufferToString(arrayBuffer: ArrayBuffer): string {
+  const uint8Array = new Uint8Array(arrayBuffer);
+  return coerceToBase64Url(uint8Array);
+}
+
 export function coerceToArrayBuffer(thing: any) {
   if (typeof thing === 'string') {
     // base64url to base64
@@ -60,17 +78,4 @@ export function coerceToBase64Url(thing: any) {
   thing = thing.replace(/\+/g, '-').replace(/\//g, '_').replace(/=*$/g, '');
 
   return thing;
-}
-
-export function calculateByteSize(text: string) {
-  const utf8Bytes = new TextEncoder().encode(text);
-  return utf8Bytes.length;
-}
-
-export function atob(base64: string) {
-  return Buffer.from(base64, 'base64').toString('binary');
-}
-
-export function btoa(binary: string) {
-  return Buffer.from(binary, 'binary').toString('base64');
 }
