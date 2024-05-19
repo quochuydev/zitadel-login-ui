@@ -1,0 +1,14 @@
+{
+  "name": "todomvc-test",
+  "version": "0.0.1",
+  "scripts": {
+    "postinstall": "playwright install-deps && playwright install",
+    "test": "playwright test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.38.0"
+  }
+}

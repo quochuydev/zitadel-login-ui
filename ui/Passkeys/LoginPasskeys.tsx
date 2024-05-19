@@ -1,4 +1,5 @@
 'use client';
+import LoadingState from '#/components/Loading';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import { arrayBufferToString, coerceToArrayBuffer } from '#/helpers/bytes';
@@ -8,7 +9,6 @@ import { APILoginPasskey, APIStartPasskey } from '#/types/api';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import LoadingState from '#/components/Loading';
 
 const LoginPasskeysPage = (props: { appUrl: string }) => {
   const { appUrl } = props;
@@ -111,7 +111,7 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">
-      <LoadingState />
+      <LoadingState loading={isLoading} />
 
       <div className="flex w-full flex-col justify-center rounded-md border-gray-300 lg:w-[480px] min-h-[480px] lg:border p-5">
         <Image
