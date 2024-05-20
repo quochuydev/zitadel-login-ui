@@ -1,4 +1,4 @@
-import { handler } from '#/services/backend/oauth';
+import { handler } from '#/services/backend/oidc.service';
 
 export const dynamic = 'force-dynamic';
 
