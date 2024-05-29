@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import type { Default } from '#/helpers/api-caller';
+import type { Default } from '#/lib/api-caller';
 import * as z from 'zod';
 
 export enum ErrorCode {

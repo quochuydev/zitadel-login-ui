@@ -3,7 +3,7 @@ import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
 import ApiService from '#/services/frontend/api.service';
 import { APIVerifyCode } from '#/types/api';
-import { ROUTING } from '#/helpers/router';
+import { ROUTING } from '#/lib/router';
 import type { Application, AuthRequest } from '#/types/zitadel';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';

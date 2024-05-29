@@ -1,5 +1,5 @@
 import configuration from '#/configuration';
-import { ROUTING } from '#/helpers/router';
+import { ROUTING } from '#/lib/router';
 import AuthService, { zitadelService } from '#/services/backend/auth.service';
 import { getCurrentSessions } from '#/services/backend/zitadel.service';
 import type {

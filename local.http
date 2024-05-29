@@ -1,0 +1,50 @@
+@host = https://system-v1-fpms4l.zitadel.cloud
+@TOKEN = 
+
+###
+PUT {{host}}/admin/v1/settings/oidc
+Authorization: Bearer {{TOKEN}}
+
+{
+  "accessTokenLifetime": "604800s",
+  "idTokenLifetime": "604800s",
+  "refreshTokenIdleExpiration": "7776000s",
+  "refreshTokenExpiration": "2592000s"
+}
+
+###
+POST {{host}}/v2beta/idp_intents
+Authorization: Bearer {{TOKEN}}
+x-zitadel-orgid: 269082740639402406
+
+{
+  "idpId": "269208139239262630",
+  "urls": {
+    "successUrl": "https://login.test.garrio.de/login/externalidp/success",
+    "failureUrl": "https://login.test.garrio.de/login/externalidp/fail"
+  }
+}
+
+###
+POST {{host}}/management/v1/policies/login/idps/_search
+Authorization: Bearer {{TOKEN}}
+x-zitadel-orgid: 269082740639402406
+
+{
+
+}
+
+###
+POST {{host}}/management/v1/policies/login/idps
+Authorization: Bearer {{TOKEN}}
+x-zitadel-orgid: 269082740639402406
+
+{
+  "idpId": "269091189930592678",
+  "ownerType": "IDP_OWNER_TYPE_ORG"
+}
+
+###
+GET {{host}}/idps/callback
+
+###

@@ -2,8 +2,8 @@
 import LoadingState from '#/components/Loading';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
-import { arrayBufferToString, coerceToArrayBuffer } from '#/helpers/bytes';
-import { ROUTING } from '#/helpers/router';
+import { arrayBufferToString, coerceToArrayBuffer } from '#/lib/bytes';
+import { ROUTING } from '#/lib/router';
 import ApiService from '#/services/frontend/api.service';
 import { APILoginPasskey, APIStartPasskey } from '#/types/api';
 import Image from 'next/image';

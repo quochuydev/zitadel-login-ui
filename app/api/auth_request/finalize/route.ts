@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import AuthService from '#/services/backend/auth.service';
 import type { APIFinalizeAuthRequest } from '#/types/api';
-import { isValidRequest, defaultHandler } from '#/helpers/api-handler';
+import { isValidRequest, defaultHandler } from '#/lib/api-handler';
 import CookieService from '#/services/backend/cookie.service';
 import * as z from 'zod';
 

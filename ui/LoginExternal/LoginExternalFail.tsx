@@ -3,7 +3,7 @@
 import Button from '#/components/Button';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
-import { ROUTING } from '#/helpers/router';
+import { ROUTING } from '#/lib/router';
 import useTranslations from 'next-translate/useTranslation';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';

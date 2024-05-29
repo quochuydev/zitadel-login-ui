@@ -2,12 +2,12 @@
 'use client';
 import React from 'react';
 import ApiService from '#/services/frontend/api.service';
-import { ROUTING } from '#/helpers/router';
+import { ROUTING } from '#/lib/router';
 import type { AuthRequest, Session } from '#/types/zitadel';
 import useTranslations from 'next-translate/useTranslation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { objectToQueryString } from '#/helpers/api-caller';
+import { objectToQueryString } from '#/lib/api-caller';
 
 export default (props: {
   appUrl: string;

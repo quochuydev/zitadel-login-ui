@@ -1,8 +1,8 @@
 'use client';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
-import { ROUTING } from '#/helpers/router';
-import { getOrgIdFromAuthRequest } from '#/helpers/zitadel';
+import { ROUTING } from '#/lib/router';
+import { getOrgIdFromAuthRequest } from '#/lib/zitadel';
 import ApiService from '#/services/frontend/api.service';
 import type { APIRegister } from '#/types/api';
 import type { AuthRequest } from '#/types/zitadel';

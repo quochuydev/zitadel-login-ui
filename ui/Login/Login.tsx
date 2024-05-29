@@ -2,8 +2,8 @@
 import LoadingState from '#/components/Loading';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
-import { objectToQueryString } from '#/helpers/api-caller';
-import { ROUTING } from '#/helpers/router';
+import { objectToQueryString } from '#/lib/api-caller';
+import { ROUTING } from '#/lib/router';
 import { PasswordComplexityPolicy } from '#/proto/zitadel/policy';
 import ApiService from '#/services/frontend/api.service';
 import { APILogin } from '#/types/api';
@@ -19,7 +19,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { getOrgIdFromAuthRequest } from '#/helpers/zitadel';
+import { getOrgIdFromAuthRequest } from '#/lib/zitadel';
 
 const LoginPage = (props: {
   zitadelUrl: string;

@@ -1,4 +1,4 @@
-import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
+import { defaultHandler, isValidRequest } from '#/lib/api-handler';
 import AuthService from '#/services/backend/auth.service';
 import CookieService from '#/services/backend/cookie.service';
 import type { APILogin } from '#/types/api';

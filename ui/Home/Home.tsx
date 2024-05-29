@@ -1,6 +1,6 @@
 'use client';
 
-import { ROUTING } from '#/helpers/router';
+import { ROUTING } from '#/lib/router';
 import type { Session } from '#/types/zitadel';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';

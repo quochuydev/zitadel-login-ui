@@ -1,11 +1,11 @@
 import configuration from '#/configuration';
-import { objectToQueryString } from '#/helpers/api-caller';
-import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
+import { objectToQueryString } from '#/lib/api-caller';
+import { defaultHandler, isValidRequest } from '#/lib/api-handler';
 import AuthService from '#/services/backend/auth.service';
 import type { APIStartExternal } from '#/types/api';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';
-import { ROUTING } from '#/helpers/router';
+import { ROUTING } from '#/lib/router';
 
 const schema = z.object({
   idpId: z.string().trim(),

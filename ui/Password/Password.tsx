@@ -2,7 +2,7 @@
 import LoadingState from '#/components/Loading';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
-import { ROUTING } from '#/helpers/router';
+import { ROUTING } from '#/lib/router';
 import ApiService from '#/services/frontend/api.service';
 import type { APIChangePassword, APIFinalizeAuthRequest } from '#/types/api';
 import type { Session } from '#/types/zitadel';

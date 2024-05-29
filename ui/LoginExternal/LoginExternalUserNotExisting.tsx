@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Button from '#/components/Button';
-import { ROUTING } from '#/helpers/router';
+import { ROUTING } from '#/lib/router';
 import useTranslations from 'next-translate/useTranslation';
 import { useRouter } from 'next/navigation';
 

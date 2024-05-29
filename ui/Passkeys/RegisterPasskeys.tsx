@@ -1,8 +1,8 @@
 'use client';
 import type { ToastType } from '#/components/Toast';
 import Toast from '#/components/Toast';
-import { coerceToArrayBuffer, coerceToBase64Url } from '#/helpers/bytes';
-import { ROUTING } from '#/helpers/router';
+import { coerceToArrayBuffer, coerceToBase64Url } from '#/lib/bytes';
+import { ROUTING } from '#/lib/router';
 import ApiService from '#/services/frontend/api.service';
 import { APIVerifyPasskey } from '#/types/api';
 import Image from 'next/image';

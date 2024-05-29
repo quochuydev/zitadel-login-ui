@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import ApiService from '#/services/frontend/api.service';
-import { ROUTING } from '#/helpers/router';
+import { ROUTING } from '#/lib/router';
 import useTranslations from 'next-translate/useTranslation';
 import { useRouter } from 'next/navigation';
 

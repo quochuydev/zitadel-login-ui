@@ -1,12 +1,12 @@
 import configuration from '#/configuration';
-import { objectToQueryString } from '#/helpers/api-caller';
-import { ROUTING } from '#/helpers/router';
+import { objectToQueryString } from '#/lib/api-caller';
+import { ROUTING } from '#/lib/router';
 import {
   getIdpIdFromAuthRequest,
   getOrgIdFromAuthRequest,
   getProjectIdFromAuthRequest,
   getPromptFromAuthRequest,
-} from '#/helpers/zitadel';
+} from '#/lib/zitadel';
 import { PasswordComplexityPolicy } from '#/proto/zitadel/policy';
 import AuthService from '#/services/backend/auth.service';
 import CookieService from '#/services/backend/cookie.service';

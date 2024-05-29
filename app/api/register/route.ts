@@ -1,4 +1,4 @@
-import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
+import { defaultHandler, isValidRequest } from '#/lib/api-handler';
 import AuthService, {
   FlowType,
   Trigger,

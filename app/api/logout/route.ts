@@ -2,7 +2,7 @@ import type { NextRequest } from 'next/server';
 import AuthService from '#/services/backend/auth.service';
 import CookieService from '#/services/backend/cookie.service';
 import type { APILogout } from '#/types/api';
-import { isValidRequest, defaultHandler } from '#/helpers/api-handler';
+import { isValidRequest, defaultHandler } from '#/lib/api-handler';
 import * as z from 'zod';
 
 const schema = z.object({

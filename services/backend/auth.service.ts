@@ -1,5 +1,5 @@
 import configuration from '#/configuration';
-import { Default, TRequest, sendRequest } from '#/helpers/api-caller';
+import { Default, TRequest, sendRequest } from '#/lib/api-caller';
 import type {
   ChangePassword,
   CreateCallback,

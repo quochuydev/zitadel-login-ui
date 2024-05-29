@@ -1,5 +1,5 @@
 'use client';
-import { calculateByteSize } from '#/helpers/bytes';
+import { calculateByteSize } from '#/lib/bytes';
 import {
   loginUsernamePattern,
   lowercasePattern,
@@ -9,7 +9,7 @@ import {
   specialPattern,
   uppercasePattern,
   usernameMaxLength,
-} from '#/helpers/constants';
+} from '#/lib/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';

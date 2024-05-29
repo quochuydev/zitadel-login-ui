@@ -1,4 +1,4 @@
-import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
+import { defaultHandler, isValidRequest } from '#/lib/api-handler';
 import AuthService, { zitadelService } from '#/services/backend/auth.service';
 import type { APIRequestCode } from '#/types/api';
 import type { GetUserByLoginName } from '#/types/zitadel';

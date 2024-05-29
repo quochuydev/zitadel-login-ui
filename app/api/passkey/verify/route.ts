@@ -1,4 +1,4 @@
-import { defaultHandler, isValidRequest } from '#/helpers/api-handler';
+import { defaultHandler, isValidRequest } from '#/lib/api-handler';
 import AuthService, { zitadelService } from '#/services/backend/auth.service';
 import { APIVerifyPasskey } from '#/types/api';
 import type { VerifyPasskeyRegistration } from '#/types/zitadel';

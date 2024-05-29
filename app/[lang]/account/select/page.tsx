@@ -1,6 +1,6 @@
 import configuration from '#/configuration';
-import { objectToQueryString } from '#/helpers/api-caller';
-import { ROUTING } from '#/helpers/router';
+import { objectToQueryString } from '#/lib/api-caller';
+import { ROUTING } from '#/lib/router';
 import AuthService from '#/services/backend/auth.service';
 import { getCurrentSessions } from '#/services/backend/zitadel.service';
 import AccountSelect from '#/ui/AccountSelect/AccountSelect';
