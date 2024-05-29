@@ -126,9 +126,10 @@ const LoginPage = (props: {
 
       if (!result.authUrl) throw result;
 
-      const zitadelHost = new URL(zitadelUrl).host;
-      const forwarded = new URL(appUrl).host;
-      router.replace(result.authUrl.replace(zitadelHost, forwarded));
+      // const zitadelHost = new URL(zitadelUrl).host;
+      // const forwarded = new URL(appUrl).host;
+      // router.replace(result.authUrl.replace(zitadelHost, forwarded));
+      router.replace(result.authUrl);
     } catch (error) {
       console.error(error);
 
@@ -216,22 +217,22 @@ const LoginPage = (props: {
               </Link>
             </p>
           )}
-
-          {!!identityProviders?.length && (
-            <div className="w-full">
-              {identityProviders.map((e) => (
-                <button
-                  type="submit"
-                  className="disabled:bg-gray-300 group w-full flex justify-center py-2 border text-sm font-medium rounded-md border-black my-5"
-                  onClick={() => startExternal(e.id)}
-                  disabled={isLoading}
-                >
-                  {e.name}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
+
+        {!!identityProviders?.length && (
+          <div className="w-full">
+            {identityProviders.map((e) => (
+              <button
+                type="submit"
+                className="disabled:bg-gray-300 group w-full flex justify-center py-2 border text-sm font-medium rounded-md border-black my-5"
+                onClick={() => startExternal(e.id)}
+                disabled={isLoading}
+              >
+                {e.name}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {application?.name && (
