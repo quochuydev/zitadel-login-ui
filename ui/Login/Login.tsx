@@ -182,21 +182,6 @@ const LoginPage = (props: {
           </a>
         )}
 
-        {!!identityProviders?.length && (
-          <div className="w-full">
-            {identityProviders.map((e) => (
-              <button
-                type="submit"
-                className="disabled:bg-gray-300 group w-full flex justify-center py-2 border text-sm font-medium rounded-md border-black my-5"
-                onClick={() => startExternal(e.id)}
-                disabled={isLoading}
-              >
-                {e.name}
-              </button>
-            ))}
-          </div>
-        )}
-
         <div className="flex justify-between items-center">
           <div>
             {!loginSettings?.hidePasswordReset && (
@@ -230,6 +215,21 @@ const LoginPage = (props: {
                 {t('REGISTER_NOW')}
               </Link>
             </p>
+          )}
+
+          {!!identityProviders?.length && (
+            <div className="w-full">
+              {identityProviders.map((e) => (
+                <button
+                  type="submit"
+                  className="disabled:bg-gray-300 group w-full flex justify-center py-2 border text-sm font-medium rounded-md border-black my-5"
+                  onClick={() => startExternal(e.id)}
+                  disabled={isLoading}
+                >
+                  {e.name}
+                </button>
+              ))}
+            </div>
           )}
         </div>
       </div>
