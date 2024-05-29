@@ -157,9 +157,7 @@ function createUserService(accessToken: string) {
       return zitadelService.request<StartIdentityProviderIntent>({
         url: '/v2beta/idp_intents',
         method: 'post',
-        headers: {
-          ...headers,
-        },
+        headers,
         data,
       });
     },
@@ -326,7 +324,7 @@ function createSettingService(accessToken: string) {
         })
         .then((res) => res.settings);
     },
-    getActiveIdentityProviders: async (orgId: string) => {
+    getActiveIdentityProviders: async (orgId?: string) => {
       const result = await zitadelService.request<GetActiveIdentityProviders>({
         url: '/v2beta/settings/login/idps',
         method: 'get',

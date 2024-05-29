@@ -87,6 +87,8 @@ export async function getAuthRequestInfo(params: {
     const setting = await settingService.getPasswordComplexitySettings();
     result.passwordSettings = setting;
     result.loginSettings = await settingService.getLoginSettings();
+    result.identityProviders =
+      await settingService.getActiveIdentityProviders();
     return result;
   }
 
@@ -167,6 +169,7 @@ export async function getAuthRequestInfo(params: {
     result.loginSettings = await settingService.getLoginSettings(orgId);
     result.identityProviders =
       await settingService.getActiveIdentityProviders(orgId);
+    console.log(`debug:result.identityProviders`, result.identityProviders);
   }
 
   const projectId = getProjectIdFromAuthRequest(authRequest);

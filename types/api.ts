@@ -139,8 +139,8 @@ export type APIStartExternal = {
   url: '/api/external/start';
   method: 'post';
   data: {
+    orgId?: string;
     idpId: string;
-    orgId: string;
     authRequestId?: string;
   };
   result: {

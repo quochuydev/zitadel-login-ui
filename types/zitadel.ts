@@ -336,7 +336,7 @@ export type GetActiveIdentityProviders = {
   url: '/v2beta/settings/login/idps';
   method: 'get';
   query: {
-    orgId: string;
+    orgId?: string;
   };
   result: {
     identityProviders: IdentityProvider[];

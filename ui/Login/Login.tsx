@@ -32,8 +32,14 @@ const LoginPage = (props: {
   defaultUsername?: string;
   identityProviders?: IdentityProvider[];
 }) => {
-  const { appUrl, authRequest, application, loginSettings, identityProviders } =
-    props;
+  const {
+    zitadelUrl,
+    appUrl,
+    authRequest,
+    application,
+    loginSettings,
+    identityProviders,
+  } = props;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const apiService = ApiService({ appUrl });
@@ -112,8 +118,6 @@ const LoginPage = (props: {
     setIsLoading(true);
 
     try {
-      if (!orgId) throw new Error('missing orgId');
-
       const result = await apiService.startExternal({
         orgId,
         idpId,
@@ -183,8 +187,9 @@ const LoginPage = (props: {
             {identityProviders.map((e) => (
               <button
                 type="submit"
-                className="disabled:bg-gray-300 group relative w-full flex justify-center py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="disabled:bg-gray-300 group w-full flex justify-center py-2 border text-sm font-medium rounded-md border-black my-5"
                 onClick={() => startExternal(e.id)}
+                disabled={isLoading}
               >
                 {e.name}
               </button>

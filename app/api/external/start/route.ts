@@ -9,7 +9,7 @@ import { ROUTING } from '#/helpers/router';
 
 const schema = z.object({
   idpId: z.string().trim(),
-  orgId: z.string().trim(),
+  orgId: z.string().trim().optional(),
   authRequestId: z.string().trim().optional(),
 });
 
