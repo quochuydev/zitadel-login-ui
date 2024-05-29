@@ -7,15 +7,22 @@ import { ROUTING } from '#/helpers/router';
 import { PasswordComplexityPolicy } from '#/proto/zitadel/policy';
 import ApiService from '#/services/frontend/api.service';
 import { APILogin } from '#/types/api';
-import type { Application, AuthRequest, LoginSettings } from '#/types/zitadel';
+import type {
+  Application,
+  AuthRequest,
+  LoginSettings,
+  IdentityProvider,
+} from '#/types/zitadel';
 import SignInForm from '#/ui/Login/components/SignInForm';
 import useTranslations from 'next-translate/useTranslation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { getOrgIdFromAuthRequest } from '#/helpers/zitadel';
 
 const LoginPage = (props: {
+  zitadelUrl: string;
   appUrl: string;
   authRequest?: AuthRequest;
   application?: Application;
@@ -23,13 +30,16 @@ const LoginPage = (props: {
   passwordSettings?: PasswordComplexityPolicy;
   orgDisplayName?: string;
   defaultUsername?: string;
+  identityProviders?: IdentityProvider[];
 }) => {
-  const { appUrl, authRequest, application, loginSettings } = props;
+  const { appUrl, authRequest, application, loginSettings, identityProviders } =
+    props;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const apiService = ApiService({ appUrl });
   const toastRef = useRef<ToastType>();
   const { t } = useTranslations('common');
+  const orgId = getOrgIdFromAuthRequest(authRequest);
 
   /**
    * @see
@@ -98,6 +108,35 @@ const LoginPage = (props: {
     }
   };
 
+  async function startExternal(idpId: string) {
+    setIsLoading(true);
+
+    try {
+      if (!orgId) throw new Error('missing orgId');
+
+      const result = await apiService.startExternal({
+        orgId,
+        idpId,
+        authRequestId: authRequest?.id,
+      });
+
+      if (!result.authUrl) throw result;
+
+      const zitadelHost = new URL(zitadelUrl).host;
+      const forwarded = new URL(appUrl).host;
+      router.replace(result.authUrl.replace(zitadelHost, forwarded));
+    } catch (error) {
+      console.error(error);
+
+      toastRef.current?.show({
+        message: t('SOMETHING_WENT_WRONG'),
+        intent: 'error',
+      });
+
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       <LoadingState loading={isLoading} />
@@ -137,6 +176,20 @@ const LoginPage = (props: {
           >
             Login with passkeys
           </a>
+        )}
+
+        {!!identityProviders?.length && (
+          <div className="w-full">
+            {identityProviders.map((e) => (
+              <button
+                type="submit"
+                className="disabled:bg-gray-300 group relative w-full flex justify-center py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={() => startExternal(e.id)}
+              >
+                {e.name}
+              </button>
+            ))}
+          </div>
         )}
 
         <div className="flex justify-between items-center">

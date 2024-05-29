@@ -1,9 +1,24 @@
 import type { Configuration } from '#/configuration';
 import { Default, TRequest, sendRequest } from '#/helpers/api-caller';
-import { APIFinalizeAuthRequest, APILoginExternal } from '#/types/api';
+import {
+  APIFinalizeAuthRequest,
+  APILoginExternal,
+  APIStartExternal,
+} from '#/types/api';
 
 export default (params: Pick<Configuration, 'appUrl'>) => {
   const { appUrl } = params;
+
+  async function startExternal(
+    appUrl: string,
+    params: APIStartExternal['data'],
+  ) {
+    return sendRequest<APIStartExternal>(appUrl, {
+      url: '/api/external/start',
+      method: 'post',
+      data: params,
+    });
+  }
 
   return {
     request: <T extends Default>(params: TRequest<T>) =>
@@ -20,5 +35,7 @@ export default (params: Pick<Configuration, 'appUrl'>) => {
         method: 'post',
         data,
       }),
+    startExternal: (params: APIStartExternal['data']) =>
+      startExternal(appUrl, params),
   };
 };

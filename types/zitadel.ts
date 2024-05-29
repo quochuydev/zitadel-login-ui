@@ -92,6 +92,7 @@ import {
   SetSessionResponse,
 } from '#/proto/zitadel/session/v2beta/session_service';
 import { LoginSettings } from '#/proto/zitadel/settings/v2beta/login_settings';
+import type { IdentityProvider } from '#/types/zitadel';
 
 //#region User service
 // https://zitadel.com/docs/apis/resources/user_service/user-service-get-user-by-id
@@ -327,6 +328,18 @@ export type GetPasswordComplexitySettings = {
   };
   result: {
     settings: PasswordComplexityPolicy;
+  };
+};
+
+// https://zitadel.com/docs/apis/resources/settings_service/settings-service-get-active-identity-providers
+export type GetActiveIdentityProviders = {
+  url: '/v2beta/settings/login/idps';
+  method: 'get';
+  query: {
+    orgId: string;
+  };
+  result: {
+    identityProviders: IdentityProvider[];
   };
 };
 //#endregion

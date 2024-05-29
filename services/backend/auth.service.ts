@@ -12,6 +12,7 @@ import type {
   GetLoginSettings,
   GetMyUserHistory,
   GetPasswordComplexitySettings,
+  GetActiveIdentityProviders,
   GetSession,
   GetUserByLoginName,
   SearchApplications,
@@ -324,6 +325,18 @@ function createSettingService(accessToken: string) {
           headers,
         })
         .then((res) => res.settings);
+    },
+    getActiveIdentityProviders: async (orgId: string) => {
+      const result = await zitadelService.request<GetActiveIdentityProviders>({
+        url: '/v2beta/settings/login/idps',
+        method: 'get',
+        query: {
+          orgId,
+        },
+        headers,
+      });
+
+      return result.identityProviders || [];
     },
   };
 }

@@ -15,6 +15,7 @@ import type {
   AuthRequest,
   LoginSettings,
   Session,
+  IdentityProvider,
 } from '#/types/zitadel';
 
 export async function getCurrentSessions() {
@@ -50,6 +51,7 @@ type AuthRequestInfo = {
   orgDisplayName?: string;
   redirect?: string;
   passwordSettings?: PasswordComplexityPolicy;
+  identityProviders?: IdentityProvider[];
 };
 
 export async function getAuthRequestInfo(params: {
@@ -65,6 +67,7 @@ export async function getAuthRequestInfo(params: {
     redirect: undefined,
     orgDisplayName: undefined,
     passwordSettings: undefined,
+    identityProviders: undefined,
   };
 
   const accessToken = await AuthService.getAdminAccessToken();
@@ -148,7 +151,9 @@ export async function getAuthRequestInfo(params: {
       });
 
       if (idpIntent.authUrl) {
-        result.redirect = idpIntent.authUrl;
+        const zitadelHost = new URL(configuration.zitadel.url).host;
+        const forwarded = new URL(configuration.appUrl).host;
+        result.redirect = idpIntent.authUrl.replace(zitadelHost, forwarded);
         return result;
       }
     } catch (error) {
@@ -160,6 +165,8 @@ export async function getAuthRequestInfo(params: {
 
   if (orgId) {
     result.loginSettings = await settingService.getLoginSettings(orgId);
+    result.identityProviders =
+      await settingService.getActiveIdentityProviders(orgId);
   }
 
   const projectId = getProjectIdFromAuthRequest(authRequest);

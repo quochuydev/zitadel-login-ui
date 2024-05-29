@@ -16,6 +16,7 @@ export default async ({ searchParams }: { searchParams: SearchParams }) => {
 
   return (
     <Login
+      zitadelUrl={configuration.zitadel.url}
       appUrl={configuration.appUrl}
       authRequest={result.authRequest}
       application={result.application}
@@ -23,6 +24,7 @@ export default async ({ searchParams }: { searchParams: SearchParams }) => {
       passwordSettings={result.passwordSettings}
       orgDisplayName={result.orgDisplayName}
       defaultUsername={result.authRequest?.loginHint}
+      identityProviders={result.identityProviders}
     />
   );
 };

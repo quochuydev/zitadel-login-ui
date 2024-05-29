@@ -134,3 +134,16 @@ export type APIVerifyCode = {
   };
   result: void;
 };
+
+export type APIStartExternal = {
+  url: '/api/external/start';
+  method: 'post';
+  data: {
+    idpId: string;
+    orgId: string;
+    authRequestId?: string;
+  };
+  result: {
+    authUrl: string;
+  };
+};
