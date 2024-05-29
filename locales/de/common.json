@@ -2,5 +2,7 @@
   "WELCOME": "👋 Welcome!",
   "WELCOME_WITH_ORG_DISPLAY_NAME": "👋 Welcome to {{displayName}}",
   "SWITCH_REGISTER_PAGE": "Don't have an account?",
-  "REGISTER_NOW": "Register now"
+  "REGISTER_NOW": "Register now",
+  "LOG_IN": "Login",
+  "SOMETHING_WENT_WRONG": "Something went wrong"
 }
