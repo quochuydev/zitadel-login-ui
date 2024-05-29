@@ -47,7 +47,7 @@ export const ok = <T>(result?: T) => {
   return NextResponse.json(result || {}, { status: 200 });
 };
 
-export const error = (e) => {
+export const error = (e: any) => {
   const { code: status, errors } = transformError(e) as {
     code: number;
     errors: {
