@@ -126,10 +126,9 @@ const LoginPage = (props: {
 
       if (!result.authUrl) throw result;
 
-      // const zitadelHost = new URL(zitadelUrl).host;
-      // const forwarded = new URL(appUrl).host;
-      // router.replace(result.authUrl.replace(zitadelHost, forwarded));
-      router.replace(result.authUrl);
+      const zitadelHost = new URL(zitadelUrl).host;
+      const forwarded = new URL(appUrl).host;
+      router.replace(result.authUrl.replace(zitadelHost, forwarded));
     } catch (error) {
       console.error(error);
 

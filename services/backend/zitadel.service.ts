@@ -153,10 +153,9 @@ export async function getAuthRequestInfo(params: {
       });
 
       if (idpIntent.authUrl) {
-        // const zitadelHost = new URL(configuration.zitadel.url).host;
-        // const forwarded = new URL(configuration.appUrl).host;
-        // result.redirect = idpIntent.authUrl.replace(zitadelHost, forwarded);
-        result.redirect = idpIntent.authUrl;
+        const zitadelHost = new URL(configuration.zitadel.url).host;
+        const forwarded = new URL(configuration.appUrl).host;
+        result.redirect = idpIntent.authUrl.replace(zitadelHost, forwarded);
         return result;
       }
     } catch (error) {
