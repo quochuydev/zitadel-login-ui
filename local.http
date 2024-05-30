@@ -15,13 +15,13 @@ Authorization: Bearer {{TOKEN}}
 ###
 POST {{host}}/v2beta/idp_intents
 Authorization: Bearer {{TOKEN}}
-x-zitadel-orgid: 269082740639402406
+x-zitadel-orgid: 233613364822053113
 
 {
-  "idpId": "269208139239262630",
+  "idpId": "269237939718875401",
   "urls": {
-    "successUrl": "https://login.test.garrio.de/login/externalidp/success",
-    "failureUrl": "https://login.test.garrio.de/login/externalidp/fail"
+    "successUrl": "https://zitadel-login-ui-v2.vercel.app/login/externalidp/success",
+    "failureUrl": "https://zitadel-login-ui-v2.vercel.app/login/externalidp/fail"
   }
 }
 
