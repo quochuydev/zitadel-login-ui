@@ -1,14 +1,18 @@
-**Development**
+### Development
 
-- Clone `.env.example` file as `.env`
+#### I. Clone `.env.example` file as `.env`
 
-- Fill zitadel url to `ZITADEL_URL`
+#### II.Fill zitadel url to `ZITADEL_URL`
 
-- Create service user: get userId and fill to `ZITADEL_SERVICE_USER_ID`
+#### III.Create service user:
+
+- Update service user role `IAM_OWNER` in https://system-v1-fpms4l.zitadel.cloud/ui/console/instance/members
+
+- Get userId and fill to `ZITADEL_SERVICE_USER_ID`
 
 ![Create service user](./docs/create-service-user.png)
 
-- Create service user token: fill token to `ZITADEL_SERVICE_USER_TOKEN`
+#### IV.Create service user token: fill token to `ZITADEL_SERVICE_USER_TOKEN`
 
 ![Create service user token](./docs/service-user-token.png)
 
