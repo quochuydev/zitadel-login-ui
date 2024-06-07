@@ -6,7 +6,7 @@
 
 #### III.Create service user:
 
-- Update service user role `IAM_OWNER` in https://ZITADEL/ui/console/instance/members
+- Update service user role `IAM_OWNER` in `https://ZITADEL_URL/ui/console/instance/members`
 
 - Get userId and fill to `ZITADEL_SERVICE_USER_ID`
 
