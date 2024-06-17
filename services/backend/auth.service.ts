@@ -21,6 +21,8 @@ import type {
   StartIdentityProviderIntent,
   UpdateSession,
   UserByID,
+  RetrieveIdentityProviderIntent,
+  AddIDPLink,
 } from '#/types/zitadel';
 
 const ZitadelService = (params: { host: string }) => {
@@ -159,6 +161,38 @@ function createUserService(accessToken: string) {
         method: 'post',
         headers,
         data,
+      });
+    },
+    retrieveIdentityProviderIntent: (params: {
+      idpIntentId: string;
+      idpIntentToken: string;
+    }) => {
+      const { idpIntentId, idpIntentToken } = params;
+      return zitadelService.request<RetrieveIdentityProviderIntent>({
+        method: 'post',
+        url: '/v2beta/idp_intents/{idpIntentId}',
+        params: {
+          idpIntentId,
+        },
+        headers,
+        data: {
+          idpIntentToken,
+        },
+      });
+    },
+    addIDPLink: (userId: string, params: AddIDPLink['data']) => {
+      const { idpLink } = params;
+
+      return zitadelService.request<AddIDPLink>({
+        method: 'post',
+        url: '/v2beta/users/{userId}/links',
+        params: {
+          userId,
+        },
+        headers,
+        data: {
+          idpLink,
+        },
       });
     },
     changePassword: (params: {

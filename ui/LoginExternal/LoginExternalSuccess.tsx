@@ -31,21 +31,28 @@ export default function LoginExternalSuccess(props: LoginExternalSuccessProps) {
 
       setLoginExternalCompleted(true);
 
-      const result = await apiService.finalizeAuthRequest({
-        authRequestId,
-        userId,
-      });
+      if (authRequestId) {
+        const result = await apiService.finalizeAuthRequest({
+          authRequestId,
+          userId,
+        });
+
+        if (result.callbackUrl) {
+          router.replace(result.callbackUrl);
+          return;
+        }
+      }
 
       setFinalizeCompleted(true);
 
-      router.replace(result.callbackUrl || ROUTING.HOME);
+      router.replace(ROUTING.HOME);
     } catch (e) {
       console.log(`debug:e`, e);
     }
   };
 
   useEffect(() => {
-    if (userId && authRequestId && idpIntentId && idpIntentToken) {
+    if (userId && idpIntentId && idpIntentToken) {
       loginExternal();
     }
   }, []);

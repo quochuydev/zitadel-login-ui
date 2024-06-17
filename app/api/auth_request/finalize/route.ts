@@ -1,8 +1,8 @@
-import type { NextRequest } from 'next/server';
+import { defaultHandler, isValidRequest } from '#/lib/api-handler';
 import AuthService from '#/services/backend/auth.service';
-import type { APIFinalizeAuthRequest } from '#/types/api';
-import { isValidRequest, defaultHandler } from '#/lib/api-handler';
 import CookieService from '#/services/backend/cookie.service';
+import type { APIFinalizeAuthRequest } from '#/types/api';
+import type { NextRequest } from 'next/server';
 import * as z from 'zod';
 
 const schema = z.object({

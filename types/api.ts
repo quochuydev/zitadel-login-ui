@@ -104,7 +104,7 @@ export type APIRegister = {
 };
 
 export type APILoginExternal = {
-  url: '/api/login/external';
+  url: '/api/external/login';
   method: 'post';
   data: {
     idpIntentId: string;
@@ -145,5 +145,18 @@ export type APIStartExternal = {
   };
   result: {
     authUrl: string;
+  };
+};
+
+export type APIExternalLinkIDP = {
+  url: '/api/external/linkIdp';
+  method: 'post';
+  data: {
+    userId: string;
+    idpLink: {
+      idpId: string;
+      userId: string;
+      userName: string;
+    };
   };
 };

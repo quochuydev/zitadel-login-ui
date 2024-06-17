@@ -223,6 +223,59 @@ export type StartIdentityProviderIntent = {
   };
 };
 
+/** https://zitadel.com/docs/apis/resources/user_service/user-service-retrieve-identity-provider-intent
+ */
+export type RetrieveIdentityProviderIntent = {
+  url: '/v2beta/idp_intents/{idpIntentId}';
+  method: 'post';
+  params: {
+    idpIntentId: string;
+  };
+  data: {
+    idpIntentToken: string;
+  };
+  result: {
+    details: {
+      sequence: string;
+      changeDate: string;
+      resourceOwner: string;
+    };
+    idpInformation: {
+      oauth?: {
+        accessToken: string;
+        idToken: string;
+      };
+      ldap?: {
+        attributes: object;
+      };
+      saml?: {
+        assertion: string;
+      };
+      idpId: string;
+      userId: string;
+      userName: string;
+      rawInformation: any;
+    };
+    userId?: string;
+  };
+};
+
+// https://zitadel.com/docs/apis/resources/user_service/user-service-add-idp-link
+export type AddIDPLink = {
+  url: '/v2beta/users/{userId}/links';
+  method: 'post';
+  params: {
+    userId: string;
+  };
+  data: {
+    idpLink: {
+      idpId: string;
+      userId: string;
+      userName: string;
+    };
+  };
+};
+
 /**
  * https://zitadel.com/docs/apis/resources/user_service/user-service-register-passkey
  */

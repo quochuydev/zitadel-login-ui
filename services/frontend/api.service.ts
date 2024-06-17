@@ -9,17 +9,6 @@ import {
 export default (params: Pick<Configuration, 'appUrl'>) => {
   const { appUrl } = params;
 
-  async function startExternal(
-    appUrl: string,
-    params: APIStartExternal['data'],
-  ) {
-    return sendRequest<APIStartExternal>(appUrl, {
-      url: '/api/external/start',
-      method: 'post',
-      data: params,
-    });
-  }
-
   return {
     request: <T extends Default>(params: TRequest<T>) =>
       sendRequest(appUrl, params),
@@ -31,11 +20,15 @@ export default (params: Pick<Configuration, 'appUrl'>) => {
       }),
     loginExternal: async (data: APILoginExternal['data']) =>
       sendRequest<APILoginExternal>(appUrl, {
-        url: '/api/login/external',
+        url: '/api/external/login',
         method: 'post',
         data,
       }),
     startExternal: (params: APIStartExternal['data']) =>
-      startExternal(appUrl, params),
+      sendRequest<APIStartExternal>(appUrl, {
+        url: '/api/external/start',
+        method: 'post',
+        data: params,
+      }),
   };
 };
