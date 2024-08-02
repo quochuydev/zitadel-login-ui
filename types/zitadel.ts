@@ -339,6 +339,54 @@ export type VerifyPasskeyRegistration = {
   result: void;
 };
 
+// https://zitadel.com/docs/apis/resources/user_service_v2/user-service-register-totp
+export type RegisterTOTP = {
+  url: '/v2beta/users/{userId}/totp';
+  method: 'post';
+  params: {
+    userId: string;
+  };
+  data: {};
+  result: {
+    details: {
+      sequence: string;
+      changeDate: string;
+      resourceOwner: string;
+    };
+    uri: string;
+    secret: string;
+  };
+};
+
+// https://zitadel.com/docs/apis/resources/user_service_v2/user-service-verify-totp-registration
+export type VerifyTOTPRegistration = {
+  url: '/v2beta/users/{userId}/totp/verify';
+  method: 'post';
+  params: {
+    userId: string;
+  };
+  data: {
+    code: string;
+  };
+  result: {
+    details: {
+      sequence: string;
+      changeDate: string;
+      resourceOwner: string;
+    };
+  };
+};
+
+// https://zitadel.com/docs/apis/resources/user_service_v2/user-service-remove-totp
+export type RemoveTOTP = {
+  url: '/v2beta/users/{userId}/totp';
+  method: 'delete';
+  params: {
+    userId: string;
+  };
+  result: void;
+};
+
 /** @see https://zitadel.com/docs/apis/resources/user_service/user-service-set-password#change-password
  */
 export type ChangePassword = {

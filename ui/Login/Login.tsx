@@ -222,21 +222,6 @@ const LoginPage = (props: {
           )}
         </div>
 
-        {/* {!!identityProviders?.length && (
-          <div className="w-full">
-            {identityProviders.map((e) => (
-              <button
-                type="submit"
-                className="disabled:bg-gray-300 group w-full flex justify-center py-2 border text-sm font-medium rounded-md border-black my-5"
-                onClick={() => startExternal(e.id, true)}
-                disabled={isLoading}
-              >
-                {e.name}
-              </button>
-            ))}
-          </div>
-        )} */}
-
         {!!identityProviders?.length && (
           <div className="w-full">
             {identityProviders.map((e) => (
@@ -251,6 +236,8 @@ const LoginPage = (props: {
             ))}
           </div>
         )}
+
+        <pre className="hidden">{JSON.stringify(loginSettings, null, 2)}</pre>
       </div>
 
       {application?.name && (

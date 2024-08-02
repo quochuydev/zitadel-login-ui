@@ -160,3 +160,39 @@ export type APIExternalLinkIDP = {
     };
   };
 };
+
+// TOTP
+export type APIStartTOTP = {
+  url: '/api/totp/start';
+  method: 'post';
+  data: {
+    orgId: string;
+    userId: string;
+  };
+  result: {
+    secret: string;
+    uri: string;
+  };
+};
+
+export type APIVerifyTOTP = {
+  url: '/api/totp/verify';
+  method: 'post';
+  data: {
+    orgId: string;
+    userId: string;
+    code: string;
+  };
+  result: void;
+};
+
+export type APILoginTOTP = {
+  url: '/api/totp/login';
+  method: 'post';
+  data: {
+    username: string;
+  };
+  result: {
+    userId: string;
+  };
+};
