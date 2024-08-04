@@ -34,7 +34,7 @@ export interface UserFactor {
   id: string;
   loginName: string;
   displayName: string;
-  organisationId: string;
+  organizationId: string;
 }
 
 export interface PasswordFactor {

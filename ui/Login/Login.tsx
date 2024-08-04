@@ -22,7 +22,6 @@ import { useEffect, useRef, useState } from 'react';
 import { getOrgIdFromAuthRequest } from '#/lib/zitadel';
 
 const LoginPage = (props: {
-  zitadelUrl: string;
   appUrl: string;
   authRequest?: AuthRequest;
   application?: Application;
@@ -32,14 +31,8 @@ const LoginPage = (props: {
   defaultUsername?: string;
   identityProviders?: IdentityProvider[];
 }) => {
-  const {
-    zitadelUrl,
-    appUrl,
-    authRequest,
-    application,
-    loginSettings,
-    identityProviders,
-  } = props;
+  const { appUrl, authRequest, application, loginSettings, identityProviders } =
+    props;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const apiService = ApiService({ appUrl });
@@ -114,7 +107,7 @@ const LoginPage = (props: {
     }
   };
 
-  async function startExternal(idpId: string, shouldReplace: boolean) {
+  async function startExternal(idpId: string) {
     setIsLoading(true);
 
     try {
@@ -125,12 +118,6 @@ const LoginPage = (props: {
       });
 
       if (!result.authUrl) throw result;
-
-      if (shouldReplace) {
-        const zitadelHost = new URL(zitadelUrl).host;
-        const forwarded = new URL(appUrl).host;
-        return router.replace(result.authUrl.replace(zitadelHost, forwarded));
-      }
 
       router.replace(result.authUrl);
     } catch (error) {
@@ -228,7 +215,7 @@ const LoginPage = (props: {
               <button
                 type="submit"
                 className="disabled:bg-gray-300 group w-full flex justify-center py-2 border text-sm font-medium rounded-md border-black my-5"
-                onClick={() => startExternal(e.id, false)}
+                onClick={() => startExternal(e.id)}
                 disabled={isLoading}
               >
                 {e.name}
