@@ -222,7 +222,7 @@ const LoginPage = (props: {
           )}
         </div>
 
-        {/* {!!identityProviders?.length && (
+        {!!identityProviders?.length && (
           <div className="w-full">
             {identityProviders.map((e) => (
               <button
@@ -235,7 +235,7 @@ const LoginPage = (props: {
               </button>
             ))}
           </div>
-        )} */}
+        )}
 
         {!!identityProviders?.length && (
           <div className="w-full">
