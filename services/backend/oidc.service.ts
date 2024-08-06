@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 export async function handler(request: NextRequest) {
-  const forwarded = new URL(configuration.appUrl).host;
   const zitadelUrl = configuration.zitadel.url;
 
   const url = new URL(
@@ -16,7 +15,16 @@ export async function handler(request: NextRequest) {
 
   const headers = new Headers();
   headers.set('x-zitadel-login-client', configuration.zitadel.userId);
-  headers.set('x-zitadel-forwarded', `host="${forwarded}"`);
+  headers.set(
+    'x-zitadel-forwarded',
+    `host="${new URL(configuration.appUrl).host}"`,
+  );
+  headers.set(
+    'x-zitadel-domain',
+    `host="${new URL(configuration.appUrl).host}"`,
+  );
+  headers.set('x-zitadel-public-host', new URL(configuration.appUrl).host);
+  headers.set('x-zitadel-instance-host', new URL(zitadelUrl).host);
   contentType && headers.set('content-type', contentType);
   authorization && headers.set('authorization', authorization);
 
