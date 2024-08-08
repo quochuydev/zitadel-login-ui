@@ -6,7 +6,7 @@
     "test": "playwright test"
   },
   "keywords": [],
-  "author": "",
+  "author": "quochuydev",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.38.0"
