@@ -3,11 +3,9 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 export async function handler(request: NextRequest) {
-  const zitadelUrl = configuration.zitadel.url;
-
   const url = new URL(
     `${request.nextUrl.pathname}${request.nextUrl.search}`,
-    zitadelUrl,
+    configuration.zitadel.url,
   ).toString();
 
   const contentType = request.headers.get('content-type');
@@ -34,7 +32,7 @@ export async function handler(request: NextRequest) {
     if (response.redirected) {
       const redirect = url.includes('/oidc/v1/end_session')
         ? getPostLogoutRedirectUrl(request)
-        : response.url.replace(zitadelUrl, configuration.appUrl);
+        : response.url.replace(configuration.zitadel.url, configuration.appUrl);
 
       return NextResponse.redirect(redirect);
     }
