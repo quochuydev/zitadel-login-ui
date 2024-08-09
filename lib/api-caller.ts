@@ -53,7 +53,7 @@ export async function sendRequest<T extends Default>(
   const response = await fetch(new URL(pathUrl, appUrl).toString(), options);
   const result = await response.json();
 
-  console.log(`**** ${pathUrl} ****`, result);
+  // console.log(`**** ${pathUrl} ****`, result);
 
   if (response.status >= 400) {
     throw {

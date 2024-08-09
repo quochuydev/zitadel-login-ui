@@ -239,8 +239,9 @@ const LoginPage = (props: {
 
         {!!identityProviders?.length && (
           <div className="w-full">
-            {identityProviders.map((e) => (
+            {identityProviders.map((e, index) => (
               <button
+                key={index}
                 type="submit"
                 className="disabled:bg-gray-300 group w-full flex justify-center py-2 border text-sm font-medium rounded-md border-black my-5"
                 onClick={() => startExternal(e.id, false)}

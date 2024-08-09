@@ -1,8 +1,6 @@
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { PrismaClient } from '@prisma/client';
+import { PrismaAdapter } from './prisma-adapter';
 import NextAuth, { NextAuthOptions } from 'next-auth';
-
-const prisma = new PrismaClient();
+import { prisma } from '#/lib/prisma';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -28,28 +26,34 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    async session({ session, token }: { session; token }) {
-      const user = token.user as {
-        id: string;
-        firstName: string;
-        lastName: string;
-        orgId: string;
-        metadata: {
-          [key: string]: string;
-        };
-        roleMap: {
-          [role: string]: {
-            [orgId: string]: string;
+    async session({ session, token, ...params }: { session: any; token: any }) {
+      console.log('session', session);
+      console.log('token', token);
+      console.log('params', params);
+
+      if (token) {
+        const user = token.user as {
+          id: string;
+          firstName: string;
+          lastName: string;
+          orgId: string;
+          metadata: {
+            [key: string]: string;
+          };
+          roleMap: {
+            [role: string]: {
+              [orgId: string]: string;
+            };
           };
         };
-      };
 
-      session.sub = token.sub;
-      session.accessToken = token.accessToken;
-      session.idToken = token.idToken;
-      session.expiresAt = token.expiresAt;
-      session.error = token.error;
-      session.user = user;
+        session.sub = token.sub;
+        session.accessToken = token.accessToken;
+        session.idToken = token.idToken;
+        session.expiresAt = token.expiresAt;
+        session.error = token.error;
+        session.user = user;
+      }
 
       return session;
     },
@@ -60,7 +64,8 @@ export const authOptions: NextAuthOptions = {
       name: 'zitadel',
       type: 'oauth',
       version: '2',
-      wellKnown: `https://zitadel-login-ui-v2.vercel.app/.well-known/openid-configuration`,
+      wellKnown: `https://system-v1-fpms4l.zitadel.cloud/.well-known/openid-configuration`,
+      // wellKnown: `https://zitadel-login-ui-v2.vercel.app/.well-known/openid-configuration`,
       authorization: {
         params: {
           scope: [
@@ -82,18 +87,20 @@ export const authOptions: NextAuthOptions = {
         token_endpoint_auth_method: 'none',
       },
       async profile(profile) {
+        console.log(`debug:profile`, profile);
+
         return {
           id: profile.sub,
           name: profile.name,
-          firstName: profile.given_name,
-          lastName: profile.family_name,
           email: profile.email,
-          loginName: profile.preferred_username,
           image: profile.picture,
-          orgId: profile['urn:zitadel:iam:user:resourceowner:id'],
+          // loginName: profile.preferred_username,
+          // firstName: profile.given_name,
+          // lastName: profile.family_name,
+          // orgId: profile['urn:zitadel:iam:user:resourceowner:id'],
         };
       },
-      clientId: '243317796283431053@myapp',
+      clientId: '279635892182804286',
       httpOptions: {
         timeout: 10000,
       },
