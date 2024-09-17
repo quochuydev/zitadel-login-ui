@@ -18,12 +18,14 @@ import type {
 import Login from '#/ui/Login/Login';
 import { redirect } from 'next/navigation';
 
-type SearchParams = {
-  authRequest?: string;
-  flow?: 'add';
-};
-
-export default async ({ searchParams }: { searchParams: SearchParams }) => {
+export default async ({
+  searchParams,
+}: {
+  searchParams: {
+    authRequest?: string;
+    flow?: 'add';
+  };
+}) => {
   const { authRequest, flow } = searchParams;
 
   const result = await getAuthRequestInfo({ authRequest, flow });

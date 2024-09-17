@@ -1,10 +1,7 @@
 import configuration from '#/configuration';
-import { objectToQueryString } from '#/lib/api-caller';
-import { ROUTING } from '#/lib/router';
 import AuthService from '#/services/backend/auth.service';
 import { getCurrentSessions } from '#/services/backend/zitadel.service';
 import AccountSelect from '#/ui/AccountSelect/AccountSelect';
-import { redirect } from 'next/navigation';
 
 export default async function Page({
   searchParams: { authRequest: authRequestId },

@@ -19,14 +19,13 @@ import type { z } from 'zod';
 import { object, string } from 'zod';
 import { RegisterParams } from '../Register';
 
-type RegisterFormForm = {
-  defaultValues?: RegisterParams;
+type RegisterFormProps = {
   loading: boolean;
   handleRegisterForm: (params: RegisterParams) => Promise<void>;
 };
 
-const RegisterFormForm: React.FC<RegisterFormForm> = (props) => {
-  const { defaultValues, handleRegisterForm, loading } = props;
+const RegisterForm: React.FC<RegisterFormProps> = (props) => {
+  const { handleRegisterForm, loading } = props;
   const [hidePwd, setHidePwd] = useState<boolean>(true);
   const [hideConfirmPwd, setHideConfirmPwd] = useState<boolean>(true);
   const { t } = useTranslation('common');
@@ -81,7 +80,6 @@ const RegisterFormForm: React.FC<RegisterFormForm> = (props) => {
     formState: { isSubmitting, isValid },
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues,
   });
 
   return (
@@ -175,4 +173,4 @@ const RegisterFormForm: React.FC<RegisterFormForm> = (props) => {
   );
 };
 
-export default RegisterFormForm;
+export default RegisterForm;

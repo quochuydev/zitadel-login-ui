@@ -11,13 +11,13 @@ const schema = z.object({
   email: z.string().trim(),
   givenName: z.string().trim(),
   familyName: z.string().trim(),
-  idpIntentId: z.string().trim(),
-  idpIntentToken: z.string().trim(),
   idpLink: z.object({
     idpId: z.string().trim(),
     userId: z.string().trim(),
     userName: z.string().trim(),
   }),
+  idpIntentId: z.string().trim(),
+  idpIntentToken: z.string().trim(),
 });
 
 export async function POST(request: NextRequest) {
@@ -45,6 +45,8 @@ export async function POST(request: NextRequest) {
       } = body;
 
       const accessToken = await AuthService.getAdminAccessToken();
+      const userService = await AuthService.createUserService(accessToken);
+      const sessionService = AuthService.createSessionService(accessToken);
 
       const loginSetting = await zitadelService
         .request<GetLoginSettings>({
@@ -57,8 +59,6 @@ export async function POST(request: NextRequest) {
         .then((res) => res.settings);
 
       if (!loginSetting.allowRegister) throw new Error('Not allow register');
-
-      const userService = await AuthService.createUserService(accessToken);
 
       const userData: CreateHumanUser['data'] = {
         username,
@@ -80,8 +80,6 @@ export async function POST(request: NextRequest) {
       });
 
       const userId = user.userId;
-
-      const sessionService = AuthService.createSessionService(accessToken);
 
       const session = await sessionService.createSession({
         checks: {
