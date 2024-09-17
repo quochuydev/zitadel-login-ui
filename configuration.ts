@@ -15,16 +15,12 @@ type Configuration = {
   };
 };
 
-const DOT_ENV_PATH = process.env.DOT_ENV_PATH;
-
-if (DOT_ENV_PATH) {
-  const buffer = fs.readFileSync(path.join(process.cwd(), DOT_ENV_PATH));
+if (process.env.DOT_ENV_PATH) {
+  const dotenvPath = path.join(process.cwd(), process.env.DOT_ENV_PATH);
+  const buffer = fs.readFileSync(dotenvPath);
   const defaultConfig = dotenv.parse(buffer);
-
   Object.entries(defaultConfig).forEach(([key, value]) => {
-    if (!process.env[key]) {
-      process.env[key] = value;
-    }
+    if (!process.env[key]) process.env[key] = value;
   });
 }
 
@@ -41,11 +37,11 @@ const configurationSchema = z.object({
 });
 
 const configuration: Configuration = {
-  appUrl: process.env.APP_URL,
+  appUrl: process.env.APP_URL as string,
   zitadel: {
-    url: process.env.ZITADEL_URL,
-    userId: process.env.ZITADEL_SERVICE_USER_ID,
-    userToken: process.env.ZITADEL_SERVICE_USER_TOKEN,
+    url: process.env.ZITADEL_URL as string,
+    userId: process.env.ZITADEL_SERVICE_USER_ID as string,
+    userToken: process.env.ZITADEL_SERVICE_USER_TOKEN as string,
   },
   resend: {
     apiKey: process.env.RESEND_API_KEY,
