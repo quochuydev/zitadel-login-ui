@@ -14,16 +14,6 @@ export default async function Page({
   };
 }) {
   const sessions = await getCurrentSessions();
-
-  if (!sessions.length) {
-    return redirect(
-      objectToQueryString(ROUTING.LOGIN, {
-        authRequest: authRequestId,
-        flow: 'add',
-      }),
-    );
-  }
-
   const accessToken = await AuthService.getAdminAccessToken();
   const oidcService = AuthService.createOIDCService(accessToken);
 
