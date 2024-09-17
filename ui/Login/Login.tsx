@@ -224,7 +224,7 @@ const LoginPage = (props: {
           </div>
         )}
 
-        <pre className="hidden">{JSON.stringify(loginSettings, null, 2)}</pre>
+        {/* <pre className="hidden">{JSON.stringify(loginSettings, null, 2)}</pre> */}
       </div>
 
       {application?.name && (

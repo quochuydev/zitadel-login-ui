@@ -176,10 +176,15 @@ export type CreateHumanUser = {
       phone: string;
       isVerified: boolean;
     };
-    password: {
+    password?: {
       password: string;
       changeRequired: boolean;
     };
+    idpLinks?: Array<{
+      idpId: string;
+      userId: string;
+      userName: string;
+    }>;
   };
   result: {
     userId: string;

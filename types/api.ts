@@ -103,6 +103,27 @@ export type APIRegister = {
   };
 };
 
+export type APIExternalRegister = {
+  url: '/api/external/register';
+  method: 'post';
+  data: {
+    username: string;
+    email: string;
+    givenName: string;
+    familyName: string;
+    idpIntentId: string;
+    idpIntentToken: string;
+    idpLink: {
+      idpId: string;
+      userId: string;
+      userName: string;
+    };
+  };
+  result: {
+    userId: string;
+  };
+};
+
 export type APILoginExternal = {
   url: '/api/external/login';
   method: 'post';

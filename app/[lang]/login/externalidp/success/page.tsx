@@ -59,6 +59,8 @@ export default async ({ searchParams }: { searchParams: SearchParams }) => {
         email={email}
         idpLink={idpLink}
         appUrl={configuration.appUrl}
+        idpIntentId={idpIntentId}
+        idpIntentToken={idpIntentToken}
       />
     );
   }

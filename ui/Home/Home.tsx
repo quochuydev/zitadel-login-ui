@@ -46,7 +46,7 @@ export default (props: {
         <div className="flex w-[480px] lg:p-[40px] flex-col items-center justify-center rounded-[8px] border-gray-300 md:border">
           <h1 className="text-[42px]">👋 Welcome!</h1>
 
-          <pre className="hidden">{JSON.stringify(activeSession, null, 2)}</pre>
+          {/* <pre className="hidden">{JSON.stringify(activeSession, null, 2)}</pre> */}
 
           <Image
             width={100}

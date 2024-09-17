@@ -2,47 +2,51 @@
 import Toast, { ToastType } from '#/components/Toast';
 import { ROUTING } from '#/lib/router';
 import ApiService from '#/services/frontend/api.service';
-import { APIExternalLinkIDP, APIRegister } from '#/types/api';
-import useTranslations from 'next-translate/useTranslation';
+import { APIExternalRegister } from '#/types/api';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import { RegisterParams } from '../Register/Register';
-import RegisterForm from '../Register/components/RegisterForm';
+import { ExternalRegisterParams } from '../Register/components/ExternalRegisterForm';
+import ExternalRegisterForm from '../Register/components/ExternalRegisterForm';
 
 export default function LoginExternalUserNotExisting(props: any) {
-  const { appUrl, familyName, givenName, email, username, idpLink } = props;
+  const {
+    appUrl,
+    familyName,
+    givenName,
+    email,
+    username,
+    idpLink,
+    idpIntentId,
+    idpIntentToken,
+  } = props;
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const apiService = ApiService({ appUrl });
   const toastRef = useRef<ToastType>();
 
-  const handleRegisterForm = async (params: RegisterParams) => {
+  const handleRegisterForm = async (params: ExternalRegisterParams) => {
     setIsLoading(true);
 
     try {
-      if (!idpLink.idpId && !idpLink.userId && !idpLink.userName)
+      if (!idpLink.idpId && !idpLink.userId && !idpLink.userName) {
         throw new Error('Invalid idpLink');
+      }
 
-      const result = await apiService.request<APIRegister>({
-        url: '/api/register',
+      const result = await apiService.request<APIExternalRegister>({
+        url: '/api/external/register',
         method: 'post',
-        data: params,
+        data: {
+          idpIntentId,
+          idpIntentToken,
+          email: params.email,
+          username: params.username,
+          givenName: params.givenName,
+          familyName: params.familyName,
+          idpLink,
+        },
       });
 
       if (!result?.userId) throw result;
-
-      await apiService.request<APIExternalLinkIDP>({
-        url: '/api/external/linkIdp',
-        method: 'post',
-        data: {
-          userId: result.userId,
-          idpLink: {
-            idpId: idpLink.idpId,
-            userId: idpLink.userId,
-            userName: idpLink.userName,
-          },
-        },
-      });
 
       router.replace(ROUTING.HOME);
     } catch (error) {
@@ -67,13 +71,12 @@ export default function LoginExternalUserNotExisting(props: any) {
         </div>
 
         <div className="m-5 flex max-w-7xl flex-col lg:m-0 py-4">
-          <RegisterForm
+          <ExternalRegisterForm
             defaultValues={{
               username,
               email,
               familyName,
               givenName,
-              password: '',
             }}
             loading={isLoading}
             handleRegisterForm={handleRegisterForm}
