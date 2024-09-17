@@ -19,6 +19,8 @@ export async function handler(request: NextRequest) {
     'x-zitadel-forwarded',
     `host="${new URL(configuration.appUrl).host}"`,
   );
+  headers.set('x-zitadel-public-host', new URL(configuration.appUrl).host);
+  headers.set('x-zitadel-instance-host', zitadelUrl.replace('https://', ''));
   contentType && headers.set('content-type', contentType);
   authorization && headers.set('authorization', authorization);
 
