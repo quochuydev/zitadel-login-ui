@@ -15,10 +15,10 @@ export async function handler(request: NextRequest) {
 
   const headers = new Headers();
   headers.set('x-zitadel-login-client', configuration.zitadel.userId);
-  headers.set(
-    'x-zitadel-forwarded',
-    `host="${new URL(configuration.appUrl).host}"`,
-  );
+  // headers.set(
+  //   'x-zitadel-forwarded',
+  //   `host="${new URL(configuration.appUrl).host}"`,
+  // );
   headers.set('x-zitadel-public-host', new URL(configuration.appUrl).host);
   headers.set('x-zitadel-instance-host', zitadelUrl.replace('https://', ''));
   contentType && headers.set('content-type', contentType);
