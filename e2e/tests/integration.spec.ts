@@ -5,8 +5,10 @@ import type { Page } from '@playwright/test';
 
 test.describe.configure({ mode: 'parallel' });
 
+const appUrl = 'http://localhost:3333';
+
 test.beforeEach(async ({ page }: { page: Page }) => {
-  await page.goto('https://zitadel-login-ui-v2.vercel.app/en/login');
+  await page.goto(`${appUrl}/en/login`);
 });
 
 test.describe('Login', () => {
@@ -22,7 +24,7 @@ test.describe('Login', () => {
     const loginButton = page.getByText('Log in');
     await loginButton.click();
 
-    await page.waitForURL('https://zitadel-login-ui-v2.vercel.app/en');
+    await page.waitForURL(`${appUrl}/en`);
 
     expect(true).toBeTruthy();
   });

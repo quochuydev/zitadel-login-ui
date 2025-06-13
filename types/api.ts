@@ -170,7 +170,7 @@ export type APIStartExternal = {
 };
 
 export type APIExternalLinkIDP = {
-  url: '/api/external/linkIdp';
+  url: '/api/external/link-idp';
   method: 'post';
   data: {
     userId: string;

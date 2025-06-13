@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import * as z from 'zod';
 
 type Configuration = {
+  server: string;
   appUrl: string;
   zitadel: {
     url: string;
@@ -19,12 +20,14 @@ if (process.env.DOT_ENV_PATH) {
   const dotenvPath = path.join(process.cwd(), process.env.DOT_ENV_PATH);
   const buffer = fs.readFileSync(dotenvPath);
   const defaultConfig = dotenv.parse(buffer);
+
   Object.entries(defaultConfig).forEach(([key, value]) => {
     if (!process.env[key]) process.env[key] = value;
   });
 }
 
 const configurationSchema = z.object({
+  server: z.string(),
   appUrl: z.string(),
   zitadel: z.object({
     url: z.string(),
@@ -37,7 +40,8 @@ const configurationSchema = z.object({
 });
 
 const configuration: Configuration = {
-  appUrl: process.env.APP_URL as string,
+  server: process.env.SERVER || 'local',
+  appUrl: process.env.APP_URL || 'http://localhost:3333',
   zitadel: {
     url: process.env.ZITADEL_URL as string,
     userId: process.env.ZITADEL_SERVICE_USER_ID as string,

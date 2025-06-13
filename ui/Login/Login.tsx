@@ -21,7 +21,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { getOrgIdFromAuthRequest } from '#/lib/zitadel';
 
-const LoginPage = (props: {
+const LoginPage: React.FC<{
   appUrl: string;
   authRequest?: AuthRequest;
   application?: Application;
@@ -30,7 +30,7 @@ const LoginPage = (props: {
   orgDisplayName?: string;
   defaultUsername?: string;
   identityProviders?: IdentityProvider[];
-}) => {
+}> = (props) => {
   const { appUrl, authRequest, application, loginSettings, identityProviders } =
     props;
   const [isLoading, setIsLoading] = useState(false);

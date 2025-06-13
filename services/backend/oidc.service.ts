@@ -4,24 +4,22 @@ import { NextResponse } from 'next/server';
 
 export async function handler(request: NextRequest) {
   const zitadelUrl = configuration.zitadel.url;
+  const forwarded = new URL(configuration.appUrl).host;
 
   const url = new URL(
     `${request.nextUrl.pathname}${request.nextUrl.search}`,
     zitadelUrl,
   ).toString();
 
-  const contentType = request.headers.get('content-type');
-  const authorization = request.headers.get('authorization');
-
   const headers = new Headers();
   headers.set('x-zitadel-login-client', configuration.zitadel.userId);
-  // headers.set(
-  //   'x-zitadel-forwarded',
-  //   `host="${new URL(configuration.appUrl).host}"`,
-  // );
-  headers.set('x-zitadel-public-host', new URL(configuration.appUrl).host);
-  headers.set('x-zitadel-instance-host', zitadelUrl.replace('https://', ''));
+  headers.set('x-zitadel-forwarded', `host="${forwarded}"`);
+  headers.set('x-forwarded-proto', 'https');
+
+  const contentType = request.headers.get('content-type');
   contentType && headers.set('content-type', contentType);
+
+  const authorization = request.headers.get('authorization');
   authorization && headers.set('authorization', authorization);
 
   try {

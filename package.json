@@ -8,7 +8,8 @@
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
-    "test": "yarn prettier:check && yarn lint"
+    "test": "yarn prettier:check && yarn lint",
+    "test:e2e": "cd e2e && yarn test --headed"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"

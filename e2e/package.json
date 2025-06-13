@@ -1,14 +1,13 @@
 {
-  "name": "todomvc-test",
+  "name": "e2e",
   "version": "0.0.1",
   "scripts": {
-    "postinstall": "playwright install-deps && playwright install",
-    "test": "playwright test"
+    "test": "npx playwright test"
   },
   "keywords": [],
   "author": "quochuydev",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.38.0"
+    "@playwright/test": "1.53.0"
   }
 }

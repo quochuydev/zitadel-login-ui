@@ -1,5 +1,6 @@
 ### Document
-  https://deepwiki.com/quochuydev/zitadel-login-ui
+
+https://deepwiki.com/quochuydev/zitadel-login-ui
 
 ### Development
 
@@ -11,6 +12,12 @@
 - Get `userId` and update to env `ZITADEL_SERVICE_USER_ID`
 
 ![Create service user](./docs/create-service-user.png)
+
+**Run the app**
+
+```bash
+yarn dev
+```
 
 #### IV.Create service user token: update token to env `ZITADEL_SERVICE_USER_TOKEN`
 
