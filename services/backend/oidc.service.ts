@@ -13,7 +13,8 @@ export async function handler(request: NextRequest) {
 
   const headers = new Headers();
   headers.set('x-zitadel-login-client', configuration.zitadel.userId);
-  headers.set('x-zitadel-forwarded', `host="${forwarded}"`);
+  headers.set('x-zitadel-forwarded', `host="${forwarded}"`); // For older zitadel version
+  headers.set('x-zitadel-public-host', forwarded); // For newer Zitadel version
   headers.set('x-forwarded-proto', 'https');
 
   const contentType = request.headers.get('content-type');
