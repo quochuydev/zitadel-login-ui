@@ -1,28 +1,48 @@
-# Next.js App Router Playground
+## Document
 
-Next.js recently introduced the App Router with support for:
+https://deepwiki.com/quochuydev/zitadel-login-ui
 
-- **Layouts:** Easily share UI while preserving state and avoiding re-renders.
-- **Server Components:** Making server-first the default for the most dynamic applications.
-- **Streaming:** Display instant loading states and stream in updates.
-- **Suspense for Data Fetching:** `async`/`await` support and the `use` hook for component-level fetching.
+## Development
 
-The App Router can coexist with the existing `pages` directory for incremental adoption. While you **don't need to use the App Router** when upgrading to Next.js 13, we're laying the foundations to build complex interfaces while shipping less JavaScript.
+1. Clone `.env.example` file as `.env`
+2. Update ZITADEL url to env `ZITADEL_URL`
+3. Create service user:
+   - Update service user role `IAM_OWNER` in `https://ZITADEL_URL/ui/console/instance/members`
+   - Get `userId` and update to env `ZITADEL_SERVICE_USER_ID`
 
-## Running Locally
+   ![Create service user](./docs/create-service-user.png)
 
-1. Install dependencies:
+4. Create service user token: update token to env `ZITADEL_SERVICE_USER_TOKEN`
 
-```sh
-pnpm install
+   ![Create service user token](./docs/service-user-token.png)
+
+### Run the app
+
+```bash
+yarn dev
 ```
 
-2. Start the dev server:
+## Commands
 
-```sh
-pnpm dev
+_Useful command to add a trust domain in self host server_
+
+```
+# Add a trusted domain
+docker ps
+
+docker exec -it zitadel_postgres_container_id psql -U postgres -c "\l"
+
+docker exec -it zitadel_postgres_container_id psql -U postgres -d zitadel -c "SELECT * FROM projections.instance_trusted_domains;"
+
+docker exec -it zitadel_postgres_container_id psql -U postgres -d zitadel -c "INSERT INTO projections.instance_trusted_domains (instance_id, creation_date, change_date, sequence, domain) VALUES ('instance_ids', NOW(), NOW(), 1, 'zitadel-login-ui-v2.vercel.app');"
+
+# Verify trusted domain
+curl https://system-v1-fpms4l.zitadel.cloud/.well-known/openid-configuration \
+-H 'x-zitadel-public-host: zitadel-login-ui-v2.vercel.app'
+
+curl https://zitadel-login-ui-v2.vercel.app/.well-known/openid-configuration
 ```
 
-## Documentation
+## Demo
 
-https://nextjs.org/docs
+https://zitadel-login-ui-v2.vercel.app

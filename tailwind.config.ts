@@ -4,8 +4,8 @@ import { Config } from 'tailwindcss';
 export default {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './ui/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   future: {
     hoverOnlyWhenSupported: true,
@@ -25,6 +25,14 @@ export default {
           orange: '#F5A623',
           violet: '#7928CA',
         },
+        gray300: '#DCE0E4',
+        gray700: '#4F6679',
+        black: '#13324B',
+        silver: '#9AA7B2',
+        info: '#356BF5',
+        info100: '#E6ECFE',
+        negative: '#D84B4B',
+        negative100: '#FDDADA',
       },
       backgroundImage: ({ theme }) => ({
         'vc-border-gradient': `radial-gradient(at left top, ${theme(
