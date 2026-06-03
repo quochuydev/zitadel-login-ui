@@ -1,0 +1,19 @@
+{
+  "SAVE": "Save",
+  "CANCEL": "Cancel",
+  "SAVING": "Saving…",
+  "EDIT": "Edit",
+  "CHANGE": "Change",
+  "CONTINUE": "Continue",
+  "UPDATE": "Update",
+  "BACK": "Back",
+  "LOADING": "Loading…",
+  "REQUIRED": "Required",
+  "SOMETHING_WENT_WRONG": "Something went wrong",
+  "LANGUAGE": "Language",
+  "ACCOUNT": "Account",
+  "LOGOUT": "Logout",
+  "ADD_ANOTHER_ACCOUNT": "Add another account",
+  "VERIFIED": "Verified",
+  "NOT_VERIFIED": "Not verified"
+}

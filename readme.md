@@ -19,7 +19,20 @@ https://deepwiki.com/quochuydev/zitadel-login-ui
 ### Run the app
 
 ```bash
+cd login
+yarn install
 yarn dev
+```
+
+## Run with Docker
+
+```bash
+docker run -p 3333:3333 \
+  -e APP_URL=http://localhost:3333 \
+  -e ZITADEL_URL=<your-zitadel-url> \
+  -e ZITADEL_SERVICE_USER_ID=<service-user-id> \
+  -e ZITADEL_SERVICE_USER_TOKEN=<service-user-token> \
+  quochuydev/zitadel-login-ui:latest
 ```
 
 ## Commands
