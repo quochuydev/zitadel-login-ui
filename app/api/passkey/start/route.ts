@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
-import AuthService from '#/services/backend/auth.service';
-import CookieService from '#/services/backend/cookie.service';
+import AuthService from '#/services/auth.service';
+import CookieService from '#/services/cookie.service';
 import type { APIStartPasskey } from '#/types/api';
 import { isValidRequest, defaultHandler } from '#/lib/api-handler';
 import * as z from 'zod';

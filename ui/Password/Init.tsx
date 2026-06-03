@@ -1,12 +1,11 @@
 'use client';
-import type { ToastType } from '#/components/Toast';
-import Toast from '#/components/Toast';
-import ApiService from '#/services/frontend/api.service';
+import { Input } from '#/components/ui/input';
+import ApiService from '#/services/api.service';
 import { APIVerifyCode } from '#/types/api';
 import { ROUTING } from '#/lib/router';
 import type { Application, AuthRequest } from '#/types/zitadel';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const PasswordInitPage = (props: {
   appUrl: string;
@@ -19,7 +18,6 @@ const PasswordInitPage = (props: {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const apiService = ApiService({ appUrl });
-  const toastRef = useRef<ToastType>();
   const [password, setPassword] = useState('');
 
   return (
@@ -30,7 +28,7 @@ const PasswordInitPage = (props: {
             <form onSubmit={(e) => e.preventDefault()}>
               <div className="rounded-md shadow-sm space-y-px">
                 <div>
-                  <input
+                  <Input
                     autoFocus
                     name="password"
                     required
@@ -73,8 +71,6 @@ const PasswordInitPage = (props: {
           </div>
         </div>
       </div>
-
-      <Toast ref={toastRef} />
     </div>
   );
 };

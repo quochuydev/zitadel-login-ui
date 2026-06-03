@@ -1,4 +1,5 @@
 'use client';
+import { Input } from '#/components/ui/input';
 import { calculateByteSize } from '#/lib/bytes';
 import {
   loginUsernamePattern,
@@ -99,7 +100,7 @@ const SignInForm: React.FC<SignInForm> = (props) => {
           >
             {t('USERNAME')}
           </label>
-          <input
+          <Input
             id="username"
             type="text"
             autoFocus={!defaultUsername}
@@ -135,7 +136,7 @@ const SignInForm: React.FC<SignInForm> = (props) => {
             {t('PASSWORD')}
           </label>
           <div className="relative">
-            <input
+            <Input
               id="password"
               type={hidePwd ? 'password' : 'text'}
               autoComplete="current-password"

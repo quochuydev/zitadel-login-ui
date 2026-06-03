@@ -1,7 +1,7 @@
 import configuration from '#/configuration';
 import { ROUTING } from '#/lib/router';
-import AuthService from '#/services/backend/auth.service';
-import { getCurrentSessions } from '#/services/backend/zitadel.service';
+import AuthService from '#/services/auth.service';
+import { getCurrentSessions } from '#/services/zitadel.service';
 import RegisterTOTP from '#/ui/TOTP/RegisterTOTP';
 import { redirect } from 'next/navigation';
 

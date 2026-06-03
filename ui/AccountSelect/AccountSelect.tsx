@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 'use client';
-import LoadingState from '#/components/Loading';
+import { LoadingOverlay } from '#/components/ui/spinner';
 import { objectToQueryString } from '#/lib/api-caller';
 import { ROUTING } from '#/lib/router';
-import ApiService from '#/services/frontend/api.service';
+import ApiService from '#/services/api.service';
 import type { AuthRequest, Session } from '#/types/zitadel';
 import useTranslations from 'next-translate/useTranslation';
 import { useRouter } from 'next/navigation';
@@ -33,7 +33,7 @@ export default (props: {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center bg-gray-50 px-4 py-8 sm:py-12">
-      <LoadingState loading={isLoading} />
+      <LoadingOverlay loading={isLoading} />
 
       <div className="w-full max-w-[440px] overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
         <div className="px-6 pb-2 pt-6 sm:px-8 sm:pt-8">

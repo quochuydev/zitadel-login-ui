@@ -1,6 +1,6 @@
 import { defaultHandler, isValidRequest } from '#/lib/api-handler';
-import AuthService, { zitadelService } from '#/services/backend/auth.service';
-import CookieService from '#/services/backend/cookie.service';
+import AuthService, { zitadelService } from '#/services/auth.service';
+import CookieService from '#/services/cookie.service';
 import type { APIExternalRegister } from '#/types/api';
 import type { CreateHumanUser, GetLoginSettings } from '#/types/zitadel';
 import type { NextRequest } from 'next/server';

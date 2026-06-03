@@ -1,17 +1,16 @@
 'use client';
-import type { ToastType } from '#/components/Toast';
-import Toast from '#/components/Toast';
+import { toast } from 'sonner';
 import { objectToQueryString } from '#/lib/api-caller';
 import { ROUTING } from '#/lib/router';
 import { getOrgIdFromAuthRequest } from '#/lib/zitadel';
-import ApiService from '#/services/frontend/api.service';
+import ApiService from '#/services/api.service';
 import type { APIRegister } from '#/types/api';
 import type { AuthRequest } from '#/types/zitadel';
 import RegisterForm from '#/ui/Register/components/RegisterForm';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 export type RegisterParams = {
   username: string;
@@ -25,7 +24,6 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
   const { appUrl, authRequest } = props;
   const [isLoading, setIsLoading] = useState(false);
   const apiService = ApiService({ appUrl });
-  const toastRef = useRef<ToastType>();
   const router = useRouter();
   const orgId = getOrgIdFromAuthRequest(authRequest);
   const { t } = useTranslation('common');
@@ -55,10 +53,7 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
     } catch (error) {
       console.error(error);
 
-      toastRef.current?.show({
-        message: t('REGISTER_ERROR'),
-        intent: 'error',
-      });
+      toast.error(t('REGISTER_ERROR'));
 
       setIsLoading(false);
     }
@@ -100,8 +95,6 @@ const RegisterPage = (props: { appUrl: string; authRequest?: AuthRequest }) => {
           handleRegisterForm={handleRegisterForm}
         />
       </div>
-
-      <Toast ref={toastRef} />
     </div>
   );
 };

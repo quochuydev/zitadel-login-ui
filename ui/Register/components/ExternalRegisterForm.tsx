@@ -1,4 +1,5 @@
 'use client';
+import { Input } from '#/components/ui/input';
 import { loginUsernamePattern, usernameMaxLength } from '#/lib/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useTranslation from 'next-translate/useTranslation';
@@ -60,7 +61,7 @@ const ExternalRegisterForm: React.FC<ExternalRegisterFormProps> = (props) => {
 
   return (
     <form onSubmit={handleSubmit(handleRegisterForm)}>
-      <input
+      <Input
         required
         className="appearance-none rounded-[8px] w-full px-3 py-2 mb-[24px] border border-gray-300 placeholder-gray-300 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
         placeholder="Username"
@@ -71,7 +72,7 @@ const ExternalRegisterForm: React.FC<ExternalRegisterFormProps> = (props) => {
         }}
       />
 
-      <input
+      <Input
         required
         className="appearance-none rounded-[8px] w-full px-3 py-2 mb-[24px] border border-gray-300 placeholder-gray-300 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
         placeholder="Email"
@@ -79,7 +80,7 @@ const ExternalRegisterForm: React.FC<ExternalRegisterFormProps> = (props) => {
         {...register('email')}
       />
 
-      <input
+      <Input
         autoFocus
         required
         className="appearance-none rounded-[8px] w-full px-3 py-2 mb-[24px] border border-gray-300 placeholder-gray-300 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -88,7 +89,7 @@ const ExternalRegisterForm: React.FC<ExternalRegisterFormProps> = (props) => {
         {...register('givenName')}
       />
 
-      <input
+      <Input
         required
         className="appearance-none rounded-[8px] w-full px-3 py-2 mb-[24px] border border-gray-300 placeholder-gray-300 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
         placeholder="Family name"

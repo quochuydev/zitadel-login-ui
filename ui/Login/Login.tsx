@@ -1,11 +1,10 @@
 'use client';
-import LoadingState from '#/components/Loading';
-import type { ToastType } from '#/components/Toast';
-import Toast from '#/components/Toast';
+import { LoadingOverlay } from '#/components/ui/spinner';
+import { toast } from 'sonner';
 import { objectToQueryString } from '#/lib/api-caller';
 import { ROUTING } from '#/lib/router';
 import { PasswordComplexityPolicy } from '#/proto/zitadel/policy';
-import ApiService from '#/services/frontend/api.service';
+import ApiService from '#/services/api.service';
 import { APILogin } from '#/types/api';
 import type {
   Application,
@@ -17,7 +16,7 @@ import SignInForm from '#/ui/Login/components/SignInForm';
 import useTranslations from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getOrgIdFromAuthRequest } from '#/lib/zitadel';
 
 const LoginPage: React.FC<{
@@ -35,7 +34,6 @@ const LoginPage: React.FC<{
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const apiService = ApiService({ appUrl });
-  const toastRef = useRef<ToastType>();
   const { t } = useTranslations('common');
   const orgId = getOrgIdFromAuthRequest(authRequest);
 
@@ -93,14 +91,12 @@ const LoginPage: React.FC<{
         return;
       }
 
-      router.replace(session.callbackUrl || ROUTING.HOME);
+      // No auth request flow (no callbackUrl) → land on the account security page.
+      router.replace(session.callbackUrl || `${ROUTING.ACCOUNT}/0/security`);
     } catch (error) {
       console.error(error);
 
-      toastRef.current?.show({
-        message: t('LOGIN_ERROR'),
-        intent: 'error',
-      });
+      toast.error(t('LOGIN_ERROR'));
 
       setIsLoading(false);
     }
@@ -122,10 +118,7 @@ const LoginPage: React.FC<{
     } catch (error) {
       console.error(error);
 
-      toastRef.current?.show({
-        message: t('SOMETHING_WENT_WRONG'),
-        intent: 'error',
-      });
+      toast.error(t('SOMETHING_WENT_WRONG'));
 
       setIsLoading(false);
     }
@@ -133,7 +126,7 @@ const LoginPage: React.FC<{
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center px-4 py-8 sm:py-12">
-      <LoadingState loading={isLoading} />
+      <LoadingOverlay loading={isLoading} />
 
       <div className="w-full max-w-[440px] rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
         <h1 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:text-3xl">
@@ -231,7 +224,6 @@ const LoginPage: React.FC<{
           {t('LOGGING_IN_TO_APP', { appName: application.name })}
         </p>
       )}
-      <Toast ref={toastRef} />
     </div>
   );
 };

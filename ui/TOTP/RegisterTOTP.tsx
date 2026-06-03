@@ -1,12 +1,11 @@
 'use client';
-import type { ToastType } from '#/components/Toast';
-import Toast from '#/components/Toast';
-import ApiService from '#/services/frontend/api.service';
+import { Input } from '#/components/ui/input';
+import { toast } from 'sonner';
+import ApiService from '#/services/api.service';
 import { APIStartTOTP, APIVerifyTOTP } from '#/types/api';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { useRef } from 'react';
 import QRCode from 'qrcode.react';
 
 const RegisterTOTP = (props: {
@@ -17,7 +16,6 @@ const RegisterTOTP = (props: {
 }) => {
   const { appUrl, orgId, userId, loginName } = props;
   const apiService = ApiService({ appUrl });
-  const toastRef = useRef<ToastType>();
   const router = useRouter();
   const [qrCode, setQrCode] = React.useState<string | undefined>(undefined);
   const [verifyCode, setVerifyCode] = React.useState<string>('');
@@ -37,10 +35,7 @@ const RegisterTOTP = (props: {
     } catch (error) {
       console.log('debug', error);
 
-      toastRef.current?.show({
-        message: 'failed',
-        intent: 'error',
-      });
+      toast.error('failed');
     }
   };
 
@@ -56,19 +51,13 @@ const RegisterTOTP = (props: {
         },
       });
 
-      toastRef.current?.show({
-        message: 'successfully',
-        intent: 'success',
-      });
+      toast.success('successfully');
 
       setQrCode(undefined);
     } catch (error) {
       console.log('debug', error);
 
-      toastRef.current?.show({
-        message: 'failed',
-        intent: 'error',
-      });
+      toast.error('failed');
     }
   };
 
@@ -94,7 +83,7 @@ const RegisterTOTP = (props: {
         {qrCode && <QRCode size={200} value={qrCode} className="my-4" />}
 
         <div className="flex gap-2">
-          <input
+          <Input
             id="password"
             type={'text'}
             required
@@ -112,8 +101,6 @@ const RegisterTOTP = (props: {
           </button>
         </div>
       </div>
-
-      <Toast ref={toastRef} />
     </div>
   );
 };

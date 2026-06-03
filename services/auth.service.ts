@@ -23,6 +23,11 @@ import type {
   UserByID,
   RetrieveIdentityProviderIntent,
   AddIDPLink,
+  SetEmail,
+  SetPhone,
+  UpdateHumanUser,
+  ListPasskeys,
+  RemovePasskey,
 } from '#/types/zitadel';
 
 const ZitadelService = (params: { host: string }) => {
@@ -222,6 +227,109 @@ function createUserService(accessToken: string) {
             changeRequired: false,
             password: newPassword,
           },
+        },
+      });
+    },
+    setEmail: (params: { userId: string; orgId: string; email: string }) => {
+      const { userId, orgId, email } = params;
+
+      return zitadelService.request<SetEmail>({
+        url: '/v2beta/users/{userId}/email',
+        method: 'post',
+        params: {
+          userId,
+        },
+        headers: {
+          ...headers,
+          'x-zitadel-orgid': orgId,
+        },
+        data: {
+          email,
+          sendCode: {},
+        },
+      });
+    },
+    setPhone: (params: { userId: string; orgId: string; phone: string }) => {
+      const { userId, orgId, phone } = params;
+
+      return zitadelService.request<SetPhone>({
+        url: '/v2beta/users/{userId}/phone',
+        method: 'post',
+        params: {
+          userId,
+        },
+        headers: {
+          ...headers,
+          'x-zitadel-orgid': orgId,
+        },
+        data: {
+          phone,
+          sendCode: {},
+        },
+      });
+    },
+    updateProfile: (params: {
+      userId: string;
+      orgId: string;
+      firstName: string;
+      lastName: string;
+      username: string;
+    }) => {
+      const { userId, orgId, firstName, lastName, username } = params;
+
+      return zitadelService.request<UpdateHumanUser>({
+        url: '/v2beta/users/human/{userId}',
+        method: 'put',
+        params: {
+          userId,
+        },
+        headers: {
+          ...headers,
+          'x-zitadel-orgid': orgId,
+        },
+        data: {
+          username,
+          profile: {
+            givenName: firstName,
+            familyName: lastName,
+          },
+        },
+      });
+    },
+    listPasskeys: (params: { userId: string; orgId: string }) => {
+      const { userId, orgId } = params;
+
+      return zitadelService
+        .request<ListPasskeys>({
+          url: '/management/v1/users/{userId}/passwordless/_search',
+          method: 'post',
+          params: {
+            userId,
+          },
+          headers: {
+            ...headers,
+            'x-zitadel-orgid': orgId,
+          },
+        })
+        .then((res) => res.result || []);
+    },
+    removePasskey: (params: {
+      userId: string;
+      orgId: string;
+      passkeyId: string;
+    }) => {
+      const { userId, orgId, passkeyId } = params;
+
+      return zitadelService.request<RemovePasskey>({
+        url: '/management/v1/users/{userId}/passwordless/{passkeyId}',
+        method: 'delete',
+        params: {
+          userId,
+          passkeyId,
+        },
+        headers: {
+          ...headers,
+          'x-zitadel-orgid': orgId,
         },
       });
     },

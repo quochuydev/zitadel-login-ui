@@ -1,14 +1,14 @@
 'use client';
-import LoadingState from '#/components/Loading';
-import type { ToastType } from '#/components/Toast';
-import Toast from '#/components/Toast';
+import { Input } from '#/components/ui/input';
+import { LoadingOverlay } from '#/components/ui/spinner';
+import { toast } from 'sonner';
 import { ROUTING } from '#/lib/router';
-import ApiService from '#/services/frontend/api.service';
+import ApiService from '#/services/api.service';
 import type { APIChangePassword, APIFinalizeAuthRequest } from '#/types/api';
 import type { Session } from '#/types/zitadel';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 const Page = (props: {
   appUrl: string;
@@ -17,7 +17,6 @@ const Page = (props: {
 }) => {
   const { appUrl, authRequestId, activeSession } = props;
   const apiService = ApiService({ appUrl });
-  const toastRef = useRef<ToastType>();
   const [currentPassword, setCurrentPassword] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -38,10 +37,7 @@ const Page = (props: {
         !confirmPassword ||
         !activeSession?.factors?.user
       ) {
-        toastRef.current?.show({
-          message: 'Missing required fields',
-          intent: 'error',
-        });
+        toast.error('Missing required fields');
         return;
       }
 
@@ -71,17 +67,11 @@ const Page = (props: {
           return;
         }
       }
-      toastRef.current?.show({
-        message: 'Update password successful',
-        intent: 'success',
-      });
+      toast.success('Update password successful');
 
       router.replace(ROUTING.HOME);
     } catch (error) {
-      toastRef.current?.show({
-        message: 'Update password fail',
-        intent: 'error',
-      });
+      toast.error('Update password fail');
       setIsLoading(false);
     }
   };
@@ -122,7 +112,7 @@ const Page = (props: {
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center">
-      <LoadingState loading={isLoading} />
+      <LoadingOverlay loading={isLoading} />
 
       <div className="flex flex-col w-full max-w-lg justify-center rounded-md border-gray-300 lg:border p-5">
         <Image
@@ -154,7 +144,7 @@ const Page = (props: {
               <p className="mb-[8px] text-[12px] text-[#4F6679]">
                 CURRENT PASSWORD
               </p>
-              <input
+              <Input
                 autoFocus={true}
                 id="password"
                 name="password"
@@ -181,7 +171,7 @@ const Page = (props: {
                 NEW PASSWORD
               </p>
 
-              <input
+              <Input
                 autoFocus={true}
                 id="password"
                 name="password"
@@ -207,7 +197,7 @@ const Page = (props: {
               <p className="mb-[8px] text-[12px] text-[#4F6679]">
                 CONFIRM PASSWORD
               </p>
-              <input
+              <Input
                 autoFocus={true}
                 id="password"
                 name="password"
@@ -269,8 +259,6 @@ const Page = (props: {
           </button>
         </form>
       </div>
-
-      <Toast ref={toastRef} />
     </div>
   );
 };

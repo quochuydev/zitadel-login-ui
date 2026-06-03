@@ -1,14 +1,14 @@
 'use client';
-import LoadingState from '#/components/Loading';
-import type { ToastType } from '#/components/Toast';
-import Toast from '#/components/Toast';
+import { Input } from '#/components/ui/input';
+import { LoadingOverlay } from '#/components/ui/spinner';
+import { toast } from 'sonner';
 import { ROUTING } from '#/lib/router';
-import ApiService from '#/services/frontend/api.service';
+import ApiService from '#/services/api.service';
 import { APIRequestCode } from '#/types/api';
 import { AuthRequest } from '#/types/zitadel';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 const PasswordResetPage = (props: {
   appUrl: string;
@@ -17,7 +17,6 @@ const PasswordResetPage = (props: {
   const { appUrl, authRequest } = props;
   const [isLoading, setIsLoading] = useState(false);
   const apiService = ApiService({ appUrl });
-  const toastRef = useRef<ToastType>();
   const [username, setUsername] = useState('');
   const [sent, setSent] = useState(false);
   const { t } = useTranslation('common');
@@ -38,17 +37,11 @@ const PasswordResetPage = (props: {
       });
 
       setSent(true);
-      toastRef.current?.show({
-        message: t('PASSWORD_RESET_SENT'),
-        intent: 'success',
-      });
+      toast.success(t('PASSWORD_RESET_SENT'));
     } catch (error) {
       console.log(`debug:error`, error);
 
-      toastRef.current?.show({
-        message: t('SOMETHING_WENT_WRONG'),
-        intent: 'error',
-      });
+      toast.error(t('SOMETHING_WENT_WRONG'));
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +53,7 @@ const PasswordResetPage = (props: {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center px-4 py-8 sm:py-12">
-      <LoadingState loading={isLoading} />
+      <LoadingOverlay loading={isLoading} />
 
       <div className="w-full max-w-[440px] rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="relative mb-6 flex items-center justify-center">
@@ -134,7 +127,7 @@ const PasswordResetPage = (props: {
                 >
                   {t('USERNAME')}
                 </label>
-                <input
+                <Input
                   id="username"
                   name="username"
                   type="text"
@@ -164,8 +157,6 @@ const PasswordResetPage = (props: {
           </>
         )}
       </div>
-
-      <Toast ref={toastRef} />
     </div>
   );
 };

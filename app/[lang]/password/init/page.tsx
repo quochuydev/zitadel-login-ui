@@ -1,5 +1,5 @@
 import configuration from '#/configuration';
-import AuthService from '#/services/backend/auth.service';
+import AuthService from '#/services/auth.service';
 import PasswordInit from '#/ui/Password/Init';
 
 export default async ({

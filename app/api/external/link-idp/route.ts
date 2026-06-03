@@ -1,5 +1,5 @@
 import { defaultHandler, isValidRequest } from '#/lib/api-handler';
-import AuthService from '#/services/backend/auth.service';
+import AuthService from '#/services/auth.service';
 import type { APIExternalLinkIDP } from '#/types/api';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';

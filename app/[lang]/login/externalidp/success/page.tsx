@@ -3,7 +3,7 @@ import React from 'react';
 import configuration from '#/configuration';
 import LoginExternalSuccess from '#/ui/LoginExternal/LoginExternalSuccess';
 import LoginExternalUserNotExisting from '#/ui/LoginExternal/LoginExternalUserNotExisting';
-import AuthService from '#/services/backend/auth.service';
+import AuthService from '#/services/auth.service';
 import jwt from 'jsonwebtoken';
 
 type SearchParams = {

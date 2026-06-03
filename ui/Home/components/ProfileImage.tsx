@@ -1,6 +1,6 @@
 'use client';
 
-import ApiService from '#/services/frontend/api.service';
+import ApiService from '#/services/api.service';
 import { APILogout } from '#/types/api';
 import type { Session } from '#/types/zitadel';
 import { Menu, Transition } from '@headlessui/react';
@@ -123,7 +123,10 @@ export default function ProfileImage(props: {
                     active ? 'bg-gray-50' : ''
                   }`}
                 >
-                  <PlusIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
+                  <PlusIcon
+                    className="h-5 w-5 text-gray-500"
+                    aria-hidden="true"
+                  />
                   Add another account
                 </button>
               )}

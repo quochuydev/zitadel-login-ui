@@ -85,6 +85,52 @@ export type APIChangePassword = {
   result: void;
 };
 
+export type APIChangeEmail = {
+  url: '/api/users/email';
+  method: 'post';
+  data: {
+    orgId: string;
+    userId: string;
+    email: string;
+  };
+  result: void;
+};
+
+export type APIChangePhone = {
+  url: '/api/users/phone';
+  method: 'post';
+  data: {
+    orgId: string;
+    userId: string;
+    phone: string;
+  };
+  result: void;
+};
+
+export type APIUpdateProfile = {
+  url: '/api/users/profile';
+  method: 'post';
+  data: {
+    orgId: string;
+    userId: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+  };
+  result: void;
+};
+
+export type APIRemovePasskey = {
+  url: '/api/passkey/remove';
+  method: 'post';
+  data: {
+    orgId: string;
+    userId: string;
+    passkeyId: string;
+  };
+  result: void;
+};
+
 export type APIRegister = {
   url: '/api/register';
   method: 'post';

@@ -8,7 +8,7 @@ import {
   getPromptFromAuthRequest,
 } from '#/lib/zitadel';
 import { PasswordComplexityPolicy } from '#/proto/zitadel/policy';
-import AuthService from '#/services/backend/auth.service';
+import AuthService from '#/services/auth.service';
 import type {
   Application,
   AuthRequest,

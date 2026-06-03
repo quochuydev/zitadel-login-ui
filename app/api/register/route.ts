@@ -5,8 +5,8 @@ import AuthService, {
   flows,
   shouldTriggerAction,
   zitadelService,
-} from '#/services/backend/auth.service';
-import CookieService from '#/services/backend/cookie.service';
+} from '#/services/auth.service';
+import CookieService from '#/services/cookie.service';
 import type { APIRegister } from '#/types/api';
 import type { CreateHumanUser, GetLoginSettings } from '#/types/zitadel';
 import type { NextRequest } from 'next/server';

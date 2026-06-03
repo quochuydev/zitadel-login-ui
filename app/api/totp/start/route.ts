@@ -1,5 +1,5 @@
 import { defaultHandler, isValidRequest } from '#/lib/api-handler';
-import AuthService, { zitadelService } from '#/services/backend/auth.service';
+import AuthService, { zitadelService } from '#/services/auth.service';
 import type { APIStartTOTP } from '#/types/api';
 import { RegisterTOTP } from '#/types/zitadel';
 import type { NextRequest } from 'next/server';

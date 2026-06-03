@@ -1,19 +1,18 @@
 'use client';
-import LoadingState from '#/components/Loading';
-import type { ToastType } from '#/components/Toast';
-import Toast from '#/components/Toast';
+import { Input } from '#/components/ui/input';
+import { LoadingOverlay } from '#/components/ui/spinner';
+import { toast } from 'sonner';
 import { arrayBufferToString, coerceToArrayBuffer } from '#/lib/bytes';
 import { ROUTING } from '#/lib/router';
-import ApiService from '#/services/frontend/api.service';
+import ApiService from '#/services/api.service';
 import { APILoginTOTP, APIStartTOTP } from '#/types/api';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const LoginTOTP = (props: { appUrl: string }) => {
   const { appUrl } = props;
   const apiService = ApiService({ appUrl });
-  const toastRef = useRef<ToastType>();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState<string>('');
@@ -44,10 +43,7 @@ const LoginTOTP = (props: { appUrl: string }) => {
     } catch (error) {
       console.error(error);
 
-      toastRef.current?.show({
-        message: 'Something wrong',
-        intent: 'error',
-      });
+      toast.error('Something wrong');
 
       setIsLoading(false);
     }
@@ -55,7 +51,7 @@ const LoginTOTP = (props: { appUrl: string }) => {
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center justify-center align-middle">
-      <LoadingState loading={isLoading} />
+      <LoadingOverlay loading={isLoading} />
 
       <div className="flex w-full flex-col justify-center rounded-md border-gray-300 lg:w-[480px] min-h-[480px] lg:border p-5">
         <Image
@@ -70,7 +66,7 @@ const LoginTOTP = (props: { appUrl: string }) => {
           Welcome!
         </h2>
 
-        <input
+        <Input
           autoFocus
           name="username"
           required
@@ -89,8 +85,6 @@ const LoginTOTP = (props: { appUrl: string }) => {
           Log in with totp
         </button>
       </div>
-
-      <Toast ref={toastRef} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { defaultHandler, isValidRequest } from '#/lib/api-handler';
-import AuthService from '#/services/backend/auth.service';
-import CookieService from '#/services/backend/cookie.service';
+import AuthService from '#/services/auth.service';
+import CookieService from '#/services/cookie.service';
 import type { APILoginPasskey } from '#/types/api';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';

@@ -1,20 +1,19 @@
 'use client';
-import LoadingState from '#/components/Loading';
-import type { ToastType } from '#/components/Toast';
-import Toast from '#/components/Toast';
+import { Input } from '#/components/ui/input';
+import { LoadingOverlay } from '#/components/ui/spinner';
+import { toast } from 'sonner';
 import { arrayBufferToString, coerceToArrayBuffer } from '#/lib/bytes';
 import { ROUTING } from '#/lib/router';
-import ApiService from '#/services/frontend/api.service';
+import ApiService from '#/services/api.service';
 import { APILoginPasskey, APIStartPasskey } from '#/types/api';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const LoginPasskeysPage = (props: { appUrl: string }) => {
   const { appUrl } = props;
   const apiService = ApiService({ appUrl });
-  const toastRef = useRef<ToastType>();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState<string>('');
@@ -102,10 +101,7 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
     } catch (error) {
       console.error(error);
 
-      toastRef.current?.show({
-        message: t('SOMETHING_WENT_WRONG'),
-        intent: 'error',
-      });
+      toast.error(t('SOMETHING_WENT_WRONG'));
 
       setIsLoading(false);
     }
@@ -113,7 +109,7 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center px-4 py-8 sm:py-12">
-      <LoadingState loading={isLoading} />
+      <LoadingOverlay loading={isLoading} />
 
       <div className="w-full max-w-[440px] rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="relative mb-6 flex items-center justify-center">
@@ -154,7 +150,7 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
             >
               {t('USERNAME')}
             </label>
-            <input
+            <Input
               id="username"
               name="username"
               type="text"
@@ -183,8 +179,6 @@ const LoginPasskeysPage = (props: { appUrl: string }) => {
           </button>
         </div>
       </div>
-
-      <Toast ref={toastRef} />
     </div>
   );
 };

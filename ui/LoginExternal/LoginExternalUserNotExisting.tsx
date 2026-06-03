@@ -1,10 +1,10 @@
 'use client';
-import Toast, { ToastType } from '#/components/Toast';
+import { toast } from 'sonner';
 import { ROUTING } from '#/lib/router';
-import ApiService from '#/services/frontend/api.service';
+import ApiService from '#/services/api.service';
 import { APIExternalRegister } from '#/types/api';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { ExternalRegisterParams } from '../Register/components/ExternalRegisterForm';
 import ExternalRegisterForm from '../Register/components/ExternalRegisterForm';
 
@@ -22,7 +22,6 @@ export default function LoginExternalUserNotExisting(props: any) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const apiService = ApiService({ appUrl });
-  const toastRef = useRef<ToastType>();
 
   const handleRegisterForm = async (params: ExternalRegisterParams) => {
     setIsLoading(true);
@@ -52,10 +51,7 @@ export default function LoginExternalUserNotExisting(props: any) {
     } catch (error) {
       console.error(error);
 
-      toastRef.current?.show({
-        message: 'Register error',
-        intent: 'error',
-      });
+      toast.error('Register error');
 
       setIsLoading(false);
     }
@@ -91,8 +87,6 @@ export default function LoginExternalUserNotExisting(props: any) {
           </div>
         )}
       </div>
-
-      <Toast ref={toastRef} />
     </div>
   );
 }

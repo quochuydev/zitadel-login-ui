@@ -411,6 +411,122 @@ export type ChangePassword = {
   result: void;
 };
 
+/**
+ * https://zitadel.com/docs/apis/resources/user_service/user-service-set-email
+ */
+export type SetEmail = {
+  url: '/v2beta/users/{userId}/email';
+  method: 'post';
+  data: {
+    email: string;
+    sendCode?: object;
+    returnCode?: object;
+    isVerified?: boolean;
+  };
+  params: {
+    userId: string;
+  };
+  result: {
+    details: {
+      sequence: string;
+      changeDate: string;
+      resourceOwner: string;
+    };
+    verificationCode?: string;
+  };
+};
+
+/**
+ * https://zitadel.com/docs/apis/resources/user_service/user-service-update-human-user
+ */
+export type UpdateHumanUser = {
+  url: '/v2beta/users/human/{userId}';
+  method: 'put';
+  params: {
+    userId: string;
+  };
+  data: {
+    username?: string;
+    profile?: {
+      givenName: string;
+      familyName: string;
+      nickName?: string;
+      displayName?: string;
+      preferredLanguage?: string;
+      gender?: string;
+    };
+  };
+  result: {
+    details: {
+      sequence: string;
+      changeDate: string;
+      resourceOwner: string;
+    };
+  };
+};
+
+/**
+ * https://zitadel.com/docs/apis/resources/mgmt/management-service-list-human-passwordless
+ */
+export type ListPasskeys = {
+  url: '/management/v1/users/{userId}/passwordless/_search';
+  method: 'post';
+  params: {
+    userId: string;
+  };
+  result: {
+    result?: Array<{
+      id: string;
+      name: string;
+      state: string;
+    }>;
+  };
+};
+
+/**
+ * https://zitadel.com/docs/apis/resources/mgmt/management-service-remove-human-passwordless
+ */
+export type RemovePasskey = {
+  url: '/management/v1/users/{userId}/passwordless/{passkeyId}';
+  method: 'delete';
+  params: {
+    userId: string;
+    passkeyId: string;
+  };
+  result: {
+    details: {
+      sequence: string;
+      changeDate: string;
+      resourceOwner: string;
+    };
+  };
+};
+
+/**
+ * https://zitadel.com/docs/apis/resources/user_service/user-service-set-phone
+ */
+export type SetPhone = {
+  url: '/v2beta/users/{userId}/phone';
+  method: 'post';
+  data: {
+    phone: string;
+    sendCode?: object;
+    returnCode?: object;
+    isVerified?: boolean;
+  };
+  params: {
+    userId: string;
+  };
+  result: {
+    details: {
+      sequence: string;
+      changeDate: string;
+      resourceOwner: string;
+    };
+    verificationCode?: string;
+  };
+};
+
 //#region Setting Service
 ///https://zitadel.com/docs/apis/resources/admin/admin-service-get-login-policy
 export type GetLoginSettings = {

@@ -1,5 +1,5 @@
 import { defaultHandler, isValidRequest } from '#/lib/api-handler';
-import AuthService, { zitadelService } from '#/services/backend/auth.service';
+import AuthService, { zitadelService } from '#/services/auth.service';
 import type { APIVerifyCode } from '#/types/api';
 import type { NextRequest } from 'next/server';
 import * as z from 'zod';

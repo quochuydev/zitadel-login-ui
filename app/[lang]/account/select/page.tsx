@@ -1,6 +1,6 @@
 import configuration from '#/configuration';
-import AuthService from '#/services/backend/auth.service';
-import { getCurrentSessions } from '#/services/backend/zitadel.service';
+import AuthService from '#/services/auth.service';
+import { getCurrentSessions } from '#/services/zitadel.service';
 import AccountSelect from '#/ui/AccountSelect/AccountSelect';
 
 export default async function Page({

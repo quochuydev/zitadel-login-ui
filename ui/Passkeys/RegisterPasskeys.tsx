@@ -1,13 +1,12 @@
 'use client';
-import type { ToastType } from '#/components/Toast';
-import Toast from '#/components/Toast';
+import { toast } from 'sonner';
 import { coerceToArrayBuffer, coerceToBase64Url } from '#/lib/bytes';
 import { ROUTING } from '#/lib/router';
-import ApiService from '#/services/frontend/api.service';
+import ApiService from '#/services/api.service';
 import { APIVerifyPasskey } from '#/types/api';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const RegisterPasskeysPage = (props: {
   appUrl: string;
@@ -26,7 +25,6 @@ const RegisterPasskeysPage = (props: {
     loginName,
   } = props;
   const apiService = ApiService({ appUrl });
-  const toastRef = useRef<ToastType>();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation('common');
@@ -89,10 +87,7 @@ const RegisterPasskeysPage = (props: {
         router.replace(ROUTING.HOME);
       } catch (error) {
         console.log('debug', error);
-        toastRef.current?.show({
-          message: t('SOMETHING_WENT_WRONG'),
-          intent: 'error',
-        });
+        toast.error(t('SOMETHING_WENT_WRONG'));
         setIsLoading(false);
       }
     }
@@ -127,8 +122,6 @@ const RegisterPasskeysPage = (props: {
           {isLoading ? t('LOADING') : t('REGISTER_PASSKEY')}
         </button>
       </div>
-
-      <Toast ref={toastRef} />
     </div>
   );
 };

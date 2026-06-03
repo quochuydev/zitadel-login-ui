@@ -1,4 +1,5 @@
 'use client';
+import { Input } from '#/components/ui/input';
 import { calculateByteSize } from '#/lib/bytes';
 import {
   loginUsernamePattern,
@@ -106,7 +107,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
           >
             {t('USERNAME')}
           </label>
-          <input
+          <Input
             id="username"
             type="text"
             autoCapitalize="none"
@@ -142,7 +143,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
           >
             {t('EMAIL')}
           </label>
-          <input
+          <Input
             id="email"
             type="email"
             autoCapitalize="none"
@@ -177,7 +178,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
             >
               {t('GIVEN_NAME')}
             </label>
-            <input
+            <Input
               id="givenName"
               type="text"
               autoComplete="given-name"
@@ -210,7 +211,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
             >
               {t('FAMILY_NAME')}
             </label>
-            <input
+            <Input
               id="familyName"
               type="text"
               autoComplete="family-name"
@@ -244,7 +245,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
             {t('PASSWORD')}
           </label>
           <div className="relative">
-            <input
+            <Input
               id="password"
               type={hidePwd ? 'password' : 'text'}
               autoComplete="new-password"
@@ -315,7 +316,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
             {t('CONFIRM_PASSWORD')}
           </label>
           <div className="relative">
-            <input
+            <Input
               id="confirmPassword"
               type={hideConfirmPwd ? 'password' : 'text'}
               autoComplete="new-password"

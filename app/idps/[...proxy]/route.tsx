@@ -1,4 +1,4 @@
-import { handler } from '#/services/backend/oidc.service';
+import { handler } from '#/services/oidc.service';
 
 export const dynamic = 'force-dynamic';
 
