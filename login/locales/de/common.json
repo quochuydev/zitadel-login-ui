@@ -1,0 +1,19 @@
+{
+  "SAVE": "Speichern",
+  "CANCEL": "Abbrechen",
+  "SAVING": "Speichert…",
+  "EDIT": "Bearbeiten",
+  "CHANGE": "Ändern",
+  "CONTINUE": "Weiter",
+  "UPDATE": "Aktualisieren",
+  "BACK": "Zurück",
+  "LOADING": "Lädt…",
+  "REQUIRED": "Pflichtfeld",
+  "SOMETHING_WENT_WRONG": "Etwas ist schiefgelaufen",
+  "LANGUAGE": "Sprache",
+  "ACCOUNT": "Konto",
+  "LOGOUT": "Abmelden",
+  "ADD_ANOTHER_ACCOUNT": "Weiteres Konto hinzufügen",
+  "VERIFIED": "Verifiziert",
+  "NOT_VERIFIED": "Nicht verifiziert"
+}

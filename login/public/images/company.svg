@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="125" height="47" viewBox="0 0 125 47" fill="none">
+  <rect x="2" y="8" width="31" height="31" rx="8" fill="#356BF5" />
+  <path d="M17.5 15.5 25 19v5.5c0 4.2-3.2 8-7.5 9-4.3-1-7.5-4.8-7.5-9V19l7.5-3.5Z" fill="#fff" fill-opacity=".92" />
+  <text x="41" y="29" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="600" fill="#13324B">Company</text>
+</svg>

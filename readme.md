@@ -7,6 +7,7 @@ https://deepwiki.com/quochuydev/zitadel-login-ui
 1. Clone `.env.example` file as `.env`
 2. Update ZITADEL url to env `ZITADEL_URL`
 3. Create service user:
+
    - Update service user role `IAM_OWNER` in `https://ZITADEL_URL/ui/console/instance/members`
    - Get `userId` and update to env `ZITADEL_SERVICE_USER_ID`
 
@@ -19,8 +20,25 @@ https://deepwiki.com/quochuydev/zitadel-login-ui
 ### Run the app
 
 ```bash
+cd login
+yarn install
 yarn dev
 ```
+
+## Run with Docker
+
+```bash
+docker run -p 3333:3333 \
+  -e APP_URL=http://localhost:3333 \
+  -e ZITADEL_URL=<your-zitadel-url> \
+  -e ZITADEL_SERVICE_USER_ID=<service-user-id> \
+  -e ZITADEL_SERVICE_USER_TOKEN=<service-user-token> \
+  quochuydev/zitadel-login-ui:latest
+```
+
+## Deploy (Vercel)
+
+Set the project **Root Directory** to `login` (Project Settings → General).
 
 ## Commands
 
