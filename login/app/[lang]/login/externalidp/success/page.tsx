@@ -13,7 +13,8 @@ type SearchParams = {
   user?: string;
 };
 
-export default async ({ searchParams }: { searchParams: SearchParams }) => {
+export default async (props: { searchParams: Promise<SearchParams> }) => {
+  const searchParams = await props.searchParams;
   const {
     id: idpIntentId,
     token: idpIntentToken,

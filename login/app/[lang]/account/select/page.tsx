@@ -3,13 +3,15 @@ import AuthService from '#/services/auth.service';
 import { getCurrentSessions } from '#/services/zitadel.service';
 import AccountSelect from '#/ui/AccountSelect/AccountSelect';
 
-export default async function Page({
-  searchParams: { authRequest: authRequestId },
-}: {
-  searchParams: {
+export default async function Page(props: {
+  searchParams: Promise<{
     authRequest?: string;
-  };
+  }>;
 }) {
+  const searchParams = await props.searchParams;
+
+  const { authRequest: authRequestId } = searchParams;
+
   const sessions = await getCurrentSessions();
   const accessToken = await AuthService.getAdminAccessToken();
   const oidcService = AuthService.createOIDCService(accessToken);

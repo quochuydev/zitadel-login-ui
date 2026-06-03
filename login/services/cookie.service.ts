@@ -30,8 +30,8 @@ const parse = (stringified?: string): SessionCookie[] => {
 const SESSION_COOKIE_NAME = 'sessions';
 const SESSION_COOKIE_CHUNK_SIZE = 2000;
 
-function getAllSessions(): SessionCookie[] {
-  const requestCookie = cookies();
+async function getAllSessions(): Promise<SessionCookie[]> {
+  const requestCookie = await cookies();
   const cookieList = requestCookie.getAll();
 
   const chunks: Array<{ name: string; value: string }> = [];
@@ -72,8 +72,8 @@ function splitTextIntoChunks(
   return chunks;
 }
 
-function setSessionHttpOnlyCookie(sessions: SessionCookie[]) {
-  const requestCookie = cookies();
+async function setSessionHttpOnlyCookie(sessions: SessionCookie[]) {
+  const requestCookie = await cookies();
   const value = stringify(sessions.slice(0, 5));
   const textChunks = splitTextIntoChunks(value);
 
@@ -95,7 +95,7 @@ function setSessionHttpOnlyCookie(sessions: SessionCookie[]) {
 }
 
 async function addSessionToCookie(session: SessionCookie) {
-  let currentSessions = getAllSessions();
+  let currentSessions = await getAllSessions();
   const index = currentSessions.findIndex((s) => s.userId === session.userId);
 
   if (index > -1) {
@@ -104,34 +104,34 @@ async function addSessionToCookie(session: SessionCookie) {
     currentSessions = [session, ...currentSessions];
   }
 
-  setSessionHttpOnlyCookie(currentSessions.filter((e) => !!e));
+  await setSessionHttpOnlyCookie(currentSessions.filter((e) => !!e));
 }
 
 async function updateSessionCookie(sessionId: string, session: SessionCookie) {
-  const sessions = getAllSessions();
+  const sessions = await getAllSessions();
 
   const currentSessions = sessions.length ? sessions : [session];
   const index = currentSessions.findIndex((e) => e.sessionId === sessionId);
 
   if (index > -1) {
     currentSessions[index] = session;
-    setSessionHttpOnlyCookie(currentSessions);
+    await setSessionHttpOnlyCookie(currentSessions);
   }
 }
 
-function removeSessionFromCookie(sessionId: string) {
-  const sessions = getAllSessions();
+async function removeSessionFromCookie(sessionId: string) {
+  const sessions = await getAllSessions();
   const filteredSessions = sessions.filter((s) => s.sessionId !== sessionId);
-  setSessionHttpOnlyCookie(filteredSessions);
+  await setSessionHttpOnlyCookie(filteredSessions);
 }
 
-function getSessionCookieByUserId(userId: string) {
-  const sessions = getAllSessions();
+async function getSessionCookieByUserId(userId: string) {
+  const sessions = await getAllSessions();
   return sessions.find((s) => s.userId === userId);
 }
 
-function getSessionCookieById(id: string) {
-  const sessions = getAllSessions();
+async function getSessionCookieById(id: string) {
+  const sessions = await getAllSessions();
   return sessions.find((s) => s.sessionId === id);
 }
 

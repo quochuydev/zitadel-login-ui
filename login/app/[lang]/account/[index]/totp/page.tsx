@@ -5,7 +5,11 @@ import { getCurrentSessions } from '#/services/zitadel.service';
 import RegisterTOTP from '#/ui/TOTP/RegisterTOTP';
 import { redirect } from 'next/navigation';
 
-export default async ({ params: { index } }: { params: { index: number } }) => {
+export default async (props: { params: Promise<{ index: number }> }) => {
+  const params = await props.params;
+
+  const { index } = params;
+
   const sessions = await getCurrentSessions();
   const session = sessions[index];
   if (!session.factors?.user) redirect(ROUTING.LOGIN);

@@ -2,16 +2,15 @@ import configuration from '#/configuration';
 import AuthService from '#/services/auth.service';
 import PasswordInit from '#/ui/Password/Init';
 
-export default async ({
-  searchParams,
-}: {
-  searchParams: {
+export default async (props: {
+  searchParams: Promise<{
     authRequest?: string;
     userID: string;
     code: string;
     orgID: string;
-  };
+  }>;
 }) => {
+  const searchParams = await props.searchParams;
   const {
     authRequest: authRequestId,
     userID: userId,

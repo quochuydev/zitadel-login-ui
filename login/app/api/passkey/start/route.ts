@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
       const userId = session.factors.user.id;
 
-      CookieService.addSessionToCookie({
+      await CookieService.addSessionToCookie({
         sessionId: newSession.sessionId,
         sessionToken: newSession.sessionToken,
         userId,

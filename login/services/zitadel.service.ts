@@ -3,7 +3,9 @@ import CookieService from '#/services/cookie.service';
 import type { Session } from '#/types/zitadel';
 
 export async function getCurrentSessions() {
-  const sessionIds = CookieService.getAllSessions().map((e) => e.sessionId);
+  const sessionIds = (await CookieService.getAllSessions()).map(
+    (e) => e.sessionId,
+  );
   if (!sessionIds.length) return [];
 
   const accessToken = await AuthService.getAdminAccessToken();

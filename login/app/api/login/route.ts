@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      CookieService.addSessionToCookie({
+      await CookieService.addSessionToCookie({
         sessionId: newSession.sessionId,
         sessionToken: newSession.sessionToken,
         userId,

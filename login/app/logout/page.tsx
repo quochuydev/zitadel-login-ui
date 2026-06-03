@@ -4,9 +4,12 @@ import type { Session } from '#/types/zitadel';
 import { redirect } from 'next/navigation';
 import { ROUTING } from '#/lib/router';
 
-export default async ({ searchParams }: any) => {
+export default async (props: any) => {
+  const searchParams = await props.searchParams;
   const { post_logout_redirect } = searchParams;
-  const sessionIds = CookieService.getAllSessions().map((e) => e.sessionId);
+  const sessionIds = (await CookieService.getAllSessions()).map(
+    (e) => e.sessionId,
+  );
 
   const accessToken = await AuthService.getAdminAccessToken();
   const sessionService = AuthService.createSessionService(accessToken);
@@ -26,7 +29,7 @@ export default async ({ searchParams }: any) => {
     : [];
 
   const removeSession = async (session: Session) => {
-    const sessionCookie = CookieService.getSessionCookieById(session.id);
+    const sessionCookie = await CookieService.getSessionCookieById(session.id);
 
     if (sessionCookie) {
       await sessionService.deleteSession({

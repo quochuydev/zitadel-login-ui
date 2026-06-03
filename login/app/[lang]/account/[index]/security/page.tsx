@@ -6,11 +6,13 @@ import AuthService from '#/services/auth.service';
 import { getCurrentSessions } from '#/services/zitadel.service';
 import Security from '#/ui/Security/Security';
 
-export default async function Page({
-  params: { index },
-}: {
-  params: { index: number };
+export default async function Page(props: {
+  params: Promise<{ index: number }>;
 }) {
+  const params = await props.params;
+
+  const { index } = params;
+
   const sessions = await getCurrentSessions();
   const session = sessions[index];
   if (!session?.factors?.user) redirect(ROUTING.LOGIN);

@@ -9,7 +9,11 @@ import type {
 import PasskeysManager from '#/ui/Passkeys/PasskeysManager';
 import { redirect } from 'next/navigation';
 
-export default async ({ params: { index } }: { params: { index: number } }) => {
+export default async (props: { params: Promise<{ index: number }> }) => {
+  const params = await props.params;
+
+  const { index } = params;
+
   const sessions = await getCurrentSessions();
   const session = sessions[index];
   if (!session?.factors?.user) redirect(ROUTING.LOGIN);

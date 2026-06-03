@@ -26,7 +26,8 @@ export async function POST(request: NextRequest) {
 
       const { authRequestId, userId } = body;
 
-      const sessionCookie = CookieService.getSessionCookieByUserId(userId);
+      const sessionCookie =
+        await CookieService.getSessionCookieByUserId(userId);
       if (!sessionCookie) throw new Error('Session not found');
 
       const accessToken = await AuthService.getAdminAccessToken();

@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
       const { sessionId } = body;
 
-      const sessionCookie = CookieService.getSessionCookieById(sessionId);
+      const sessionCookie = await CookieService.getSessionCookieById(sessionId);
       if (!sessionCookie) throw new Error('Session not found');
 
       const accessToken = await AuthService.getAdminAccessToken();
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
         sessionToken: sessionCookie.sessionToken,
       });
 
-      CookieService.removeSessionFromCookie(sessionId);
+      await CookieService.removeSessionFromCookie(sessionId);
     },
   );
 }
