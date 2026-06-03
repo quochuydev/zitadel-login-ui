@@ -38,7 +38,8 @@ docker run -p 3333:3333 \
 
 ## Deploy (Vercel)
 
-Set the project **Root Directory** to `login` (Project Settings → General).
+The root `vercel.json` builds the app from `login/` — no project settings needed.
+(If you set a custom **Root Directory** in the Vercel dashboard, clear it.)
 
 ## Commands
 
