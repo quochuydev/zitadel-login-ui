@@ -1,4 +1,8 @@
 ![Is It Alive?](https://isitalive.dev/api/badge/github/quochuydev/zitadel-login-ui)
+![Passkeys](https://img.shields.io/badge/Passkeys-Supported-success?style=flat-square)
+![TOTP](https://img.shields.io/badge/TOTP-Supported-success?style=flat-square)
+![i18n](https://img.shields.io/badge/i18n-Multi--Language-blue?style=flat-square)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker)
 
 ## Development
 
